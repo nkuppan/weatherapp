@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Weather App</string>
+
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="set_by_battery_saver">Set by battery saver</string>
+    <string name="system_default">System default</string>
+    <string name="next_hours">Next hours</string>
+    <string name="next_days">Next 5 days</string>
+    <string name="rio_de_jeneiro">Rio de janeiro</string>
+    <string name="beijing">Beijing</string>
+    <string name="los_angeles">Los angeles</string>
+    <string name="unable_to_fecth_data">Unable to fetch data from server</string>
+</resources>

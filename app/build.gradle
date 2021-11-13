@@ -1,0 +1,113 @@
+import com.nkuppan.weatherapp.buildsrc.Libs
+import com.nkuppan.weatherapp.buildsrc.Versions
+
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'dagger.hilt.android.plugin'
+}
+
+def apikeyPropertiesFile = rootProject.file("keys.properties")
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
+android {
+    compileSdk Versions.compileSdk
+
+    defaultConfig {
+
+        applicationId "com.nkuppan.weatherapp"
+
+        minSdk Versions.minSdk
+        targetSdk Versions.targetSdk
+
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner Libs.AndroidX.Test.instrumentationRunner
+
+        buildConfigField "String", "WEATHER_API_KEY", apikeyProperties['WEATHER_API_KEY']
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+        dataBinding true
+    }
+}
+
+dependencies {
+    implementation(Libs.Kotlin.stdlib)
+    implementation(Libs.Kotlin.Coroutines.core)
+    implementation(Libs.Kotlin.Coroutines.android)
+
+    implementation(Libs.AndroidX.Core.ktx)
+    implementation(Libs.AndroidX.appCompat)
+    implementation(Libs.AndroidX.constraintLayout)
+    implementation(Libs.AndroidX.recyclerView)
+    implementation(Libs.AndroidX.swipeRefreshLayout)
+
+    implementation(Libs.AndroidX.Activity.ktx)
+    implementation(Libs.AndroidX.Fragment.ktx)
+
+    implementation(Libs.AndroidX.Lifecycle.liveDataKtx)
+    implementation(Libs.AndroidX.Lifecycle.viewModelKtx)
+
+    implementation(Libs.AndroidX.Navigation.fragmentKtx)
+    implementation(Libs.AndroidX.Navigation.uiKtx)
+
+    implementation(Libs.Google.material)
+
+    implementation(Libs.Square.okHttp)
+    implementation(Libs.Square.Retrofit.retrofit)
+    implementation(Libs.Square.Retrofit.gsonConverter)
+
+    implementation(Libs.AndroidX.DataStore.preferences)
+
+
+    implementation(Libs.Glide.core)
+    annotationProcessor(Libs.Glide.compiler)
+
+    implementation(Libs.AndroidX.Paging.runtime)
+
+    implementation(Libs.Google.Hilt.android)
+    kapt(Libs.Google.Hilt.compiler)
+    kapt(Libs.AndroidX.Hilt.compiler)
+
+    /**
+     * Android Testing Related Library
+     */
+    debugImplementation(Libs.AndroidX.Fragment.test)
+
+    androidTestImplementation(Libs.AndroidX.Test.JUnit.ktx)
+    androidTestImplementation(Libs.AndroidX.Test.Espresso.core)
+    androidTestImplementation(Libs.AndroidX.Test.Espresso.contrib)
+    androidTestImplementation(Libs.AndroidX.Navigation.test)
+    androidTestImplementation(Libs.AndroidX.Test.runner)
+    androidTestImplementation(Libs.AndroidX.Test.rules)
+    androidTestImplementation(Libs.AndroidX.Core.test)
+    androidTestImplementation(Libs.Google.truth)
+
+    //Android JUnit test cases for API
+    testImplementation(Libs.Square.mockWebServer)
+    //for unit testing
+    testImplementation(Libs.Google.truth)
+    testImplementation(Libs.AndroidX.Test.JUnit.core)
+    testImplementation(Libs.AndroidX.Core.test)
+    testImplementation(Libs.Kotlin.Coroutines.test)
+    testImplementation(Libs.Mockito.core)
+}

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.nkuppan.weatherapp.domain.model.Weather" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/parentConstraint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_16dp">
+
+        <ImageView
+            android:id="@+id/weather_image"
+            android:layout_width="@dimen/weather_image_size"
+            android:layout_height="@dimen/weather_image_size"
+            android:layout_marginTop="@dimen/margin_4dp"
+            android:contentDescription="@{viewModel.weatherDescription}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:loadWeatherImageURL="@{viewModel.weatherIcon}"
+            tools:src="@drawable/ic_weather" />
+
+        <TextView
+            android:id="@+id/temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.formattedTemperature}"
+            android:textSize="@dimen/temperature_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="27 °" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_4dp"
+            android:text="@{viewModel.formattedDate}"
+            android:textSize="@dimen/daily_hours_date_text_size"
+            app:layout_constraintEnd_toStartOf="@id/temperature"
+            app:layout_constraintStart_toEndOf="@id/weather_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Fri, Nov 1" />
+
+        <TextView
+            android:id="@+id/weather_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_4dp"
+            android:text="@{viewModel.weatherDescription}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/temperature"
+            app:layout_constraintStart_toEndOf="@id/weather_image"
+            app:layout_constraintTop_toBottomOf="@id/date"
+            tools:text="Clear throughout the day." />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
