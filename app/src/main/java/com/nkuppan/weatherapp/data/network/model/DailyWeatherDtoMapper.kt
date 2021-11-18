@@ -5,6 +5,7 @@ import com.nkuppan.weatherapp.data.network.response.WeatherForecastDailyApiRespo
 import com.nkuppan.weatherapp.domain.mapper.DomainMapper
 import com.nkuppan.weatherapp.domain.model.Weather
 import com.nkuppan.weatherapp.domain.model.WeatherForecast
+import java.text.DecimalFormat
 
 class DailyWeatherDtoMapper : DomainMapper<WeatherForecastDailyApiResponse, WeatherForecast> {
 
@@ -13,11 +14,15 @@ class DailyWeatherDtoMapper : DomainMapper<WeatherForecastDailyApiResponse, Weat
         if (model.forecastList.isNotEmpty()) {
             model.forecastList.forEach {
 
-                val dayThemeImageURL =
-                    String.format(AccWeatherApiService.BASE_IMAGE_URL, it.dayThemeIcon.icon)
+                val dayThemeImageURL = String.format(
+                    AccWeatherApiService.BASE_IMAGE_URL,
+                    DecimalFormat("00").format(it.dayThemeIcon.icon)
+                )
 
-                val nightThemeImageURL =
-                    String.format(AccWeatherApiService.BASE_IMAGE_URL, it.dayThemeIcon.icon)
+                val nightThemeImageURL = String.format(
+                    AccWeatherApiService.BASE_IMAGE_URL,
+                    DecimalFormat("00").format(it.nightThemeIcon.icon)
+                )
 
                 val probabilityPercent =
                     if (it.dayThemeIcon.hasPrecipitation) "${it.dayThemeIcon.precipitationProbability} %" else "N/A"

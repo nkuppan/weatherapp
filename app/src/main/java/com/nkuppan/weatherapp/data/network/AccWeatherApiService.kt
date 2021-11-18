@@ -44,6 +44,6 @@ interface AccWeatherApiService {
         const val DEFAULT_LANG = "en"
 
         const val BASE_URL = "http://dataservice.accuweather.com/"
-        const val BASE_IMAGE_URL = "https://developer.accuweather.com/sites/default/files/0%d-s.png"
+        const val BASE_IMAGE_URL = "https://developer.accuweather.com/sites/default/files/%s-s.png"
     }
 }

@@ -7,7 +7,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.nkuppan.weatherapp.R
-import com.nkuppan.weatherapp.data.network.AccWeatherApiService
 
 
 private fun loadErrorImage(imageView: ImageView) {
@@ -19,27 +18,19 @@ private fun loadErrorImage(imageView: ImageView) {
 }
 
 @BindingAdapter("app:loadWeatherImageURL")
-fun loadWeatherImageURL(imageView: ImageView, iconName: String?) {
+fun loadWeatherImageURL(imageView: ImageView, networkURL: String?) {
 
-    if (iconName.isNullOrBlank()) {
+    if (networkURL.isNullOrBlank() || !URLUtil.isValidUrl(networkURL)) {
         loadErrorImage(imageView)
         return
     }
-
-    val newURL = String.format(AccWeatherApiService.BASE_URL, iconName)
-
-    if (URLUtil.isValidUrl(newURL)) {
-
-        Glide
-            .with(imageView.context)
-            .setDefaultRequestOptions(
-                RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL)
-            )
-            .load(newURL)
-            .error(R.drawable.ic_error)
-            .placeholder(R.drawable.image_place_holder)
-            .into(imageView)
-    } else {
-        loadErrorImage(imageView)
-    }
+    Glide
+        .with(imageView.context)
+        .setDefaultRequestOptions(
+            RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL)
+        )
+        .load(networkURL)
+        .error(R.drawable.ic_error)
+        .placeholder(R.drawable.image_place_holder)
+        .into(imageView)
 }
