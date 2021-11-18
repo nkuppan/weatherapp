@@ -1,4 +1,4 @@
-package com.nkuppan.weatherapp.extension
+package com.nkuppan.weatherapp.core.extention
 
 
 fun Long.getFormattedTime(): String {

@@ -1,4 +1,4 @@
-package com.nkuppan.weatherapp.extension
+package com.nkuppan.weatherapp.core.extention
 
 import android.webkit.URLUtil
 import android.widget.ImageView
@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.nkuppan.weatherapp.R
-import com.nkuppan.weatherapp.data.network.WeatherApiService
+import com.nkuppan.weatherapp.data.network.AccWeatherApiService
 
 
 private fun loadErrorImage(imageView: ImageView) {
@@ -26,7 +26,7 @@ fun loadWeatherImageURL(imageView: ImageView, iconName: String?) {
         return
     }
 
-    val newURL = String.format(WeatherApiService.BASE_URL, iconName)
+    val newURL = String.format(AccWeatherApiService.BASE_URL, iconName)
 
     if (URLUtil.isValidUrl(newURL)) {
 

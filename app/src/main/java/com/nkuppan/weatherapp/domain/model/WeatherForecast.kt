@@ -1,27 +1,33 @@
 package com.nkuppan.weatherapp.domain.model
 
-import com.nkuppan.weatherapp.extension.getFormattedDate
-import com.nkuppan.weatherapp.extension.getFormattedTime
+import com.nkuppan.weatherapp.core.extention.getFormattedDate
+import com.nkuppan.weatherapp.core.extention.getFormattedTime
+
+data class City(
+    val name: String,
+    val key: String,
+    val rank: Int,
+    val country: String,
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0
+)
 
 data class WeatherForecast(
-    val cityName: String,
-    val count: Int, // May have number of days or hours,
+    val headlines: String,
     val forecasts: List<Weather>
 )
 
 data class Weather(
     val date: Long,
-    val probability: Double,
-    val temperature: Double,
-    val weatherIcon: String,
+    val probability: String,
+    val lowTemperature: Double,
+    val highTemperature: Double,
+    val weatherDayThemeIcon: String,
+    val weatherNightThemeIcon: String,
     val weatherDescription: String
 ) {
     fun getFormattedTemperature(): String {
-        return "$temperature °"
-    }
-
-    fun getFormattedProbability(): String {
-        return "$probability %"
+        return "$highTemperature °"
     }
 
     fun getFormattedTime(): String {

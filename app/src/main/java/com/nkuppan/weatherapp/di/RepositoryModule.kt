@@ -2,10 +2,12 @@ package com.nkuppan.weatherapp.di
 
 import android.content.Context
 import com.nkuppan.weatherapp.data.datastore.ThemeDataStore
-import com.nkuppan.weatherapp.data.network.WeatherApiService
-import com.nkuppan.weatherapp.data.network.model.WeatherDtoMapper
+import com.nkuppan.weatherapp.data.network.AccWeatherApiService
+import com.nkuppan.weatherapp.data.network.model.CityDtoMapper
+import com.nkuppan.weatherapp.data.network.model.DailyWeatherDtoMapper
+import com.nkuppan.weatherapp.data.network.model.HourlyWeatherDtoMapper
 import com.nkuppan.weatherapp.data.respository.ThemeRepositoryImpl
-import com.nkuppan.weatherapp.data.respository.WeatherRepositoryImpl
+import com.nkuppan.weatherapp.data.respository.AccuWeatherRepositoryImpl
 import com.nkuppan.weatherapp.di.AppModule.dataStore
 import com.nkuppan.weatherapp.domain.respository.ThemeRepository
 import com.nkuppan.weatherapp.domain.respository.WeatherRepository
@@ -24,8 +26,20 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideWeatherDtoMapper(): WeatherDtoMapper {
-        return WeatherDtoMapper()
+    fun provideWeatherDtoMapper(): DailyWeatherDtoMapper {
+        return DailyWeatherDtoMapper()
+    }
+
+    @Provides
+    @Singleton
+    fun provideHourlyWeatherDtoMapper(): HourlyWeatherDtoMapper {
+        return HourlyWeatherDtoMapper()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCityDtoMapper(): CityDtoMapper {
+        return CityDtoMapper()
     }
 
     @Provides
@@ -45,12 +59,16 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideWeatherRepository(
-        service: WeatherApiService,
-        mapper: WeatherDtoMapper
+        service: AccWeatherApiService,
+        dailyWeatherDtoMapper: DailyWeatherDtoMapper,
+        hourlyWeatherDtoMapper: HourlyWeatherDtoMapper,
+        cityDtoMapper: CityDtoMapper,
     ): WeatherRepository {
-        return WeatherRepositoryImpl(
+        return AccuWeatherRepositoryImpl(
             service,
-            mapper
+            dailyWeatherDtoMapper,
+            hourlyWeatherDtoMapper,
+            cityDtoMapper
         )
     }
 

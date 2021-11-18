@@ -1,17 +1,22 @@
 package com.nkuppan.weatherapp.domain.respository
 
-import com.nkuppan.weatherapp.core.extention.Result
+import com.nkuppan.weatherapp.core.extention.NetworkResult
+import com.nkuppan.weatherapp.domain.model.City
 import com.nkuppan.weatherapp.domain.model.WeatherForecast
 
 interface WeatherRepository {
 
+    suspend fun getAccWeatherCityId(
+        cityName: String
+    ): NetworkResult<List<City>>
+
     suspend fun getHourlyWeatherForecast(
-        cityName: String,
+        cityId: String,
         numberOfHours: Int
-    ): Result<WeatherForecast>
+    ): NetworkResult<WeatherForecast>
 
     suspend fun getDailyWeatherForecast(
-        cityName: String,
+        cityId: String,
         numberOfDays: Int
-    ): Result<WeatherForecast>
+    ): NetworkResult<WeatherForecast>
 }

@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_4dp"
-            android:text="@{viewModel.formattedProbability}"
+            android:text="@{viewModel.probability}"
             android:textColor="@color/colorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/probability"
             app:layout_constraintVertical_chainStyle="packed"
-            app:loadWeatherImageURL="@{viewModel.weatherIcon}"
+            app:loadWeatherImageURL="@{viewModel.weatherDayThemeIcon}"
             tools:src="@drawable/ic_weather" />
 
         <TextView

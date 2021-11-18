@@ -1,32 +1,29 @@
 package com.nkuppan.weatherapp.presentation.weatherdetails
 
-import android.app.Application
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.nkuppan.weatherapp.R
-import com.nkuppan.weatherapp.core.extention.Result
+import com.nkuppan.weatherapp.core.extention.NetworkResult
 import com.nkuppan.weatherapp.core.ui.viewmodel.BaseViewModel
 import com.nkuppan.weatherapp.domain.model.Weather
 import com.nkuppan.weatherapp.domain.usecase.GetDailyWeatherForecastUseCase
 import com.nkuppan.weatherapp.domain.usecase.GetHourlyWeatherForecastUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class WeatherDetailsViewModel @Inject constructor(
-    private val aApplication: Application,
     private val dailyWeatherForecastUseCase: GetDailyWeatherForecastUseCase,
     private val hourlyWeatherForecastUseCase: GetHourlyWeatherForecastUseCase
-) : BaseViewModel(aApplication) {
+) : BaseViewModel() {
 
-    private val _dailyForecastInfo: MutableSharedFlow<List<Weather>> = MutableSharedFlow()
-    val dailyForecastInfo: SharedFlow<List<Weather>> = _dailyForecastInfo.asSharedFlow()
+    private val _dailyForecastInfo: MutableLiveData<List<Weather>> = MutableLiveData()
+    val dailyForecastInfo: LiveData<List<Weather>> = _dailyForecastInfo
 
-    private val _hourlyForecastInfo: MutableSharedFlow<List<Weather>> = MutableSharedFlow()
-    val hourlyForecastInfo: SharedFlow<List<Weather>> = _hourlyForecastInfo.asSharedFlow()
+    private val _hourlyForecastInfo: MutableLiveData<List<Weather>> = MutableLiveData()
+    val hourlyForecastInfo: LiveData<List<Weather>> = _hourlyForecastInfo
 
     fun fetchWeatherInfo(cityName: String) {
 
@@ -38,27 +35,34 @@ class WeatherDetailsViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            when (val response = dailyWeatherForecastUseCase.invoke(cityName, numberOfDays = 5)) {
-                is Result.Success -> {
-                    _dailyForecastInfo.emit(response.data.forecasts)
+            when (val response =
+                dailyWeatherForecastUseCase.invoke(cityName, numberOfDays = NUMBER_OF_DAYS)) {
+                is NetworkResult.Success -> {
+                    _dailyForecastInfo.value = (response.data.forecasts)
                 }
-                is Result.Error -> {
-                    _dailyForecastInfo.emit(emptyList())
-                    _errorMessage.emit(aApplication.getString(R.string.unable_to_fecth_data))
+                is NetworkResult.Error -> {
+                    _dailyForecastInfo.value = (emptyList())
+                    _errorMessage.value = R.string.unable_to_fecth_data
                 }
             }
 
-            when (val response = hourlyWeatherForecastUseCase.invoke(cityName, numberOfHours = 5)) {
-                is Result.Success -> {
-                    _hourlyForecastInfo.emit(response.data.forecasts)
+            when (val response =
+                hourlyWeatherForecastUseCase.invoke(cityName, numberOfHours = NUMBER_OF_HOURS)) {
+                is NetworkResult.Success -> {
+                    _hourlyForecastInfo.value = (response.data.forecasts)
                 }
-                is Result.Error -> {
-                    _hourlyForecastInfo.emit(emptyList())
-                    _errorMessage.emit(aApplication.getString(R.string.unable_to_fecth_data))
+                is NetworkResult.Error -> {
+                    _hourlyForecastInfo.value = (emptyList())
+                    _errorMessage.value = R.string.unable_to_fecth_data
                 }
             }
 
             _isLoading.value = false
         }
+    }
+
+    companion object {
+        const val NUMBER_OF_HOURS = 12
+        const val NUMBER_OF_DAYS = 5
     }
 }

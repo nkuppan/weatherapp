@@ -1,6 +1,7 @@
 package com.nkuppan.weatherapp.di
 
-import com.nkuppan.weatherapp.data.network.WeatherApiService
+import com.nkuppan.weatherapp.data.network.AccWeatherApiService
+import com.nkuppan.weatherapp.data.network.OpenWeatherMapApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,17 +28,21 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideAccWeatherApiService(okHttpClient: OkHttpClient): AccWeatherApiService {
         return Retrofit.Builder()
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(WeatherApiService.BASE_URL)
-            .build()
+            .baseUrl(AccWeatherApiService.BASE_URL)
+            .build().create()
     }
 
     @Provides
     @Singleton
-    fun provideService(retrofit: Retrofit): WeatherApiService {
-        return retrofit.create()
+    fun provideOpenWeatherMapApiService(okHttpClient: OkHttpClient): OpenWeatherMapApiService {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(OpenWeatherMapApiService.BASE_URL)
+            .build().create()
     }
 }
