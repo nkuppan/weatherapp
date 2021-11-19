@@ -3,9 +3,6 @@ package com.nkuppan.weatherapp.data.respository
 import com.nkuppan.weatherapp.BuildConfig
 import com.nkuppan.weatherapp.core.extention.NetworkResult
 import com.nkuppan.weatherapp.data.network.AccWeatherApiService
-import com.nkuppan.weatherapp.data.network.model.CityDtoMapper
-import com.nkuppan.weatherapp.data.network.model.DailyWeatherDtoMapper
-import com.nkuppan.weatherapp.data.network.model.HourlyWeatherDtoMapper
 import com.nkuppan.weatherapp.domain.model.City
 import com.nkuppan.weatherapp.domain.model.WeatherForecast
 import com.nkuppan.weatherapp.domain.respository.WeatherRepository
@@ -16,21 +13,18 @@ import retrofit2.awaitResponse
 
 class AccuWeatherRepositoryImpl(
     private val service: AccWeatherApiService,
-    private val dailyWeatherDtoMapper: DailyWeatherDtoMapper,
-    private val hourlyWeatherDtoMapper: HourlyWeatherDtoMapper,
-    private val cityDtoMapper: CityDtoMapper,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : WeatherRepository {
 
-    override suspend fun getAccWeatherCityId(cityName: String): NetworkResult<List<City>> =
+    override suspend fun getCityInfo(cityName: String): NetworkResult<List<City>> =
         withContext(dispatcher) {
             return@withContext try {
                 val response = service.getCities(
                     cityName = cityName,
-                    apiKey = BuildConfig.WEATHER_API_KEY
+                    apiKey = BuildConfig.ACC_WEATHER_API_KEY
                 ).awaitResponse()
-                if (response.isSuccessful && response.body() != null) {
-                    NetworkResult.Success(cityDtoMapper.toDomainList(response.body()!!))
+                if (response.isSuccessful && response.body()?.isNotEmpty() == true) {
+                    NetworkResult.Success(response.body()!!.map { it.toCity() })
                 } else {
                     NetworkResult.Error(KotlinNullPointerException())
                 }
@@ -40,20 +34,20 @@ class AccuWeatherRepositoryImpl(
         }
 
     override suspend fun getHourlyWeatherForecast(
-        cityId: String,
+        city: City,
         numberOfHours: Int
     ): NetworkResult<WeatherForecast> = withContext(dispatcher) {
         return@withContext try {
             val response = service.getHourlyForecastUsingCityId(
-                cityId = cityId,
-                appKey = BuildConfig.WEATHER_API_KEY,
+                cityId = city.key,
+                appKey = BuildConfig.ACC_WEATHER_API_KEY,
                 numberOfHours = "${numberOfHours}hour"
             ).awaitResponse()
-            if (response.isSuccessful && response.body() != null) {
+            if (response.isSuccessful && response.body()?.isNotEmpty() == true) {
                 NetworkResult.Success(
                     WeatherForecast(
                         headlines = "",
-                        forecasts = hourlyWeatherDtoMapper.toDomainList(response.body()!!)
+                        forecasts = response.body()!!.map { it.toWeather() }
                     )
                 )
             } else {
@@ -65,17 +59,17 @@ class AccuWeatherRepositoryImpl(
     }
 
     override suspend fun getDailyWeatherForecast(
-        cityId: String,
+        city: City,
         numberOfDays: Int
     ): NetworkResult<WeatherForecast> = withContext(dispatcher) {
         return@withContext try {
             val response = service.getDailyForecastUsingCityId(
-                cityId = cityId,
-                appKey = BuildConfig.WEATHER_API_KEY,
+                cityId = city.key,
+                appKey = BuildConfig.ACC_WEATHER_API_KEY,
                 numberOfDays = "${numberOfDays}day"
             ).awaitResponse()
             if (response.isSuccessful && response.body() != null) {
-                NetworkResult.Success(dailyWeatherDtoMapper.mapToDomainModel(response.body()!!))
+                NetworkResult.Success(response.body()!!.toWeatherForecast())
             } else {
                 NetworkResult.Error(KotlinNullPointerException())
             }

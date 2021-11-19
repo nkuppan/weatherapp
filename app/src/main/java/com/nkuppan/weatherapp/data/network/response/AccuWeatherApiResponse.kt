@@ -1,6 +1,13 @@
 package com.nkuppan.weatherapp.data.network.response
 
 import com.google.gson.annotations.SerializedName
+import com.nkuppan.weatherapp.data.network.AccWeatherApiService
+import com.nkuppan.weatherapp.domain.model.City
+import com.nkuppan.weatherapp.domain.model.Weather
+import com.nkuppan.weatherapp.domain.model.WeatherForecast
+import java.text.DecimalFormat
+
+val IMAGE_NUMBER_PATTERN: DecimalFormat = DecimalFormat("00")
 
 data class CityDto(
     @SerializedName("Key")
@@ -11,7 +18,16 @@ data class CityDto(
     val rank: Int,
     @SerializedName("Country")
     val country: CountryDto
-)
+) {
+    fun toCity(): City {
+        return City(
+            name,
+            key,
+            rank,
+            country.name
+        )
+    }
+}
 
 data class CountryDto(
     @SerializedName("ID")
@@ -64,7 +80,18 @@ data class WeatherImageDto(
     val precipitationIntensity: String?,
     @SerializedName("PrecipitationProbability")
     val precipitationProbability: Double
-)
+) {
+    fun getIconURL(): String {
+        return String.format(
+            AccWeatherApiService.BASE_IMAGE_URL,
+            IMAGE_NUMBER_PATTERN.format(icon)
+        )
+    }
+
+    fun getPrecipitationProbability(): String {
+        return if (hasPrecipitation) "$precipitationProbability %" else "N/A"
+    }
+}
 
 data class WeatherDto(
     @SerializedName("Date")
@@ -81,14 +108,33 @@ data class WeatherDto(
     val link: String,
     @SerializedName("MobileLink")
     val mobileLink: String
-)
+) {
+    fun toWeather(): Weather {
+        return Weather(
+            dateTimeInMilliseconds,
+            dayThemeIcon.getPrecipitationProbability(),
+            temperature.minimum.value,
+            temperature.maximum.value,
+            dayThemeIcon.getIconURL(),
+            nightThemeIcon.getIconURL(),
+            dayThemeIcon.description
+        )
+    }
+}
 
 data class WeatherForecastDailyApiResponse(
     @SerializedName("Headline")
     val headline: HeadLineDto,
     @SerializedName("DailyForecasts")
     val forecastList: List<WeatherDto>
-)
+) {
+    fun toWeatherForecast(): WeatherForecast {
+        return WeatherForecast(
+            headlines = headline.status,
+            forecasts = forecastList.map { it.toWeather() }
+        )
+    }
+}
 
 data class WeatherForecastHourlyApiResponse(
     @SerializedName("DateTime")
@@ -96,7 +142,7 @@ data class WeatherForecastHourlyApiResponse(
     @SerializedName("EpochDateTime")
     val epocTime: Long,
     @SerializedName("WeatherIcon")
-    val weatherIcon: Int,
+    val weatherIcon: Long,
     @SerializedName("IconPhrase")
     val iconStatus: String,
     @SerializedName("HasPrecipitation")
@@ -115,4 +161,27 @@ data class WeatherForecastHourlyApiResponse(
     val link: String,
     @SerializedName("MobileLink")
     val mobileLink: String
-)
+) {
+    private fun getIconURL(): String {
+        return String.format(
+            AccWeatherApiService.BASE_IMAGE_URL,
+            IMAGE_NUMBER_PATTERN.format(weatherIcon)
+        )
+    }
+
+    private fun getPrecipitationProbability(): String {
+        return if (hasPrecipitation) "$precipitationProbability %" else "N/A"
+    }
+
+    fun toWeather(): Weather {
+        return Weather(
+            epocTime,
+            getPrecipitationProbability(),
+            temperature.value,
+            temperature.value,
+            getIconURL(),
+            getIconURL(),
+            iconStatus
+        )
+    }
+}

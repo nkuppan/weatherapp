@@ -28,7 +28,8 @@ android {
 
         testInstrumentationRunner Libs.AndroidX.Test.instrumentationRunner
 
-        buildConfigField "String", "WEATHER_API_KEY", apikeyProperties['WEATHER_API_KEY']
+        buildConfigField "String", "ACC_WEATHER_API_KEY", apikeyProperties['ACC_WEATHER_API_KEY']
+        buildConfigField "String", "OPEN_WEATHER_API_KEY", apikeyProperties['OPEN_WEATHER_API_KEY']
     }
 
     buildTypes {

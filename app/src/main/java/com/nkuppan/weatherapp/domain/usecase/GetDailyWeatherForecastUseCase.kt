@@ -12,10 +12,10 @@ class GetDailyWeatherForecastUseCase(
         numberOfDays: Int
     ): NetworkResult<WeatherForecast> {
 
-        return when (val cityResponse = repository.getAccWeatherCityId(cityName)) {
+        return when (val cityResponse = repository.getCityInfo(cityName)) {
             is NetworkResult.Success -> {
                 if (cityResponse.data.isNotEmpty()) {
-                    repository.getDailyWeatherForecast(cityResponse.data[0].key, numberOfDays)
+                    repository.getDailyWeatherForecast(cityResponse.data[0], numberOfDays)
                 } else {
                     NetworkResult.Error(IllegalArgumentException("City name not found exception"))
                 }

@@ -2,12 +2,9 @@ package com.nkuppan.weatherapp.di
 
 import android.content.Context
 import com.nkuppan.weatherapp.data.datastore.ThemeDataStore
-import com.nkuppan.weatherapp.data.network.AccWeatherApiService
-import com.nkuppan.weatherapp.data.network.model.CityDtoMapper
-import com.nkuppan.weatherapp.data.network.model.DailyWeatherDtoMapper
-import com.nkuppan.weatherapp.data.network.model.HourlyWeatherDtoMapper
+import com.nkuppan.weatherapp.data.network.OpenWeatherMapApiService
+import com.nkuppan.weatherapp.data.respository.OpenWeatherMapRepositoryImpl
 import com.nkuppan.weatherapp.data.respository.ThemeRepositoryImpl
-import com.nkuppan.weatherapp.data.respository.AccuWeatherRepositoryImpl
 import com.nkuppan.weatherapp.di.AppModule.dataStore
 import com.nkuppan.weatherapp.domain.respository.ThemeRepository
 import com.nkuppan.weatherapp.domain.respository.WeatherRepository
@@ -26,50 +23,26 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideWeatherDtoMapper(): DailyWeatherDtoMapper {
-        return DailyWeatherDtoMapper()
-    }
-
-    @Provides
-    @Singleton
-    fun provideHourlyWeatherDtoMapper(): HourlyWeatherDtoMapper {
-        return HourlyWeatherDtoMapper()
-    }
-
-    @Provides
-    @Singleton
-    fun provideCityDtoMapper(): CityDtoMapper {
-        return CityDtoMapper()
-    }
-
-    @Provides
-    @Singleton
     fun provideThemeDataStore(@ApplicationContext context: Context): ThemeDataStore {
         return ThemeDataStore(context.dataStore)
     }
 
     @Provides
     @Singleton
-    fun provideThemeRepository(
-        dataStore: ThemeDataStore
-    ): ThemeRepository {
+    fun provideThemeRepository(dataStore: ThemeDataStore): ThemeRepository {
         return ThemeRepositoryImpl(dataStore)
     }
 
+    /*@Provides
+    @Singleton
+    fun provideWeatherRepository(service: AccWeatherApiService): WeatherRepository {
+        return AccuWeatherRepositoryImpl(service)
+    }*/
+
     @Provides
     @Singleton
-    fun provideWeatherRepository(
-        service: AccWeatherApiService,
-        dailyWeatherDtoMapper: DailyWeatherDtoMapper,
-        hourlyWeatherDtoMapper: HourlyWeatherDtoMapper,
-        cityDtoMapper: CityDtoMapper,
-    ): WeatherRepository {
-        return AccuWeatherRepositoryImpl(
-            service,
-            dailyWeatherDtoMapper,
-            hourlyWeatherDtoMapper,
-            cityDtoMapper
-        )
+    fun provideWeatherRepository(service: OpenWeatherMapApiService): WeatherRepository {
+        return OpenWeatherMapRepositoryImpl(service)
     }
 
     @Provides

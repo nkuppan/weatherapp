@@ -16,19 +16,19 @@ interface AccWeatherApiService {
         @Query("apikey") apiKey: String
     ): Call<List<CityDto>>
 
-    @GET("forecasts/v1/daily/{count}/{cityId}")
+    @GET("forecasts/v1/daily/{days}/{cityId}")
     fun getDailyForecastUsingCityId(
         @Path("cityId") cityId: String,
-        @Path("count") numberOfDays: String = FORECAST_DAYS,
+        @Path("days") numberOfDays: String = FORECAST_DAYS,
         @Query("apikey") appKey: String,
         @Query("metric") metric: Boolean = DEFAULT_METRIC,
         @Query("language") lang: String = DEFAULT_LANG
     ): Call<WeatherForecastDailyApiResponse>
 
-    @GET("forecasts/v1/hourly/{count}/{cityId}")
+    @GET("forecasts/v1/hourly/{hours}/{cityId}")
     fun getHourlyForecastUsingCityId(
         @Path("cityId") cityId: String,
-        @Path("count") numberOfHours: String = FORECAST_HOURS,
+        @Path("hours") numberOfHours: String = FORECAST_HOURS,
         @Query("apikey") appKey: String,
         @Query("metric") metric: Boolean = DEFAULT_METRIC,
         @Query("language") lang: String = DEFAULT_LANG

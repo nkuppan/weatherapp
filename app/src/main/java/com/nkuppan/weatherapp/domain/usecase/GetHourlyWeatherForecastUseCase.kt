@@ -12,10 +12,10 @@ class GetHourlyWeatherForecastUseCase(
         numberOfHours: Int
     ): NetworkResult<WeatherForecast> {
 
-        return when (val cityResponse = repository.getAccWeatherCityId(cityName)) {
+        return when (val cityResponse = repository.getCityInfo(cityName)) {
             is NetworkResult.Success -> {
                 if (cityResponse.data.isNotEmpty()) {
-                    repository.getHourlyWeatherForecast(cityResponse.data[0].key, numberOfHours)
+                    repository.getHourlyWeatherForecast(cityResponse.data[0], numberOfHours)
                 } else {
                     NetworkResult.Error(IllegalArgumentException("City name not found exception"))
                 }

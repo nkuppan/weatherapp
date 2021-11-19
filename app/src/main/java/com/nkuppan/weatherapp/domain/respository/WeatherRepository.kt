@@ -6,17 +6,17 @@ import com.nkuppan.weatherapp.domain.model.WeatherForecast
 
 interface WeatherRepository {
 
-    suspend fun getAccWeatherCityId(
+    suspend fun getCityInfo(
         cityName: String
     ): NetworkResult<List<City>>
 
     suspend fun getHourlyWeatherForecast(
-        cityId: String,
+        city: City,
         numberOfHours: Int
     ): NetworkResult<WeatherForecast>
 
     suspend fun getDailyWeatherForecast(
-        cityId: String,
+        city: City,
         numberOfDays: Int
     ): NetworkResult<WeatherForecast>
 }

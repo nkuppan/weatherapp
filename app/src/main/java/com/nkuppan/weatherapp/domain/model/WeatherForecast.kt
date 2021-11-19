@@ -14,7 +14,7 @@ data class City(
 
 data class WeatherForecast(
     val headlines: String,
-    val forecasts: List<Weather>
+    val forecasts: List<Weather>?
 )
 
 data class Weather(
