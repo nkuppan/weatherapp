@@ -15,7 +15,7 @@ class WeatherApplication : Application() {
     @Inject
     lateinit var themeRepository: ThemeRepository
 
-    @DelicateCoroutinesApi
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate() {
         super.onCreate()
         setupTheme()

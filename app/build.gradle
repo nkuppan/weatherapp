@@ -9,10 +9,6 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
-def apikeyPropertiesFile = rootProject.file("keys.properties")
-def apikeyProperties = new Properties()
-apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
-
 android {
     compileSdk Versions.compileSdk
 
@@ -23,13 +19,10 @@ android {
         minSdk Versions.minSdk
         targetSdk Versions.targetSdk
 
-        versionCode 1
-        versionName "1.0"
+        versionCode Versions.versionCode
+        versionName Versions.versionName
 
         testInstrumentationRunner Libs.AndroidX.Test.instrumentationRunner
-
-        buildConfigField "String", "ACC_WEATHER_API_KEY", apikeyProperties['ACC_WEATHER_API_KEY']
-        buildConfigField "String", "OPEN_WEATHER_API_KEY", apikeyProperties['OPEN_WEATHER_API_KEY']
     }
 
     buildTypes {
@@ -52,38 +45,13 @@ android {
 }
 
 dependencies {
-    implementation(Libs.Kotlin.stdlib)
-    implementation(Libs.Kotlin.Coroutines.core)
-    implementation(Libs.Kotlin.Coroutines.android)
 
-    implementation(Libs.AndroidX.Core.ktx)
-    implementation(Libs.AndroidX.appCompat)
-    implementation(Libs.AndroidX.constraintLayout)
-    implementation(Libs.AndroidX.recyclerView)
-    implementation(Libs.AndroidX.swipeRefreshLayout)
-
-    implementation(Libs.AndroidX.Activity.ktx)
-    implementation(Libs.AndroidX.Fragment.ktx)
-
-    implementation(Libs.AndroidX.Lifecycle.liveDataKtx)
-    implementation(Libs.AndroidX.Lifecycle.viewModelKtx)
-
-    implementation(Libs.AndroidX.Navigation.fragmentKtx)
-    implementation(Libs.AndroidX.Navigation.uiKtx)
-
-    implementation(Libs.Google.material)
-
-    implementation(Libs.Square.okHttp)
-    implementation(Libs.Square.Retrofit.retrofit)
-    implementation(Libs.Square.Retrofit.gsonConverter)
-
-    implementation(Libs.AndroidX.DataStore.preferences)
-
+    implementation project(":core")
+    implementation project(":data")
+    implementation project(":domain")
 
     implementation(Libs.Glide.core)
     annotationProcessor(Libs.Glide.compiler)
-
-    implementation(Libs.AndroidX.Paging.runtime)
 
     implementation(Libs.Google.Hilt.android)
     kapt(Libs.Google.Hilt.compiler)

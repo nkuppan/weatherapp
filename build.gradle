@@ -3,7 +3,7 @@ import com.nkuppan.weatherapp.buildsrc.Libs
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath Libs.androidGradlePlugin
@@ -18,13 +18,14 @@ buildscript {
          * Google Hilt library Gradle plugin to support dependency injection
          */
         classpath Libs.Google.Hilt.androidGradlePlugin
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0'
     }
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 

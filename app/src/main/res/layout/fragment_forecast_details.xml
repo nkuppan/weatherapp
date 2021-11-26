@@ -50,7 +50,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding_16dp"
-                        android:text="@string/next_hours"
+                        android:text="@string/next_48_hours"
                         android:textSize="@dimen/forecast_header_text_size" />
 
                     <View
@@ -92,7 +92,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding_16dp"
-                        android:text="@string/next_days"
+                        android:text="@string/next_7_days"
                         android:textSize="@dimen/forecast_header_text_size" />
 
                     <View

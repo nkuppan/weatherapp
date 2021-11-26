@@ -29,6 +29,7 @@ class WeatherTabHostFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val cityName = listOf(
+            getString(R.string.chennai),
             getString(R.string.rio_de_jeneiro),
             getString(R.string.beijing),
             getString(R.string.los_angeles)

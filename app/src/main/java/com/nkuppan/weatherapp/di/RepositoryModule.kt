@@ -8,6 +8,7 @@ import com.nkuppan.weatherapp.data.respository.ThemeRepositoryImpl
 import com.nkuppan.weatherapp.di.AppModule.dataStore
 import com.nkuppan.weatherapp.domain.respository.ThemeRepository
 import com.nkuppan.weatherapp.domain.respository.WeatherRepository
+import com.nkuppan.weatherapp.domain.usecase.GetCityDetailsUseCase
 import com.nkuppan.weatherapp.domain.usecase.GetDailyWeatherForecastUseCase
 import com.nkuppan.weatherapp.domain.usecase.GetHourlyWeatherForecastUseCase
 import dagger.Module
@@ -59,5 +60,13 @@ object RepositoryModule {
         weatherRepository: WeatherRepository
     ): GetDailyWeatherForecastUseCase {
         return GetDailyWeatherForecastUseCase(weatherRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetCityDetailsUseCase(
+        weatherRepository: WeatherRepository
+    ): GetCityDetailsUseCase {
+        return GetCityDetailsUseCase(weatherRepository)
     }
 }

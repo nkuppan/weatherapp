@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="ic_launcher_background">#FFFFFF</color>
+
     <!-- Support Dark/Light theme -->
     <color name="white">@android:color/white</color>
     <color name="black">@android:color/black</color>
     <color name="transparent">@android:color/transparent</color>
     <color name="red">@android:color/holo_red_dark</color>
-    <color name="grey_light">#E0E0E0</color>
     <color name="divider_color">#E0E0E0</color>
     <color name="blue">#166EF7</color>
 

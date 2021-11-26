@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="description"
+            type="String" />
+
+        <variable
+            name="weatherIconURL"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/weather_icon"
+            android:layout_width="@dimen/weather_mid_image_size"
+            android:layout_height="@dimen/weather_mid_image_size"
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:contentDescription="@{description}"
+            android:scaleType="fitXY"
+            app:layout_constraintEnd_toStartOf="@id/weather_status"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:loadWeatherImageURL="@{weatherIconURL}"
+            tools:src="@drawable/ic_weather" />
+
+        <TextView
+            android:id="@+id/weather_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/weather_icon"
+            app:layout_constraintTop_toTopOf="@id/weather_icon"
+            tools:text="Broken cloud" />
+
+        <TextView
+            android:id="@+id/weather_sub_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_4dp"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@id/weather_icon"
+            app:layout_constraintTop_toBottomOf="@id/weather_status"
+            tools:text="Light breeze" />
+
+        <TextView
+            android:id="@+id/temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:text="@{description}"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/weather_icon"
+            tools:text="31°C" />
+
+        <TextView
+            android:id="@+id/alert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:background="@drawable/alert_bg"
+            android:padding="@dimen/padding_4dp"
+            android:text="@{description}"
+            android:textColor="?attr/colorOnError"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/temperature"
+            tools:text="Heavy Rain" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
