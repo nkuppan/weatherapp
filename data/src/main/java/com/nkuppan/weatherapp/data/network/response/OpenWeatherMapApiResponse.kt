@@ -6,6 +6,21 @@ import com.nkuppan.weatherapp.domain.model.City
 import com.nkuppan.weatherapp.domain.model.Weather
 import com.nkuppan.weatherapp.domain.model.WeatherForecast
 
+data class OpenWeatherAlertDto(
+    @SerializedName("sender_name")
+    val senderName: String?,
+    @SerializedName("event")
+    val event: String?,
+    @SerializedName("start")
+    val start: Long?,
+    @SerializedName("end")
+    val end: Long?,
+    @SerializedName("description")
+    val description: String?,
+    @SerializedName("tags")
+    val tags: List<String>?,
+)
+
 data class OpenWeatherCityDto(
     @SerializedName("name")
     val name: String,
@@ -94,12 +109,14 @@ data class HourlyOpenWeatherDto(
     fun toWeather(): Weather {
         return Weather(
             date,
-            "N/A",
+            "${pop * 100} %",
             temperature,
             temperature,
             weatherImages[0].getDayThemeImageURL(),
             weatherImages[0].getNightThemeImageURL(),
-            weatherImages[0].description
+            weatherImages[0].description,
+            feelsLikeTemperature = feelsLikeTemperature,
+            alert = null
         )
     }
 }
@@ -136,12 +153,13 @@ data class DailyOpenWeatherDto(
     fun toWeather(): Weather {
         return Weather(
             date,
-            "N/A",
+            "${pop * 100} %",
             temperature.min ?: 0.0,
             temperature.max ?: 0.0,
             weatherImages[0].getDayThemeImageURL(),
             weatherImages[0].getNightThemeImageURL(),
-            weatherImages[0].description
+            weatherImages[0].description,
+            feelsLikeTemperature = feelsLikeTemperature.max ?: 0.0
         )
     }
 }
@@ -156,7 +174,9 @@ data class OpenWeatherMapApiResponse(
     @SerializedName("hourly")
     val hourlyWeather: List<HourlyOpenWeatherDto>? = null,
     @SerializedName("daily")
-    val dailyWeather: List<DailyOpenWeatherDto>? = null
+    val dailyWeather: List<DailyOpenWeatherDto>? = null,
+    @SerializedName("alerts")
+    val alerts: List<OpenWeatherAlertDto>? = null
 ) {
     fun toCurrentWeatherForecast(): WeatherForecast {
         return WeatherForecast(
@@ -177,5 +197,17 @@ data class OpenWeatherMapApiResponse(
             headlines = currentWeather.weatherImages[0].description,
             forecasts = dailyWeather?.map { it.toWeather() } ?: emptyList()
         )
+    }
+
+    fun toCurrentWeatherList(): List<Weather> {
+        return listOf(currentWeather.toWeather())
+    }
+
+    fun toDailyWeatherList(): List<Weather> {
+        return dailyWeather?.map { it.toWeather() } ?: emptyList()
+    }
+
+    fun toHourlyWeatherList(): List<Weather> {
+        return hourlyWeather?.map { it.toWeather() } ?: emptyList()
     }
 }

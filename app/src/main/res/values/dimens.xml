@@ -3,9 +3,11 @@
 
     <dimen name="weather_mid_image_size">48dp</dimen>
     <dimen name="weather_image_size">32dp</dimen>
-    <dimen name="temperature_text_size">18sp</dimen>
-    <dimen name="daily_hours_date_text_size">18sp</dimen>
+    <dimen name="temperature_text_size">16sp</dimen>
+    <dimen name="daily_hours_date_text_size">16sp</dimen>
     <dimen name="forecast_header_text_size">18sp</dimen>
+    <dimen name="daily_forecast_description_size">12sp</dimen>
+
     <dimen name="hour_list_height">150dp</dimen>
     <dimen name="place_heading_text_size">18sp</dimen>
     <dimen name="padding_12dp">12dp</dimen>

@@ -29,10 +29,20 @@ data class Weather(
     val highTemperature: Double,
     val weatherDayThemeIcon: String,
     val weatherNightThemeIcon: String,
-    val weatherDescription: String
+    val weatherDescription: String,
+    val alert: String? = null,
+    val feelsLikeTemperature: Double = 0.0,
 ) {
+    fun getFormattedFeelsLikeTemperature(): String {
+        return "Feels like $feelsLikeTemperature°C"
+    }
+
     fun getFormattedTemperature(): String {
-        return "$highTemperature °"
+        return "$highTemperature°C"
+    }
+
+    fun getFormattedHighLowTemperature(): String {
+        return "$highTemperature / ${lowTemperature}°C"
     }
 
     fun getFormattedTime(): String {
@@ -43,3 +53,8 @@ data class Weather(
         return date.getFormattedDate()
     }
 }
+
+data class WeatherUIModel(
+    val type: WeatherType,
+    val weather: List<Weather>
+)

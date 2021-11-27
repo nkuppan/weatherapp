@@ -2,10 +2,15 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
-    app:startDestination="@id/weatherTabHostFragment">
+    app:startDestination="@id/newWeatherDetailFragment">
 
     <fragment
         android:id="@+id/weatherTabHostFragment"
         android:name="com.nkuppan.weatherapp.presentation.weathertab.WeatherTabHostFragment"
         android:label="WeatherTabHostFragment" />
+
+    <fragment
+        android:id="@+id/newWeatherDetailFragment"
+        android:name="com.nkuppan.weatherapp.presentation.weatherdetails.NewWeatherDetailFragment"
+        android:label="NewWeatherDetailFragment" />
 </navigation>

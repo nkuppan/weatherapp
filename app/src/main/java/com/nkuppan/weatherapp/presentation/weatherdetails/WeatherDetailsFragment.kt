@@ -5,18 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nkuppan.weatherapp.core.extention.autoCleared
 import com.nkuppan.weatherapp.core.ui.fragment.BaseFragment
 import com.nkuppan.weatherapp.databinding.FragmentForecastDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class WeatherDetailsFragment : BaseFragment() {
@@ -72,18 +67,12 @@ class WeatherDetailsFragment : BaseFragment() {
             viewBinding.swipeRefreshLayout.isRefreshing = it
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
+        viewModel.hourlyForecastInfo.observe(viewLifecycleOwner) {
+            hourlyForecastAdapter.submitList(it)
+        }
 
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-                viewModel.dailyForecastInfo.collectLatest {
-                    dailyForecastAdapter.submitList(it)
-                }
-
-                viewModel.hourlyForecastInfo.collectLatest {
-                    hourlyForecastAdapter.submitList(it)
-                }
-            }
+        viewModel.dailyForecastInfo.observe(viewLifecycleOwner) {
+            dailyForecastAdapter.submitList(it)
         }
 
         viewModel.fetchWeatherInfo(cityName)

@@ -5,37 +5,37 @@
 
     <data>
 
-        <variable
-            name="description"
-            type="String" />
+        <import type="android.view.View" />
 
         <variable
-            name="weatherIconURL"
-            type="String" />
+            name="viewModel"
+            type="com.nkuppan.weatherapp.domain.model.Weather" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/weather_icon"
             android:layout_width="@dimen/weather_mid_image_size"
             android:layout_height="@dimen/weather_mid_image_size"
             android:layout_marginTop="@dimen/margin_16dp"
-            android:contentDescription="@{description}"
+            android:contentDescription="@{viewModel.weatherDescription}"
             android:scaleType="fitXY"
             app:layout_constraintEnd_toStartOf="@id/weather_status"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:loadWeatherImageURL="@{weatherIconURL}"
+            app:loadWeatherImageURL="@{viewModel.weatherDayThemeIcon}"
             tools:src="@drawable/ic_weather" />
 
         <TextView
             android:id="@+id/weather_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_4dp"
+            android:text="@{viewModel.weatherDescription}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/weather_icon"
             app:layout_constraintTop_toTopOf="@id/weather_icon"
@@ -45,7 +45,9 @@
             android:id="@+id/weather_sub_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_4dp"
             android:layout_marginTop="@dimen/margin_4dp"
+            android:text="@{viewModel.weatherDescription}"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@id/weather_icon"
             app:layout_constraintTop_toBottomOf="@id/weather_status"
@@ -55,9 +57,9 @@
             android:id="@+id/temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_16dp"
-            android:text="@{description}"
-            android:textSize="36sp"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:text="@{viewModel.formattedTemperature}"
+            android:textSize="48sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,17 +67,35 @@
             tools:text="31°C" />
 
         <TextView
-            android:id="@+id/alert"
+            android:id="@+id/feels_temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_16dp"
-            android:background="@drawable/alert_bg"
-            android:padding="@dimen/padding_4dp"
-            android:text="@{description}"
-            android:textColor="?attr/colorOnError"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:fontFamily="sans-serif-thin"
+            android:text="@{viewModel.formattedFeelsLikeTemperature}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/temperature"
+            tools:text="Feels like 27°C" />
+
+        <TextView
+            android:id="@+id/alert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:layout_marginBottom="@dimen/margin_16dp"
+            android:background="@drawable/alert_bg"
+            android:drawablePadding="@dimen/padding_8dp"
+            android:gravity="center_vertical"
+            android:padding="@dimen/padding_4dp"
+            android:text="@{viewModel.alert}"
+            android:textColor="?attr/colorOnError"
+            android:visibility="@{viewModel.alert.length() > 0 ? View.VISIBLE : View.GONE}"
+            app:drawableStartCompat="@drawable/ic_info"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/feels_temperature"
             tools:text="Heavy Rain" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

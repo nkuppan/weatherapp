@@ -2,9 +2,7 @@ package com.nkuppan.weatherapp.data.respository
 
 import com.nkuppan.weatherapp.core.BuildConfig
 import com.nkuppan.weatherapp.data.network.AccWeatherApiService
-import com.nkuppan.weatherapp.domain.model.City
-import com.nkuppan.weatherapp.domain.model.Resource
-import com.nkuppan.weatherapp.domain.model.WeatherForecast
+import com.nkuppan.weatherapp.domain.model.*
 import com.nkuppan.weatherapp.domain.respository.WeatherRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -76,5 +74,13 @@ class AccuWeatherRepositoryImpl(
         } catch (e: Exception) {
             Resource.Error(e)
         }
+    }
+
+    override suspend fun getAllWeatherForecast(
+        city: City,
+        numberOfHours: Int,
+        numberOfDays: Int
+    ): Resource<Map<WeatherType, List<Weather>>> {
+        TODO("Not yet implemented")
     }
 }
