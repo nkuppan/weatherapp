@@ -35,6 +35,7 @@
             android:layout_marginTop="@dimen/margin_4dp"
             android:text="@{viewModel.probability}"
             android:textColor="@color/colorSecondary"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/temperature"

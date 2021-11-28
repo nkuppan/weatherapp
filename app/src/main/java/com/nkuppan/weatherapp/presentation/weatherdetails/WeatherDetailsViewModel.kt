@@ -53,11 +53,11 @@ class WeatherDetailsViewModel @Inject constructor(
                             fetchIndividualForecastInfo(response.data[0])
                         }
                     } else {
-                        _errorMessage.emit(R.string.city_name_is_invalid)
+                        _errorMessage.value = (R.string.city_name_is_invalid)
                     }
                 }
                 is Resource.Error -> {
-                    _errorMessage.emit(R.string.unable_to_fecth_data)
+                    _errorMessage.value = (R.string.unable_to_fecth_data)
                 }
             }
 
@@ -67,17 +67,17 @@ class WeatherDetailsViewModel @Inject constructor(
 
     private suspend fun fetchAllForecastInfo(city: City) {
         when (val response = getAllWeatherForecastUseCase
-                .invoke(
-                    city,
-                    numberOfHours = NUMBER_OF_HOURS,
-                    numberOfDays = NUMBER_OF_DAYS
-                )
+            .invoke(
+                city,
+                numberOfHours = NUMBER_OF_HOURS,
+                numberOfDays = NUMBER_OF_DAYS
+            )
         ) {
             is Resource.Success -> {
                 _allWeatherInfo.value = (response.data)
             }
             is Resource.Error -> {
-                _errorMessage.emit(R.string.unable_to_fecth_data)
+                _errorMessage.value = (R.string.unable_to_fecth_data)
             }
         }
     }
@@ -90,7 +90,7 @@ class WeatherDetailsViewModel @Inject constructor(
                 _hourlyForecastInfo.value = (response.data.forecasts)
             }
             is Resource.Error -> {
-                _errorMessage.emit(R.string.unable_to_fecth_data)
+                _errorMessage.value = (R.string.unable_to_fecth_data)
             }
         }
 
@@ -100,7 +100,7 @@ class WeatherDetailsViewModel @Inject constructor(
                 _dailyForecastInfo.value = (response.data.forecasts)
             }
             is Resource.Error -> {
-                _errorMessage.emit(R.string.unable_to_fecth_data)
+                _errorMessage.value = (R.string.unable_to_fecth_data)
             }
         }
     }

@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nkuppan.weatherapp.core.extention.autoCleared
@@ -15,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class NewWeatherDetailFragment : BaseFragment() {
 
-    private var cityName: String = "London"
+    private var cityName: String = "Chennai"
 
     private var viewBinding: FragmentForecastDetailsNewBinding by autoCleared()
 
@@ -50,6 +52,18 @@ class NewWeatherDetailFragment : BaseFragment() {
         viewBinding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.fetchWeatherInfo(cityName, fetchAllDataInOnce = true)
         }
+
+        viewBinding.place.setOnClickListener {
+            findNavController().navigate(
+                NewWeatherDetailFragmentDirections.actionNewWeatherDetailFragmentToPlaceSearchFragment()
+            )
+        }
+
+        viewBinding.settings.setOnClickListener {
+            findNavController().navigate(
+                NewWeatherDetailFragmentDirections.actionNewWeatherDetailFragmentToSettingsFragment()
+            )
+        }
     }
 
     private fun initializeData() {
@@ -83,6 +97,15 @@ class NewWeatherDetailFragment : BaseFragment() {
     }
 
     companion object {
+
         private const val CITY_NAME = "city_name"
+
+        fun newInstance(cityName: String): Fragment {
+            return WeatherDetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putString(CITY_NAME, cityName)
+                }
+            }
+        }
     }
 }

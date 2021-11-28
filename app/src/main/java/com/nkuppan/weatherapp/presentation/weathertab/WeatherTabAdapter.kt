@@ -2,7 +2,7 @@ package com.nkuppan.weatherapp.presentation.weathertab
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.nkuppan.weatherapp.presentation.weatherdetails.WeatherDetailsFragment
+import com.nkuppan.weatherapp.presentation.weatherdetails.NewWeatherDetailFragment
 
 class WeatherTabAdapter(
     fragment: Fragment,
@@ -14,6 +14,6 @@ class WeatherTabAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-        return WeatherDetailsFragment.newInstance(cityNames[position])
+        return NewWeatherDetailFragment.newInstance(cityNames[position])
     }
 }

@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_4dp"
-            android:text="@{viewModel.weatherDescription}"
+            android:text="@{viewModel.weatherTitle}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/weather_icon"
             app:layout_constraintTop_toTopOf="@id/weather_icon"

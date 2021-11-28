@@ -106,7 +106,7 @@ data class HourlyOpenWeatherDto(
     @SerializedName("pop")
     val pop: Double
 ) {
-    fun toWeather(): Weather {
+    fun toWeather(alertMessage: String? = null): Weather {
         return Weather(
             date,
             "${pop * 100} %",
@@ -115,8 +115,9 @@ data class HourlyOpenWeatherDto(
             weatherImages[0].getDayThemeImageURL(),
             weatherImages[0].getNightThemeImageURL(),
             weatherImages[0].description,
+            weatherImages[0].main,
             feelsLikeTemperature = feelsLikeTemperature,
-            alert = null
+            alert = alertMessage
         )
     }
 }
@@ -159,6 +160,7 @@ data class DailyOpenWeatherDto(
             weatherImages[0].getDayThemeImageURL(),
             weatherImages[0].getNightThemeImageURL(),
             weatherImages[0].description,
+            weatherImages[0].main,
             feelsLikeTemperature = feelsLikeTemperature.max ?: 0.0
         )
     }
@@ -200,7 +202,7 @@ data class OpenWeatherMapApiResponse(
     }
 
     fun toCurrentWeatherList(): List<Weather> {
-        return listOf(currentWeather.toWeather())
+        return listOf(currentWeather.toWeather(alerts?.get(0)?.event))
     }
 
     fun toDailyWeatherList(): List<Weather> {

@@ -30,9 +30,13 @@ data class Weather(
     val weatherDayThemeIcon: String,
     val weatherNightThemeIcon: String,
     val weatherDescription: String,
+    val weatherTitle: String? = null,
     val alert: String? = null,
     val feelsLikeTemperature: Double = 0.0,
 ) {
+    /**
+     * This we have to improve by using android resource string rather than hard coding here
+     */
     fun getFormattedFeelsLikeTemperature(): String {
         return "Feels like $feelsLikeTemperature°C"
     }

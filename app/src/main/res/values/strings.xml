@@ -10,4 +10,8 @@
     <string name="unable_to_fecth_data">Unable to fetch data from server</string>
     <string name="settings">Settings</string>
     <string name="city_name_is_invalid">City name is invalid</string>
+    <string name="retry">Retry</string>
+    <string name="country_flag">Country Flag</string>
+    <string name="search_place">Search places</string>
+    <string name="enter_valid_query_string">Enter a valid query string</string>
 </resources>
