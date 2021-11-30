@@ -38,6 +38,12 @@ data class Weather(
     val weatherTitle: String? = null,
     val alert: String? = null,
     val feelsLikeTemperature: Double = 0.0,
+    val windSpeed: Double = 0.0,
+    val humidity: Int = 0,
+    val uvIndex: Double = 0.0,
+    val pressure: Int = 0,
+    val visibility: Int = 0,
+    val dewPoint: Double = 0.0,
 ) {
     /**
      * This we have to improve by using android resource string rather than hard coding here
@@ -60,6 +66,30 @@ data class Weather(
 
     fun getFormattedDate(): String {
         return date.getFormattedDate()
+    }
+
+    fun getFormattedWindSpeed(): String {
+        return "Wind: $windSpeed m/s"
+    }
+
+    fun getFormattedHumidity(): String {
+        return "Humidity: $humidity %"
+    }
+
+    fun getFormattedUVIndex(): String {
+        return "UV Index: $uvIndex"
+    }
+
+    fun getFormattedPressure(): String {
+        return "Pressure: $pressure hPa"
+    }
+
+    fun getFormattedVisibility(): String {
+        return "Visibility: ${visibility / 1000} km"
+    }
+
+    fun getFormattedDewPoint(): String {
+        return "Dew Point: ${dewPoint.toInt()}°C"
     }
 }
 

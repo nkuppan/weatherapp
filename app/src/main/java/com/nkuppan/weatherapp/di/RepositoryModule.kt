@@ -4,6 +4,9 @@ import android.content.Context
 import com.nkuppan.weatherapp.data.datastore.SettingsDataStore
 import com.nkuppan.weatherapp.data.datastore.ThemeDataStore
 import com.nkuppan.weatherapp.data.network.OpenWeatherMapApiService
+import com.nkuppan.weatherapp.data.network.mapper.CurrentWeatherDtoMapper
+import com.nkuppan.weatherapp.data.network.mapper.DailyWeatherDtoMapper
+import com.nkuppan.weatherapp.data.network.mapper.HourlyWeatherDtoMapper
 import com.nkuppan.weatherapp.data.respository.OpenWeatherMapRepositoryImpl
 import com.nkuppan.weatherapp.data.respository.SettingsRepositoryImpl
 import com.nkuppan.weatherapp.data.respository.ThemeRepositoryImpl
@@ -56,7 +59,12 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideWeatherRepository(service: OpenWeatherMapApiService): WeatherRepository {
-        return OpenWeatherMapRepositoryImpl(service)
+        return OpenWeatherMapRepositoryImpl(
+            service,
+            CurrentWeatherDtoMapper(),
+            HourlyWeatherDtoMapper(),
+            DailyWeatherDtoMapper()
+        )
     }
 
     @Provides

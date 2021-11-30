@@ -16,4 +16,7 @@
     <dimen name="error_image_size">48dp</dimen>
     <dimen name="search_container_min_width">300dp</dimen>
     <dimen name="card_corner_radius">4dp</dimen>
+
+    <dimen name="text_size_10sp">10sp</dimen>
+    <dimen name="text_size_12sp">12sp</dimen>
 </resources>

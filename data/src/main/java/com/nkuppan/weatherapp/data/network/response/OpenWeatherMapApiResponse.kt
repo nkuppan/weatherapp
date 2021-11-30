@@ -1,10 +1,9 @@
 package com.nkuppan.weatherapp.data.network.response
 
+import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import com.nkuppan.weatherapp.data.network.OpenWeatherMapApiService
 import com.nkuppan.weatherapp.domain.model.City
-import com.nkuppan.weatherapp.domain.model.Weather
-import com.nkuppan.weatherapp.domain.model.WeatherForecast
 
 data class OpenWeatherAlertDto(
     @SerializedName("sender_name")
@@ -103,24 +102,19 @@ data class HourlyOpenWeatherDto(
     val humidity: Int,
     @SerializedName("pressure")
     val pressure: Int,
+    @SerializedName("uvi")
+    val uvIndex: Double,
+    @SerializedName("dew_point")
+    val dewPoint: Double,
+    @SerializedName("visibility")
+    val visibility: Int,
+    @SerializedName("clouds")
+    val clouds: Int,
+    @SerializedName("rain")
+    val rain: JsonObject,
     @SerializedName("pop")
     val pop: Double
-) {
-    fun toWeather(alertMessage: String? = null): Weather {
-        return Weather(
-            date,
-            "${pop * 100} %",
-            temperature,
-            temperature,
-            weatherImages[0].getDayThemeImageURL(),
-            weatherImages[0].getNightThemeImageURL(),
-            weatherImages[0].description,
-            weatherImages[0].main,
-            feelsLikeTemperature = feelsLikeTemperature,
-            alert = alertMessage
-        )
-    }
-}
+)
 
 data class DailyOpenWeatherDto(
     @SerializedName("dt")
@@ -149,22 +143,7 @@ data class DailyOpenWeatherDto(
     val pressure: Int,
     @SerializedName("pop")
     val pop: Double
-) {
-
-    fun toWeather(): Weather {
-        return Weather(
-            date,
-            "${pop * 100} %",
-            temperature.min ?: 0.0,
-            temperature.max ?: 0.0,
-            weatherImages[0].getDayThemeImageURL(),
-            weatherImages[0].getNightThemeImageURL(),
-            weatherImages[0].description,
-            weatherImages[0].main,
-            feelsLikeTemperature = feelsLikeTemperature.max ?: 0.0
-        )
-    }
-}
+)
 
 data class OpenWeatherMapApiResponse(
     @SerializedName("lat")
@@ -179,37 +158,4 @@ data class OpenWeatherMapApiResponse(
     val dailyWeather: List<DailyOpenWeatherDto>? = null,
     @SerializedName("alerts")
     val alerts: List<OpenWeatherAlertDto>? = null
-) {
-    fun toCurrentWeatherForecast(): WeatherForecast {
-        return WeatherForecast(
-            headlines = currentWeather.weatherImages[0].description,
-            forecasts = listOf(currentWeather.toWeather())
-        )
-    }
-
-    fun toHourlyWeatherForecast(): WeatherForecast {
-        return WeatherForecast(
-            headlines = currentWeather.weatherImages[0].description,
-            forecasts = hourlyWeather?.map { it.toWeather() } ?: emptyList()
-        )
-    }
-
-    fun toDailyWeatherForecast(): WeatherForecast {
-        return WeatherForecast(
-            headlines = currentWeather.weatherImages[0].description,
-            forecasts = dailyWeather?.map { it.toWeather() } ?: emptyList()
-        )
-    }
-
-    fun toCurrentWeatherList(): List<Weather> {
-        return listOf(currentWeather.toWeather(alerts?.get(0)?.event))
-    }
-
-    fun toDailyWeatherList(): List<Weather> {
-        return dailyWeather?.map { it.toWeather() } ?: emptyList()
-    }
-
-    fun toHourlyWeatherList(): List<Weather> {
-        return hourlyWeather?.map { it.toWeather() } ?: emptyList()
-    }
-}
+)
