@@ -4,7 +4,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.google.gson.Gson
+import com.nkuppan.weatherapp.data.extension.jsonStringToObject
+import com.nkuppan.weatherapp.data.extension.objectToJsonString
 import com.nkuppan.weatherapp.domain.model.City
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -29,17 +30,5 @@ class SettingsDataStore(private val dataStore: DataStore<Preferences>) {
 
     companion object {
         private val KEY_SELECTED_COUNTRY = stringPreferencesKey("selected_country")
-    }
-}
-
-fun Any.objectToJsonString(): String {
-    return Gson().toJson(this)
-}
-
-inline fun <reified T> String.jsonStringToObject(): T? {
-    return try {
-        Gson().fromJson(this, T::class.java)
-    } catch (exception: Exception) {
-        null
     }
 }

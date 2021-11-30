@@ -10,23 +10,30 @@ import com.nkuppan.weatherapp.domain.model.Resource
 import com.nkuppan.weatherapp.domain.model.Weather
 import com.nkuppan.weatherapp.domain.model.WeatherUIModel
 import com.nkuppan.weatherapp.domain.usecase.GetAllWeatherForecastUseCase
-import com.nkuppan.weatherapp.domain.usecase.GetCityDetailsUseCase
 import com.nkuppan.weatherapp.domain.usecase.GetDailyWeatherForecastUseCase
 import com.nkuppan.weatherapp.domain.usecase.GetHourlyWeatherForecastUseCase
+import com.nkuppan.weatherapp.domain.usecase.GetSelectedCityUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class WeatherDetailsViewModel @Inject constructor(
-    private val getCityDetailsUseCase: GetCityDetailsUseCase,
     private val dailyWeatherForecastUseCase: GetDailyWeatherForecastUseCase,
     private val hourlyWeatherForecastUseCase: GetHourlyWeatherForecastUseCase,
-    private val getAllWeatherForecastUseCase: GetAllWeatherForecastUseCase
+    private val getAllWeatherForecastUseCase: GetAllWeatherForecastUseCase,
+    private val getSelectedCityUseCase: GetSelectedCityUseCase
 ) : BaseViewModel() {
 
-    private val _allWeatherInfo: MutableLiveData<List<WeatherUIModel>> = MutableLiveData()
-    val allWeatherInfo: LiveData<List<WeatherUIModel>> = _allWeatherInfo
+    private val _allWeatherInfo: MutableSharedFlow<List<WeatherUIModel>> =
+        MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val allWeatherInfo: SharedFlow<List<WeatherUIModel>> = _allWeatherInfo.asSharedFlow()
 
     private val _dailyForecastInfo: MutableLiveData<List<Weather>> = MutableLiveData()
     val dailyForecastInfo: LiveData<List<Weather>> = _dailyForecastInfo
@@ -34,31 +41,44 @@ class WeatherDetailsViewModel @Inject constructor(
     private val _hourlyForecastInfo: MutableLiveData<List<Weather>> = MutableLiveData()
     val hourlyForecastInfo: LiveData<List<Weather>> = _hourlyForecastInfo
 
-    fun fetchWeatherInfo(cityName: String, fetchAllDataInOnce: Boolean = false) {
+    private var currentJob: Job? = null
+
+    private var selectedCity: City? = null
+
+    val selectedLocation = MutableLiveData<String>()
+
+    init {
+        viewModelScope.launch {
+            getSelectedCityUseCase.invoke().collectLatest {
+                fetchWeatherInfo(it, true)
+            }
+        }
+    }
+
+    fun fetchWeatherInfo(fetchAllDataInOnce: Boolean = false) {
+        selectedCity?.let {
+            fetchWeatherInfo(it, fetchAllDataInOnce)
+        }
+    }
+
+    private fun fetchWeatherInfo(city: City, fetchAllDataInOnce: Boolean = false) {
 
         if (_isLoading.value == true) {
-            return
+            currentJob?.cancel()
         }
 
         _isLoading.value = true
 
-        viewModelScope.launch {
+        currentJob = viewModelScope.launch {
 
-            when (val response = getCityDetailsUseCase.invoke(cityName)) {
-                is Resource.Success -> {
-                    if (response.data.isNotEmpty()) {
-                        if (fetchAllDataInOnce) {
-                            fetchAllForecastInfo(response.data[0])
-                        } else {
-                            fetchIndividualForecastInfo(response.data[0])
-                        }
-                    } else {
-                        _errorMessage.value = (R.string.city_name_is_invalid)
-                    }
-                }
-                is Resource.Error -> {
-                    _errorMessage.value = (R.string.unable_to_fetch_data)
-                }
+            selectedCity = city
+
+            selectedLocation.value = city.getFormattedCityName()
+
+            if (fetchAllDataInOnce) {
+                fetchAllForecastInfo(city)
+            } else {
+                fetchIndividualForecastInfo(city)
             }
 
             _isLoading.value = false
@@ -74,7 +94,7 @@ class WeatherDetailsViewModel @Inject constructor(
             )
         ) {
             is Resource.Success -> {
-                _allWeatherInfo.value = (response.data)
+                _allWeatherInfo.tryEmit(response.data)
             }
             is Resource.Error -> {
                 _errorMessage.value = (R.string.unable_to_fetch_data)

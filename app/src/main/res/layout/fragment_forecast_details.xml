@@ -61,7 +61,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/hourly_forecast_view"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/hour_list_height"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:listitem="@layout/list_item_hourly_forecast" />

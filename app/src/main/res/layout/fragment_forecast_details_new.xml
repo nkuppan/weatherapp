@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.nkuppan.weatherapp.presentation.weatherdetails.WeatherDetailsViewModel" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -26,6 +33,7 @@
                     android:drawablePadding="@dimen/padding_16dp"
                     android:gravity="center_vertical"
                     android:padding="@dimen/padding_16dp"
+                    android:text="@{viewModel.selectedLocation}"
                     android:textSize="@dimen/place_heading_text_size"
                     app:drawableStartCompat="@drawable/ic_search"
                     tools:text="Chennai, Tamil Nadu, India" />

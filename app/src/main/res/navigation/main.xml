@@ -12,7 +12,7 @@
     <fragment
         android:id="@+id/newWeatherDetailFragment"
         android:name="com.nkuppan.weatherapp.presentation.weatherdetails.NewWeatherDetailFragment"
-        android:label="NewWeatherDetailFragment" >
+        android:label="NewWeatherDetailFragment">
         <action
             android:id="@+id/action_newWeatherDetailFragment_to_placeSearchFragment"
             app:destination="@id/placeSearchFragment" />

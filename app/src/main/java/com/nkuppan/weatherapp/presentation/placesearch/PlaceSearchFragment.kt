@@ -6,8 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nkuppan.weatherapp.R
 import com.nkuppan.weatherapp.core.extention.autoCleared
@@ -23,7 +24,7 @@ class PlaceSearchFragment : BaseFragment() {
 
     private var binding: FragmentPlaceSearchBinding by autoCleared()
 
-    private val placeSearchViewModel: PlaceSearchViewModel by activityViewModels()
+    private val placeSearchViewModel: PlaceSearchViewModel by viewModels()
 
     private val placeListAdapter = PlaceListAdapter { city ->
         viewLifecycleOwner.lifecycleScope.launch {
@@ -53,8 +54,13 @@ class PlaceSearchFragment : BaseFragment() {
     }
 
     private fun initializeObserver() {
+
         placeSearchViewModel.places.observe(viewLifecycleOwner) {
             placeListAdapter.submitList(it)
+        }
+
+        placeSearchViewModel.success.observe(viewLifecycleOwner) {
+            findNavController().popBackStack()
         }
     }
 

@@ -16,6 +16,10 @@ data class City(
     fun isValidCity(): Boolean {
         return latitude != null && longitude != null
     }
+
+    fun getFormattedCityName(): String {
+        return "${name}, $country"
+    }
 }
 
 data class WeatherForecast(
@@ -39,15 +43,15 @@ data class Weather(
      * This we have to improve by using android resource string rather than hard coding here
      */
     fun getFormattedFeelsLikeTemperature(): String {
-        return "Feels like $feelsLikeTemperature°C"
+        return "Feels like ${feelsLikeTemperature.toInt()}°C"
     }
 
     fun getFormattedTemperature(): String {
-        return "$highTemperature°C"
+        return "${highTemperature.toInt()}°C"
     }
 
     fun getFormattedHighLowTemperature(): String {
-        return "$highTemperature / ${lowTemperature}°C"
+        return "${highTemperature.toInt()} / ${lowTemperature.toInt()}°C"
     }
 
     fun getFormattedTime(): String {

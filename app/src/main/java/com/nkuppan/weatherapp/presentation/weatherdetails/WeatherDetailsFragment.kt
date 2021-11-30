@@ -51,7 +51,7 @@ class WeatherDetailsFragment : BaseFragment() {
 
     private fun initializeRefreshView() {
         viewBinding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.fetchWeatherInfo(cityName)
+            viewModel.fetchWeatherInfo()
         }
     }
 
@@ -75,7 +75,7 @@ class WeatherDetailsFragment : BaseFragment() {
             dailyForecastAdapter.submitList(it)
         }
 
-        viewModel.fetchWeatherInfo(cityName)
+        viewModel.fetchWeatherInfo()
     }
 
     private fun initializeAdapters() {

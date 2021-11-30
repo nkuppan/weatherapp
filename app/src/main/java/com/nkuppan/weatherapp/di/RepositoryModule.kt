@@ -11,10 +11,7 @@ import com.nkuppan.weatherapp.di.AppModule.dataStore
 import com.nkuppan.weatherapp.domain.respository.SettingsRepository
 import com.nkuppan.weatherapp.domain.respository.ThemeRepository
 import com.nkuppan.weatherapp.domain.respository.WeatherRepository
-import com.nkuppan.weatherapp.domain.usecase.GetAllWeatherForecastUseCase
-import com.nkuppan.weatherapp.domain.usecase.GetCityDetailsUseCase
-import com.nkuppan.weatherapp.domain.usecase.GetDailyWeatherForecastUseCase
-import com.nkuppan.weatherapp.domain.usecase.GetHourlyWeatherForecastUseCase
+import com.nkuppan.weatherapp.domain.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -92,5 +89,21 @@ object RepositoryModule {
         weatherRepository: WeatherRepository
     ): GetAllWeatherForecastUseCase {
         return GetAllWeatherForecastUseCase(weatherRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetSelectedCityUseCase(
+        settingsRepository: SettingsRepository
+    ): GetSelectedCityUseCase {
+        return GetSelectedCityUseCase(settingsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSaveSelectedCityUseCase(
+        settingsRepository: SettingsRepository
+    ): SaveSelectedCityUseCase {
+        return SaveSelectedCityUseCase(settingsRepository)
     }
 }
