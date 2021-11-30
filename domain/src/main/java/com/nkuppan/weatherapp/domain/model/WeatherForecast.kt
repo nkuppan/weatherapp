@@ -10,7 +10,8 @@ data class City(
     val rank: Int,
     val country: String,
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
+    val isFavorite: Boolean = false
 ) {
     fun isValidCity(): Boolean {
         return latitude != null && longitude != null

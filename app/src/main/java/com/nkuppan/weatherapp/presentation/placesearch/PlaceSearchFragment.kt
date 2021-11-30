@@ -7,14 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.nkuppan.weatherapp.R
-import com.nkuppan.weatherapp.core.extention.EventObserver
 import com.nkuppan.weatherapp.core.extention.autoCleared
 import com.nkuppan.weatherapp.core.extention.clearFocusAndHideKeyboard
 import com.nkuppan.weatherapp.core.extention.showSnackBarMessage
 import com.nkuppan.weatherapp.core.ui.fragment.BaseFragment
 import com.nkuppan.weatherapp.databinding.FragmentPlaceSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PlaceSearchFragment : BaseFragment() {
@@ -22,6 +24,12 @@ class PlaceSearchFragment : BaseFragment() {
     private var binding: FragmentPlaceSearchBinding by autoCleared()
 
     private val placeSearchViewModel: PlaceSearchViewModel by activityViewModels()
+
+    private val placeListAdapter = PlaceListAdapter { city ->
+        viewLifecycleOwner.lifecycleScope.launch {
+            placeSearchViewModel.saveSelectedCity(city)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +45,20 @@ class PlaceSearchFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initializeSearchContainer()
+
+        initializeRecyclerView()
+
+        initializeObserver()
+    }
+
+    private fun initializeObserver() {
+        placeSearchViewModel.places.observe(viewLifecycleOwner) {
+            placeListAdapter.submitList(it)
+        }
+    }
+
+    private fun initializeSearchContainer() {
         binding.query.apply {
             setOnEditorActionListener { _, actionId, _ ->
                 return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -55,10 +77,11 @@ class PlaceSearchFragment : BaseFragment() {
                 return@setOnKeyListener false
             }
         }
+    }
 
-        placeSearchViewModel.places.observe(viewLifecycleOwner) {
-
-        }
+    private fun initializeRecyclerView() {
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = placeListAdapter
     }
 
     private fun handleSearchAction() {

@@ -1,11 +1,14 @@
 package com.nkuppan.weatherapp.di
 
 import android.content.Context
+import com.nkuppan.weatherapp.data.datastore.SettingsDataStore
 import com.nkuppan.weatherapp.data.datastore.ThemeDataStore
 import com.nkuppan.weatherapp.data.network.OpenWeatherMapApiService
 import com.nkuppan.weatherapp.data.respository.OpenWeatherMapRepositoryImpl
+import com.nkuppan.weatherapp.data.respository.SettingsRepositoryImpl
 import com.nkuppan.weatherapp.data.respository.ThemeRepositoryImpl
 import com.nkuppan.weatherapp.di.AppModule.dataStore
+import com.nkuppan.weatherapp.domain.respository.SettingsRepository
 import com.nkuppan.weatherapp.domain.respository.ThemeRepository
 import com.nkuppan.weatherapp.domain.respository.WeatherRepository
 import com.nkuppan.weatherapp.domain.usecase.GetAllWeatherForecastUseCase
@@ -33,6 +36,18 @@ object RepositoryModule {
     @Singleton
     fun provideThemeRepository(dataStore: ThemeDataStore): ThemeRepository {
         return ThemeRepositoryImpl(dataStore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSettingsDataStore(@ApplicationContext context: Context): SettingsDataStore {
+        return SettingsDataStore(context.dataStore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSettingsRepository(dataStore: SettingsDataStore): SettingsRepository {
+        return SettingsRepositoryImpl(dataStore)
     }
 
     /*@Provides

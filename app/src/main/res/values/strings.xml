@@ -7,7 +7,7 @@
     <string name="rio_de_jeneiro">Rio de janeiro</string>
     <string name="beijing">Beijing</string>
     <string name="los_angeles">Los angeles</string>
-    <string name="unable_to_fecth_data">Unable to fetch data from server</string>
+    <string name="unable_to_fetch_data">Unable to fetch data from server</string>
     <string name="settings">Settings</string>
     <string name="city_name_is_invalid">City name is invalid</string>
     <string name="retry">Retry</string>

@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WeatherDetailsViewModel @Inject constructor(
-    private val cityDetailsUseCase: GetCityDetailsUseCase,
+    private val getCityDetailsUseCase: GetCityDetailsUseCase,
     private val dailyWeatherForecastUseCase: GetDailyWeatherForecastUseCase,
     private val hourlyWeatherForecastUseCase: GetHourlyWeatherForecastUseCase,
     private val getAllWeatherForecastUseCase: GetAllWeatherForecastUseCase
@@ -44,7 +44,7 @@ class WeatherDetailsViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            when (val response = cityDetailsUseCase.invoke(cityName)) {
+            when (val response = getCityDetailsUseCase.invoke(cityName)) {
                 is Resource.Success -> {
                     if (response.data.isNotEmpty()) {
                         if (fetchAllDataInOnce) {
@@ -57,7 +57,7 @@ class WeatherDetailsViewModel @Inject constructor(
                     }
                 }
                 is Resource.Error -> {
-                    _errorMessage.value = (R.string.unable_to_fecth_data)
+                    _errorMessage.value = (R.string.unable_to_fetch_data)
                 }
             }
 
@@ -77,7 +77,7 @@ class WeatherDetailsViewModel @Inject constructor(
                 _allWeatherInfo.value = (response.data)
             }
             is Resource.Error -> {
-                _errorMessage.value = (R.string.unable_to_fecth_data)
+                _errorMessage.value = (R.string.unable_to_fetch_data)
             }
         }
     }
@@ -90,7 +90,7 @@ class WeatherDetailsViewModel @Inject constructor(
                 _hourlyForecastInfo.value = (response.data.forecasts)
             }
             is Resource.Error -> {
-                _errorMessage.value = (R.string.unable_to_fecth_data)
+                _errorMessage.value = (R.string.unable_to_fetch_data)
             }
         }
 
@@ -100,7 +100,7 @@ class WeatherDetailsViewModel @Inject constructor(
                 _dailyForecastInfo.value = (response.data.forecasts)
             }
             is Resource.Error -> {
-                _errorMessage.value = (R.string.unable_to_fecth_data)
+                _errorMessage.value = (R.string.unable_to_fetch_data)
             }
         }
     }
