@@ -9,9 +9,9 @@ It displays the latest weather forecast information for selected city using open
 
 <br>
 
-| Weather Home | Search City | Search Details | Dark Theme |
+| Weather Home | Search City | Settings | Dark Theme |
 | ------ | ----- | ------ | ------ |
-| ![Search](art/screenshots/screenshot-1.png) | ![Search List](art/screenshots/screenshot-2.png) | ![Image](art/screenshots/screenshot-3.png) | ![Dark Theme](art/screenshots/screenshot-4.png) |
+| ![Weather Home](art/screenshots/screenshot-1.png) | ![Search City](art/screenshots/screenshot-2.png) | ![Settings](art/screenshots/screenshot-3.png) | ![Dark Theme](art/screenshots/screenshot-4.png) |
 
 ## Android development
 

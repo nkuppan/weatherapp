@@ -13,6 +13,6 @@ class WeatherTabAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-        return fragments.get(position)
+        return fragments[position]
     }
 }
