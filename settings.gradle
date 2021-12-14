@@ -1,2 +1,5 @@
-rootProject.name = "Weather App"
 include ':app'
+include ':core'
+rootProject.name = "weatherapp"
+include ':data'
+include ':domain'

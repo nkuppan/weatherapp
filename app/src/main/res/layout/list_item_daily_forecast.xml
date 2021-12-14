@@ -13,14 +13,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/parentConstraint"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/padding_16dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/weather_image"
-            android:layout_width="@dimen/weather_image_size"
-            android:layout_height="@dimen/weather_image_size"
-            android:layout_marginTop="@dimen/margin_4dp"
+            android:layout_width="@dimen/weather_mid_image_size"
+            android:layout_height="@dimen/weather_mid_image_size"
+            android:layout_marginStart="@dimen/margin_16dp"
             android:contentDescription="@{viewModel.weatherDescription}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,18 +31,19 @@
             android:id="@+id/temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.formattedTemperature}"
+            android:layout_marginEnd="@dimen/margin_16dp"
+            android:text="@{viewModel.formattedHighLowTemperature}"
             android:textSize="@dimen/temperature_text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="27 °" />
+            tools:text="27/28°C" />
 
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_4dp"
+            android:layout_marginTop="@dimen/margin_16dp"
             android:text="@{viewModel.formattedDate}"
             android:textSize="@dimen/daily_hours_date_text_size"
             app:layout_constraintEnd_toStartOf="@id/temperature"
@@ -56,12 +56,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_4dp"
+            android:layout_marginBottom="@dimen/margin_16dp"
             android:text="@{viewModel.weatherDescription}"
+            android:textSize="@dimen/daily_forecast_description_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/temperature"
             app:layout_constraintStart_toEndOf="@id/weather_image"
             app:layout_constraintTop_toBottomOf="@id/date"
             tools:text="Clear throughout the day." />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

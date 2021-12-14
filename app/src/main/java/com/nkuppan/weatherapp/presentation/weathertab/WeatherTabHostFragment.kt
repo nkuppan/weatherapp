@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.nkuppan.weatherapp.R
 import com.nkuppan.weatherapp.core.extention.autoCleared
 import com.nkuppan.weatherapp.core.ui.fragment.BaseFragment
 import com.nkuppan.weatherapp.databinding.FragmentForecastTabHostBinding
+import com.nkuppan.weatherapp.presentation.weatherdetails.WeatherDetailsFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,7 +36,13 @@ class WeatherTabHostFragment : BaseFragment() {
             getString(R.string.los_angeles)
         )
 
-        viewBinding.forecastViewPager.adapter = WeatherTabAdapter(this, cityName)
+        val weatherDetailFragments = mutableListOf<Fragment>()
+
+        repeat(cityName.size) { index ->
+            weatherDetailFragments.add(WeatherDetailsFragment.newInstance(cityName[index]))
+        }
+
+        viewBinding.forecastViewPager.adapter = WeatherTabAdapter(this, weatherDetailFragments)
 
         TabLayoutMediator(viewBinding.tabLayout, viewBinding.forecastViewPager) { tab, position ->
             tab.text = cityName[position]

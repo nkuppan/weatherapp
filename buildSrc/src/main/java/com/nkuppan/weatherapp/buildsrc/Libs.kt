@@ -52,6 +52,8 @@ object Libs {
                 "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.AndroidX.lifecycle}"
             const val liveDataKtx =
                 "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.AndroidX.lifecycle}"
+            const val runtime =
+                "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.AndroidX.lifecycle}"
         }
 
         object Room {

@@ -5,7 +5,10 @@ object Versions {
     const val minSdk = 21
     const val targetSdk = 30
 
-    const val androidGradlePlugin = "7.0.3"
+    const val versionCode = 1
+    const val versionName = "1.0.0"
+
+    const val androidGradlePlugin = "7.0.4"
     const val ktlint = "0.42.1"
     const val glide = "4.12.0"
 

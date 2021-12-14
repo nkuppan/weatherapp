@@ -2,10 +2,32 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
-    app:startDestination="@id/weatherTabHostFragment">
+    app:startDestination="@id/newWeatherDetailFragment">
 
     <fragment
         android:id="@+id/weatherTabHostFragment"
         android:name="com.nkuppan.weatherapp.presentation.weathertab.WeatherTabHostFragment"
         android:label="WeatherTabHostFragment" />
+
+    <fragment
+        android:id="@+id/newWeatherDetailFragment"
+        android:name="com.nkuppan.weatherapp.presentation.weatherdetails.NewWeatherDetailFragment"
+        android:label="NewWeatherDetailFragment">
+        <action
+            android:id="@+id/action_newWeatherDetailFragment_to_placeSearchFragment"
+            app:destination="@id/placeSearchFragment" />
+        <action
+            android:id="@+id/action_newWeatherDetailFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/placeSearchFragment"
+        android:name="com.nkuppan.weatherapp.presentation.placesearch.PlaceSearchFragment"
+        android:label="PlaceSearchFragment" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.nkuppan.weatherapp.presentation.settings.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>

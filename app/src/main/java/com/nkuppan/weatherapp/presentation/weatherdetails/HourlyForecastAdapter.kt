@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.nkuppan.weatherapp.databinding.ListItemDailyForecastBinding
 import com.nkuppan.weatherapp.databinding.ListItemHourlyForecastBinding
 import com.nkuppan.weatherapp.domain.model.Weather
 
@@ -14,7 +13,11 @@ class HourlyForecastAdapter : ListAdapter<Weather, HourlyForecastViewHolder>(DIF
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourlyForecastViewHolder =
         HourlyForecastViewHolder(
-            ListItemHourlyForecastBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ListItemHourlyForecastBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
         )
 
     override fun onBindViewHolder(holder: HourlyForecastViewHolder, position: Int) {
