@@ -14,4 +14,5 @@
     <string name="country_flag">Country Flag</string>
     <string name="search_place">Search places</string>
     <string name="enter_valid_query_string">Enter a valid query string</string>
+    <string name="powered_by">Powered By</string>
 </resources>

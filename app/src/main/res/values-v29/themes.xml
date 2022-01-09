@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Platform.V29.Theme.WeatherApp" parent="Platform.V24.Theme.WeatherApp">
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:enforceStatusBarContrast">false</item>
+    </style>
+
+    <style name="Platform.Theme.WeatherApp" parent="Platform.V29.Theme.WeatherApp" />
+
+</resources>

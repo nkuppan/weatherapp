@@ -1,32 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <color name="ic_launcher_background">#FFFFFF</color>
-
     <!-- Support Dark/Light theme -->
     <color name="white">@android:color/white</color>
     <color name="black">@android:color/black</color>
-    <color name="transparent">@android:color/transparent</color>
     <color name="red">@android:color/holo_red_dark</color>
-    <color name="divider_color">#E0E0E0</color>
+    <color name="grey_light">#E0E0E0</color>
     <color name="blue">#166EF7</color>
 
-    <!-- Below colors are used to create theme -->
-    <color name="colorPrimary">@color/blue</color>
-    <color name="colorOnPrimary">@color/white</color>
-    <color name="colorPrimaryVariant">@color/blue</color>
-
-    <color name="colorSecondary">@color/blue</color>
-    <color name="colorOnSecondary">@color/white</color>
-    <color name="colorSecondaryVariant">@color/blue</color>
-
-    <color name="colorSurface">@color/white</color>
-    <color name="colorOnSurface">@color/black</color>
-
-    <color name="colorError">@color/red</color>
-    <color name="colorOnError">@color/white</color>
-
-    <color name="colorBackground">@color/white</color>
-    <color name="colorOnBackground">@color/black</color>
+    <color name="weather_green_300">#7BC075</color>
+    <color name="weather_green_700">#2D8626</color>
+    <color name="weather_green_900">#005800</color>
+    <color name="weather_blue_300">#768FFF</color>
+    <color name="weather_blue_900">#0000AC</color>
+    <color name="weather_blue_950">#001754</color>
+    <color name="weather_red_300">#FF5C44</color>
+    <color name="weather_red_600">#E51A19</color>
+    <color name="white_70">#B3FFFFFF</color>
+    <color name="dark_grey">#121212</color>
+    <color name="black_40">#66000000</color>
 
 </resources>

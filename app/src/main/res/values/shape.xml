@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ShapeAppearance.WeatherApp.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerSize">0dp</item>
+    </style>
+
+    <style name="ShapeAppearance.WeatherApp.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerSize">0dp</item>
+    </style>
+
+    <style name="ShapeAppearance.WeatherApp.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerSize">0dp</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.WeatherApp.Rounded" parent="">
+        <item name="cornerSize">@dimen/height_row_half</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.WeatherApp.RoundedTopStart" parent="">
+        <item name="cornerSizeTopLeft">@dimen/height_row_half</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.WeatherApp.RoundedTopEnd" parent="">
+        <item name="cornerSizeTopRight">@dimen/height_row_half</item>
+    </style>
+</resources>
