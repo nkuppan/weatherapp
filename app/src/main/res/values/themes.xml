@@ -1,47 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
 
-    <style name="AppTheme" parent="BaseTheme">
-        <!--selection controls.-->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorOnPrimary">@color/colorOnPrimary</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
 
-        <item name="colorSecondary">@color/colorSecondary</item>
-        <item name="colorOnSecondary">@color/colorOnSecondary</item>
-        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
-
-        <item name="colorError">@color/colorError</item>
-        <item name="colorOnError">@color/colorOnError</item>
-
-        <item name="colorSurface">@color/colorSurface</item>
-        <item name="colorOnSurface">@color/colorOnSurface</item>
-
-        <item name="android:colorBackground">@color/colorSurface</item>
-        <item name="colorOnBackground">@color/colorOnSurface</item>
+    <style name="Platform.V24.Theme.WeatherApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:navigationBarColor">@color/white_70</item>
     </style>
 
-    <style name="BaseTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Platform.Theme.WeatherApp" parent="Platform.V24.Theme.WeatherApp" />
 
-        <item name="android:fontFamily">@font/open_sans</item>
+    <style name="Base.Theme.WeatherApp" parent="Platform.Theme.WeatherApp">
+        <item name="android:colorControlHighlight">@color/on_surface_16</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="fontFamily">@font/open_sans</item>
-
-        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.WeatherApp.Headline4</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.WeatherApp.Headline6</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.WeatherApp.Body1</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.WeatherApp.SmallComponent
         </item>
-        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Surface</item>
-        <item name="textAppearanceButton">@style/TextAppearance.MaterialComponents.Button</item>
-        <item name="android:statusBarColor" tools:ignore="NewApi">?attr/colorSurface</item>
-        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
-        <!--<item name="android:navigationBarColor" tools:ignore="NewApi">
-            ?attr/colorSurface
-        </item>-->
-        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
-        <item name="android:navigationBarDividerColor" tools:ignore="NewApi">
-            ?attr/colorControlHighlight
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.WeatherApp.MediumComponent
+        </item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.WeatherApp.LargeComponent
+        </item>
+        <item name="listPreferredItemHeightSmall">@dimen/height_row</item>
+        <item name="navigationViewStyle">@style/Widget.WeatherApp.NavigationView</item>
+        <item name="actionBarSize">@dimen/height_row</item>
+        <item name="appBarLayoutStyle">@style/Widget.WeatherApp.AppBarLayout</item>
+        <item name="tabStyle">@style/Widget.WeatherApp.TabLayout</item>
+        <item name="materialButtonStyle">@style/Widget.WeatherApp.Button</item>
+        <item name="floatingActionButtonStyle">@style/Widget.WeatherApp.FloatingActionButton</item>
+        <item name="chipStyle">@style/Widget.WeatherApp.Chip</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.WeatherApp.BottomSheetDialog</item>
+        <item name="listPopupWindowStyle">@style/Widget.MaterialComponents.ListPopupWindow</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.WeatherApp.MaterialAlertDialog</item>
+        <item name="snackbarStyle">@style/Widget.WeatherApp.Snackbar</item>
+        <item name="snackbarTextViewStyle">@style/Widget.WeatherApp.Snackbar.TextView</item>
+        <item name="materialCardViewStyle">@style/Widget.WeatherApp.CardView</item>
+        <item name="circularProgressIndicatorStyle">
+            @style/Widget.WeatherApp.CircularProgressIndicator
         </item>
     </style>
 
-    <style name="AppTheme.LauncherTheme">
-        <item name="android:windowBackground">@drawable/launcher_bg</item>
+    <style name="Theme.WeatherApp" parent="Base.Theme.WeatherApp">
+        <item name="colorPrimary">@color/weather_green_700</item>
+        <item name="colorPrimaryVariant">@color/weather_green_900</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/weather_blue_900</item>
+        <item name="colorSecondaryVariant">@color/weather_blue_900</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorError">@color/weather_red_600</item>
+        <item name="colorOnError">@color/white</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+    </style>
+
+    <style name="Base.Theme.WeatherApp.OssLicenses" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:navigationBarColor">?attr/colorSurface</item>
+        <item name="fontFamily">@font/open_sans</item>
+        <item name="android:fontFamily">@font/open_sans</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.WeatherApp.Headline6</item>
+        <item name="android:listPreferredItemHeight">@dimen/height_row</item>
+        <item name="actionBarStyle">@style/Widget.WeatherApp.ActionBar</item>
+    </style>
+
+    <style name="Theme.WeatherApp.OssLicenses" parent="Base.Theme.WeatherApp.OssLicenses">
+        <item name="colorPrimary">@color/weather_green_700</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+    </style>
+
+    <style name="ThemeOverlay.WeatherApp.Toolbar" parent="">
+        <item name="colorControlNormal">?attr/colorOnSurface</item>
+        <item name="actionMenuTextColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="Base.ThemeOverlay.WeatherApp.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.DayNight.BottomSheetDialog">
+        <item name="android:colorControlHighlight">@color/on_surface_32</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">false</item>
+        <item name="bottomSheetStyle">@style/Widget.WeatherApp.BottomSheet.Modal</item>
+    </style>
+
+    <style name="ThemeOverlay.WeatherApp.BottomSheetDialog" parent="Base.ThemeOverlay.WeatherApp.BottomSheetDialog">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSurface">@color/weather_blue_900</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="android:colorBackground">@color/weather_blue_900</item>
+        <item name="colorOnBackground">@color/white</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+    </style>
+
+    <style name="Base.ThemeOverlay.WeatherApp.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="materialAlertDialogTitleTextStyle">
+            @style/MaterialAlertDialog.WeatherApp.Title.Text
+        </item>
+        <item name="materialAlertDialogBodyTextStyle">@style/MaterialAlertDialog.WeatherApp.Body.Text
+        </item>
+        <item name="android:windowAnimationStyle">@style/Animation.WeatherApp.MaterialAlertDialog
+        </item>
+    </style>
+
+    <style name="ThemeOverlay.WeatherApp.MaterialAlertDialog" parent="Base.ThemeOverlay.WeatherApp.MaterialAlertDialog">
+        <item name="colorSecondary">@color/weather_green_700</item>
+    </style>
+
+    <style name="ThemeOverlay.WeatherApp.PrimarySecondary" parent="">
+        <item name="colorPrimary">?attr/colorSecondary</item>
     </style>
 </resources>

@@ -55,7 +55,7 @@ class PlaceSearchViewModel @Inject constructor(
             when (val response = getCityDetailsUseCase.invoke(placeName)) {
                 is Resource.Success -> {
                     if (response.data.isNotEmpty()) {
-                        _places.value = response.data!!
+                        _places.value = response.data
                     } else {
                         _errorMessage.value = (R.string.city_name_is_invalid)
                     }

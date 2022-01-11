@@ -1,26 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="AppTheme" parent="BaseTheme">
-        <!--selection controls.-->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorOnPrimary">@color/colorOnPrimary</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+    <style name="Platform.V24.Theme.WeatherApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:navigationBarColor">@color/black_40</item>
+    </style>
 
-        <item name="colorSecondary">@color/colorSecondary</item>
-        <item name="colorOnSecondary">@color/colorOnSecondary</item>
-        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+    <style name="Theme.WeatherApp" parent="Base.Theme.WeatherApp">
+        <item name="colorPrimary">@color/weather_green_300</item>
+        <item name="colorPrimaryVariant">@color/weather_green_700</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/weather_blue_300</item>
+        <item name="colorSecondaryVariant">@color/weather_blue_300</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorError">@color/weather_red_300</item>
+        <item name="colorOnError">@color/black</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+    </style>
 
-        <item name="colorError">@color/colorError</item>
-        <item name="colorOnError">@color/colorOnError</item>
+    <style name="Theme.WeatherApp.OssLicenses" parent="Base.Theme.WeatherApp.OssLicenses">
+        <item name="colorPrimary">@color/weather_green_300</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+    </style>
 
-        <item name="colorSurface">@color/colorSurface</item>
-        <item name="colorOnSurface">@color/colorOnSurface</item>
+    <style name="ThemeOverlay.WeatherApp.BottomSheetDialog" parent="Base.ThemeOverlay.WeatherApp.BottomSheetDialog">
+        <item name="colorPrimary">@color/weather_blue_300</item>
+        <item name="colorPrimaryVariant">@color/weather_blue_300</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/weather_blue_300</item>
+        <item name="colorSecondaryVariant">@color/weather_blue_300</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSurface">@color/dark_grey</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="android:colorBackground">@color/dark_grey</item>
+        <item name="colorOnBackground">@color/white</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+    </style>
 
-        <item name="android:colorBackground">@color/colorSurface</item>
-        <item name="colorOnBackground">@color/colorOnSurface</item>
-
-        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
-        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
+    <style name="ThemeOverlay.WeatherApp.MaterialAlertDialog" parent="Base.ThemeOverlay.WeatherApp.MaterialAlertDialog">
+        <item name="colorSecondary">@color/weather_green_300</item>
     </style>
 
 </resources>

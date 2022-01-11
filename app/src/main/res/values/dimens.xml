@@ -19,4 +19,10 @@
 
     <dimen name="text_size_10sp">10sp</dimen>
     <dimen name="text_size_12sp">12sp</dimen>
+
+    <dimen name="height_row_half">28dp</dimen>
+    <dimen name="elevation_popup">16dp</dimen>
+    <dimen name="elevation_action_bar">4dp</dimen>
+    <dimen name="elevation_bottom_sheet">8dp</dimen>
+    <dimen name="height_row">56dp</dimen>
 </resources>
