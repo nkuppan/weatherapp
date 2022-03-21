@@ -77,39 +77,62 @@ class SettingsFragment : BaseFragment(), MaterialButtonToggleGroup.OnButtonCheck
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.temperature.collectLatest {
-                        binding.celsius.isChecked = it == Temperature.CELSIUS
-                        binding.fahrenheit.isChecked = it == Temperature.FAHRENHEIT
+                        if (it == Temperature.CELSIUS) {
+                            binding.celsius.isChecked = true
+                        } else if (it == Temperature.FAHRENHEIT) {
+                            binding.fahrenheit.isChecked = true
+                        }
                     }
                 }
                 launch {
                     viewModel.windSpeed.collectLatest {
-                        binding.metersPerSecond.isChecked = it == WindSpeed.METERS_PER_SECOND
-                        binding.kilometersPerHour.isChecked = it == WindSpeed.KILOMETERS_PER_HOUR
-                        binding.milesPerHour.isChecked = it == WindSpeed.MILES_PER_HOUR
+                        when (it) {
+                            WindSpeed.METERS_PER_SECOND -> {
+                                binding.metersPerSecond.isChecked = true
+                            }
+                            WindSpeed.KILOMETERS_PER_HOUR -> {
+                                binding.kilometersPerHour.isChecked = true
+                            }
+                            WindSpeed.MILES_PER_HOUR -> {
+                                binding.milesPerHour.isChecked = true
+                            }
+                        }
                     }
                 }
                 launch {
                     viewModel.pressure.collectLatest {
-                        binding.hpa.isChecked = it == Pressure.HECTOPASCAL
-                        binding.inhg.isChecked = it == Pressure.INCH_OF_MERCURY
+                        if (it == Pressure.HECTOPASCAL) {
+                            binding.hpa.isChecked = true
+                        } else if (it == Pressure.INCH_OF_MERCURY) {
+                            binding.inhg.isChecked = true
+                        }
                     }
                 }
                 launch {
                     viewModel.precipitation.collectLatest {
-                        binding.millimeter.isChecked = it == Precipitation.MILLIMETER
-                        binding.inches.isChecked = it == Precipitation.INCHES
+                        if (it == Precipitation.MILLIMETER) {
+                            binding.millimeter.isChecked = true
+                        } else if (it == Precipitation.INCHES) {
+                            binding.inches.isChecked = true
+                        }
                     }
                 }
                 launch {
                     viewModel.distance.collectLatest {
-                        binding.miles.isChecked = it == Distance.MILES
-                        binding.kilometers.isChecked = it == Distance.KILOMETERS
+                        if (it == Distance.MILES) {
+                            binding.miles.isChecked = true
+                        } else if (it == Distance.KILOMETERS) {
+                            binding.kilometers.isChecked = true
+                        }
                     }
                 }
                 launch {
                     viewModel.timeFormat.collectLatest {
-                        binding.twentyFourHourFormat.isChecked = it == TimeFormat.TWENTY_FOUR_HOUR
-                        binding.twelveHourFormat.isChecked = it == TimeFormat.TWELVE_HOUR
+                        if (it == TimeFormat.TWENTY_FOUR_HOUR) {
+                            binding.twentyFourHourFormat.isChecked = true
+                        } else if (it == TimeFormat.TWELVE_HOUR) {
+                            binding.twelveHourFormat.isChecked = true
+                        }
                     }
                 }
             }
