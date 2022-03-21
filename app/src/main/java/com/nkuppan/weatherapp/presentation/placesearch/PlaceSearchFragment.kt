@@ -26,9 +26,13 @@ class PlaceSearchFragment : BaseFragment() {
 
     private val placeSearchViewModel: PlaceSearchViewModel by viewModels()
 
-    private val placeListAdapter = PlaceListAdapter { city ->
+    private val placeListAdapter = PlaceListAdapter { type, city ->
         viewLifecycleOwner.lifecycleScope.launch {
-            placeSearchViewModel.saveSelectedCity(city)
+            if (type == 1) {
+                placeSearchViewModel.saveSelectedCity(city)
+            } else if (type == 2) {
+                placeSearchViewModel.saveFavoriteCity(city)
+            }
         }
     }
 
@@ -59,9 +63,11 @@ class PlaceSearchFragment : BaseFragment() {
             placeListAdapter.submitList(it)
         }
 
-        placeSearchViewModel.success.observe(viewLifecycleOwner) {
+        placeSearchViewModel.placeSelected.observe(viewLifecycleOwner) {
             findNavController().popBackStack()
         }
+
+        placeSearchViewModel.searchFavorites()
     }
 
     private fun initializeSearchContainer() {
@@ -82,6 +88,10 @@ class PlaceSearchFragment : BaseFragment() {
                 }
                 return@setOnKeyListener false
             }
+        }
+
+        binding.back.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 

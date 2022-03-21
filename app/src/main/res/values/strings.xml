@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Weather App</string>
 
     <string name="next_48_hours">Next 48 hours</string>
@@ -15,4 +15,43 @@
     <string name="search_place">Search places</string>
     <string name="enter_valid_query_string">Enter a valid query string</string>
     <string name="powered_by">Powered By</string>
+
+    <string name="back_navigation">Back Navigation</string>
+    <string name="city_selection_failed">City selection failed</string>
+
+    <string name="credits">All the data for WeatherApp is provided by One Call API. Open Weather aggregates and process meteorological data from tens of thousands of weather stations, on-ground radars and satellites to bring you accurate and actionable weather data for any location world wide.</string>
+
+    <string name="temperature">Temperature</string>
+    <string name="celsius">°C</string>
+    <string name="fahrenheit">°F</string>
+
+    <string name="time_format">Time Format</string>
+    <string name="twelve_hour_format">12 Hour</string>
+    <string name="twenty_four_hour_format">24 Hour</string>
+
+    <string name="distance">Distance</string>
+    <string name="miles">mi</string>
+    <string name="kilometers">km</string>
+
+    <string name="wind_speed">Wind Speed</string>
+    <string name="meters_per_second">m/s</string>
+    <string name="kilometers_per_hour">km/h</string>
+    <string name="miles_per_hour">mph</string>
+
+    <string name="pressure">Pressure</string>
+    <string name="hpa">hPa</string>
+    <string name="inHg">inHg</string>
+
+    <string name="precipitation">Precipitation</string>
+    <string name="millimeter">mm</string>
+    <string name="inches">in</string>
+
+    <!-- String to configure -->
+    <string name="feels_like_value">Feels like</string>
+    <string name="wind_value">Wind:</string>
+    <string name="humidity_value">Humidity:</string>
+    <string name="uv_index_value">UV Index:</string>
+    <string name="visibility_value">Visibility:</string>
+    <string name="dew_point_value">Dew Point:</string>
+    <string name="pressure_value">Pressure:</string>
 </resources>

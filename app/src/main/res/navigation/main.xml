@@ -3,16 +3,10 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/main"
-        app:startDestination="@id/newWeatherDetailFragment">
+        app:startDestination="@id/weatherDetailFragment">
 
     <fragment
-            android:id="@+id/weatherTabHostFragment"
-            android:name="com.nkuppan.weatherapp.presentation.weathertab.WeatherTabHostFragment"
-            android:label="WeatherTabHostFragment"
-            tools:layout="@layout/fragment_forecast_tab_host" />
-
-    <fragment
-            android:id="@+id/newWeatherDetailFragment"
+            android:id="@+id/weatherDetailFragment"
             android:name="com.nkuppan.weatherapp.presentation.weatherdetails.NewWeatherDetailFragment"
             android:label="NewWeatherDetailFragment"
             tools:layout="@layout/fragment_forecast_details_new">

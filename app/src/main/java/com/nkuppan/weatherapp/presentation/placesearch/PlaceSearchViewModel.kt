@@ -9,8 +9,10 @@ import com.nkuppan.weatherapp.core.ui.viewmodel.BaseViewModel
 import com.nkuppan.weatherapp.domain.extentions.isValidQueryString
 import com.nkuppan.weatherapp.domain.model.City
 import com.nkuppan.weatherapp.domain.model.Resource
-import com.nkuppan.weatherapp.domain.usecase.GetCityDetailsUseCase
-import com.nkuppan.weatherapp.domain.usecase.SaveSelectedCityUseCase
+import com.nkuppan.weatherapp.domain.usecase.favorite.GetAllFavoriteCitiesUseCase
+import com.nkuppan.weatherapp.domain.usecase.weather.GetCityDetailsUseCase
+import com.nkuppan.weatherapp.domain.usecase.favorite.SaveFavoriteCityUseCase
+import com.nkuppan.weatherapp.domain.usecase.settings.SaveSelectedCityUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -19,7 +21,9 @@ import javax.inject.Inject
 @HiltViewModel
 class PlaceSearchViewModel @Inject constructor(
     private val getCityDetailsUseCase: GetCityDetailsUseCase,
+    private val getAllFavoriteCitiesUseCase: GetAllFavoriteCitiesUseCase,
     private val saveSelectedCityUseCase: SaveSelectedCityUseCase,
+    private val saveFavoriteCityUseCase: SaveFavoriteCityUseCase,
 ) : BaseViewModel() {
 
     val queryString: MutableLiveData<String> = MutableLiveData()
@@ -27,7 +31,12 @@ class PlaceSearchViewModel @Inject constructor(
     private val _places = MutableLiveData<List<City>>()
     val places: LiveData<List<City>> = _places
 
+    private val _placeSelected = MutableLiveData<Event<City>>()
+    val placeSelected: LiveData<Event<City>> = _placeSelected
+
     private var searchJob: Job? = null
+
+    private var isPlaceAvailable = false
 
     fun processQuery(): Boolean {
 
@@ -39,6 +48,30 @@ class PlaceSearchViewModel @Inject constructor(
         } else {
             _errorMessage.value = R.string.enter_valid_query_string
             false
+        }
+    }
+
+    fun searchFavorites() {
+
+        searchJob?.cancel()
+
+        _isLoading.value = true
+
+        searchJob = viewModelScope.launch {
+
+            when (val response = getAllFavoriteCitiesUseCase.invoke()) {
+                is Resource.Success -> {
+                    val data = response.data
+                    _places.value = data.ifEmpty {
+                        emptyList()
+                    }
+                }
+                is Resource.Error -> {
+                    _errorMessage.value = R.string.unable_to_fetch_data
+                }
+            }
+
+            _isLoading.value = false
         }
     }
 
@@ -54,14 +87,14 @@ class PlaceSearchViewModel @Inject constructor(
 
             when (val response = getCityDetailsUseCase.invoke(placeName)) {
                 is Resource.Success -> {
-                    if (response.data.isNotEmpty()) {
-                        _places.value = response.data
-                    } else {
-                        _errorMessage.value = (R.string.city_name_is_invalid)
+                    val data = response.data
+                    _places.value = data.ifEmpty {
+                        emptyList()
                     }
+                    isPlaceAvailable = true
                 }
                 is Resource.Error -> {
-                    _errorMessage.value = (R.string.unable_to_fetch_data)
+                    _errorMessage.value = R.string.unable_to_fetch_data
                 }
             }
 
@@ -72,8 +105,24 @@ class PlaceSearchViewModel @Inject constructor(
     fun saveSelectedCity(city: City) {
 
         viewModelScope.launch {
-            saveSelectedCityUseCase.invoke(city)
-            _success.value = Event(Unit)
+            when (saveSelectedCityUseCase.invoke(city)) {
+                is Resource.Error -> {
+                    _errorMessage.value = R.string.city_selection_failed
+                }
+                is Resource.Success -> {
+                    _placeSelected.value = Event(city)
+                }
+            }
+        }
+    }
+
+    fun saveFavoriteCity(city: City) {
+        viewModelScope.launch {
+            saveFavoriteCityUseCase.invoke(city)
+            //Refreshing the favorite value if the places is not loaded from server
+            if (!isPlaceAvailable) {
+                searchFavorites()
+            }
         }
     }
 }

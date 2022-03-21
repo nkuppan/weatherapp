@@ -7,7 +7,7 @@
 
         <variable
                 name="viewModel"
-                type="com.nkuppan.weatherapp.domain.model.Weather" />
+                type="com.nkuppan.weatherapp.presentation.weatherdetails.WeatherUIModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +24,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:loadWeatherImageURL="@{viewModel.weatherDayThemeIcon}"
+                app:loadWeatherImageURL="@{viewModel.weatherIconURL}"
                 tools:src="@drawable/ic_weather" />
 
         <TextView
@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_16dp"
-                android:text="@{viewModel.formattedHighLowTemperature}"
+                android:text="@{viewModel.highLowTemperature}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -46,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_16dp"
-                android:text="@{viewModel.formattedDate}"
+                android:text="@{viewModel.date}"
                 app:layout_constraintEnd_toStartOf="@id/temperature"
                 app:layout_constraintStart_toEndOf="@id/weather_image"
                 app:layout_constraintTop_toTopOf="parent"

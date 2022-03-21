@@ -1,4 +1,4 @@
-package com.nkuppan.weatherapp.data.extension
+package com.nkuppan.weatherapp.core.extention
 
 import com.google.gson.Gson
 

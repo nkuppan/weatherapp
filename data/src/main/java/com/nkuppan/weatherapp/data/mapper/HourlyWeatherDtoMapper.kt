@@ -1,12 +1,14 @@
-package com.nkuppan.weatherapp.data.network.mapper
+package com.nkuppan.weatherapp.data.mapper
 
 import com.nkuppan.weatherapp.data.network.response.OpenWeatherMapApiResponse
-import com.nkuppan.weatherapp.domain.mapper.DomainMapper
+import com.nkuppan.weatherapp.domain.mapper.Mapper
 import com.nkuppan.weatherapp.domain.model.Weather
+import javax.inject.Inject
 
-class HourlyWeatherDtoMapper : DomainMapper<OpenWeatherMapApiResponse, List<Weather>> {
-    override fun dtoToDomainModel(dtoObject: OpenWeatherMapApiResponse): List<Weather> {
-        return dtoObject.hourlyWeather?.map {
+class HourlyWeatherDtoMapper @Inject constructor() :
+    Mapper<OpenWeatherMapApiResponse, List<Weather>> {
+    override fun convert(fromObject: OpenWeatherMapApiResponse): List<Weather> {
+        return fromObject.hourlyWeather?.map {
             Weather(
                 it.date,
                 "${it.pop * 100} %",

@@ -1,82 +1,366 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbar"
-            app:elevation="0dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <data>
 
-        <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:navigationIcon="@drawable/ic_arrow_back" />
+        <variable
+                name="viewModel"
+                type="com.nkuppan.weatherapp.presentation.settings.SettingsViewModel" />
+    </data>
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar"
+                app:elevation="0dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <com.google.android.material.button.MaterialButtonToggleGroup
-                    android:id="@+id/container"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:singleSelection="true"
+            <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:navigationIcon="@drawable/ic_arrow_back" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                <com.google.android.material.button.MaterialButton
-                        android:gravity="center"
-                        android:layout_weight="1"
+                <TextView
+                        android:layout_marginEnd="@dimen/margin_16dp"
+                        android:layout_marginStart="@dimen/margin_16dp"
+                        android:layout_marginTop="@dimen/margin_16dp"
+                        android:id="@+id/temp_title"
+                        android:textColor="?attr/colorSecondary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/temperature"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/temperature_container"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/temp_title"
+                        app:singleSelection="true"
+                        app:selectionRequired="true"
+                        app:checkedButton="@id/celsius"
+                        android:layout_margin="@dimen/margin_16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <com.google.android.material.button.MaterialButton
+                            android:id="@+id/celsius"
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/celsius" />
+
+                    <com.google.android.material.button.MaterialButton
+                            android:id="@+id/fahrenheit"
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/fahrenheit" />
+
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                <TextView
+                        android:layout_marginEnd="@dimen/margin_16dp"
+                        android:layout_marginStart="@dimen/margin_16dp"
+                        android:layout_marginTop="@dimen/margin_16dp"
+                        android:id="@+id/wind_speed_title"
+                        android:textColor="?attr/colorSecondary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/wind_speed"
+                        app:layout_constraintTop_toBottomOf="@id/temperature_container"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/wind_speed_container"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/wind_speed_title"
+                        app:singleSelection="true"
+                        app:selectionRequired="true"
+                        app:checkedButton="@id/miles_per_hour"
+                        android:layout_margin="@dimen/margin_16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <com.google.android.material.button.MaterialButton
+                            android:id="@+id/meters_per_second"
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:textAllCaps="false"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/meters_per_second" />
+
+                    <com.google.android.material.button.MaterialButton
+                            android:id="@+id/kilometers_per_hour"
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:gravity="center"
+                            android:textAllCaps="false"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/kilometers_per_hour" />
+
+                    <com.google.android.material.button.MaterialButton
+                            android:id="@+id/miles_per_hour"
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:gravity="center"
+                            android:textAllCaps="false"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/miles_per_hour" />
+
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                <TextView
+                        android:layout_marginEnd="@dimen/margin_16dp"
+                        android:layout_marginStart="@dimen/margin_16dp"
+                        android:layout_marginTop="@dimen/margin_16dp"
+                        android:id="@+id/pressure_title"
+                        android:textColor="?attr/colorSecondary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/pressure"
+                        app:layout_constraintTop_toBottomOf="@id/wind_speed_container"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/pressure_container"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/pressure_title"
+                        app:singleSelection="true"
+                        app:selectionRequired="true"
+                        app:checkedButton="@id/inhg"
+                        android:layout_margin="@dimen/margin_16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <com.google.android.material.button.MaterialButton
+                            android:id="@+id/hpa"
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:gravity="center"
+                            android:textAllCaps="false"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/hpa" />
+
+                    <com.google.android.material.button.MaterialButton
+                            android:id="@+id/inhg"
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:gravity="center"
+                            android:textAllCaps="false"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/inHg" />
+
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                <TextView
+                        android:layout_marginEnd="@dimen/margin_16dp"
+                        android:layout_marginStart="@dimen/margin_16dp"
+                        android:layout_marginTop="@dimen/margin_16dp"
+                        android:id="@+id/precipitation_title"
+                        android:textColor="?attr/colorSecondary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/precipitation"
+                        app:layout_constraintTop_toBottomOf="@id/pressure_container"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/precipitation_container"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/precipitation_title"
+                        app:singleSelection="true"
+                        app:selectionRequired="true"
+                        app:checkedButton="@id/inches"
+                        android:layout_margin="@dimen/margin_16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <com.google.android.material.button.MaterialButton
+                            android:id="@+id/millimeter"
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:gravity="center"
+                            android:textAllCaps="false"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/millimeter" />
+
+                    <com.google.android.material.button.MaterialButton
+                            android:id="@+id/inches"
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:gravity="center"
+                            android:textAllCaps="false"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/inches" />
+
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                <TextView
+                        android:layout_marginEnd="@dimen/margin_16dp"
+                        android:layout_marginStart="@dimen/margin_16dp"
+                        android:layout_marginTop="@dimen/margin_16dp"
+                        android:id="@+id/distance_title"
+                        android:textColor="?attr/colorSecondary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/distance"
+                        app:layout_constraintTop_toBottomOf="@id/precipitation_container"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/distance_container"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/distance_title"
+                        app:singleSelection="true"
+                        app:selectionRequired="true"
+                        app:checkedButton="@id/miles"
+                        android:layout_margin="@dimen/margin_16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <com.google.android.material.button.MaterialButton
+                            android:id="@+id/kilometers"
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:textAllCaps="false"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/kilometers" />
+
+                    <com.google.android.material.button.MaterialButton
+                            android:id="@+id/miles"
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:gravity="center"
+                            android:textAllCaps="false"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/miles" />
+
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                <TextView
+                        android:layout_marginEnd="@dimen/margin_16dp"
+                        android:layout_marginStart="@dimen/margin_16dp"
+                        android:layout_marginTop="@dimen/margin_16dp"
+                        android:id="@+id/time_title"
+                        android:textColor="?attr/colorSecondary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/time_format"
+                        app:layout_constraintTop_toBottomOf="@id/distance_container"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/time_format_container"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/time_title"
+                        app:singleSelection="true"
+                        app:selectionRequired="true"
+                        app:checkedButton="@id/twenty_four_hour_format"
+                        android:layout_margin="@dimen/margin_16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <com.google.android.material.button.MaterialButton
+                            android:id="@+id/twenty_four_hour_format"
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/twenty_four_hour_format" />
+
+                    <com.google.android.material.button.MaterialButton
+                            android:id="@+id/twelve_hour_format"
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/twelve_hour_format" />
+
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                <TextView
+                        android:textAppearance="?attr/textAppearanceCaption"
+                        android:text="@string/powered_by"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView"
+                        android:layout_marginEnd="@dimen/margin_16dp"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintEnd_toStartOf="@id/imageView"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                        app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+                <ImageView
+                        android:layout_marginTop="@dimen/margin_16dp"
+                        app:layout_constraintTop_toBottomOf="@+id/time_format_container"
+                        android:contentDescription="@string/app_name"
+                        android:layout_marginBottom="@dimen/margin_16dp"
+                        android:layout_width="70dp"
+                        android:layout_height="30dp"
+                        app:srcCompat="@drawable/open_weather"
+                        android:id="@+id/imageView"
+                        app:layout_constraintStart_toEndOf="@+id/textView"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                        android:text="@string/credits"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="°C" />
+                        android:layout_margin="@dimen/margin_16dp"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/imageView" />
 
-                <com.google.android.material.button.MaterialButton
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="°F" />
-
-            </com.google.android.material.button.MaterialButtonToggleGroup>
-
-            <TextView
-                    android:textAppearance="?attr/textAppearanceCaption"
-                    android:text="@string/powered_by"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView"
-                    android:layout_marginEnd="@dimen/margin_16dp"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintEnd_toStartOf="@id/imageView"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                    app:layout_constraintTop_toTopOf="@+id/imageView" />
-
-            <ImageView
-                    app:layout_constraintTop_toBottomOf="@+id/container"
-                    android:contentDescription="@string/app_name"
-                    android:layout_marginBottom="@dimen/margin_16dp"
-                    android:layout_width="70dp"
-                    android:layout_height="30dp"
-                    app:srcCompat="@drawable/open_weather"
-                    android:id="@+id/imageView"
-                    app:layout_constraintStart_toEndOf="@+id/textView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

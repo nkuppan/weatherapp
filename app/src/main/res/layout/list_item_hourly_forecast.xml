@@ -7,7 +7,7 @@
 
         <variable
                 name="viewModel"
-                type="com.nkuppan.weatherapp.domain.model.Weather" />
+                type="com.nkuppan.weatherapp.presentation.weatherdetails.WeatherUIModel" />
     </data>
 
 
@@ -21,7 +21,7 @@
                 android:id="@+id/temperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.formattedTemperature}"
+                android:text="@{viewModel.temperature}"
                 tools:text="27 °"
                 android:textAppearance="?attr/textAppearanceBody1"
                 app:layout_constraintTop_toTopOf="parent"
@@ -49,7 +49,7 @@
                 android:layout_width="@dimen/weather_image_size"
                 android:layout_height="@dimen/weather_image_size"
                 android:contentDescription="@{viewModel.weatherDescription}"
-                app:loadWeatherImageURL="@{viewModel.weatherDayThemeIcon}"
+                app:loadWeatherImageURL="@{viewModel.weatherIconURL}"
                 tools:src="@drawable/ic_weather"
                 app:layout_constraintTop_toBottomOf="@+id/probability"
                 app:layout_constraintBottom_toTopOf="@+id/time"
@@ -61,7 +61,7 @@
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.formattedTime}"
+                android:text="@{viewModel.time}"
                 tools:text="3:00 PM"
                 android:textAppearance="?attr/textAppearanceBody2"
                 app:layout_constraintTop_toBottomOf="@+id/weather_image"

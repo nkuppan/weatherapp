@@ -9,11 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nkuppan.weatherapp.databinding.ListItemCurrentForecastBinding
 import com.nkuppan.weatherapp.databinding.ListItemDailyForecastBinding
 import com.nkuppan.weatherapp.databinding.ListItemHourlyListViewBinding
-import com.nkuppan.weatherapp.domain.model.WeatherUIModel
 
 
 class WeatherForecastAdapter :
-    ListAdapter<WeatherUIModel, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
+    ListAdapter<WeatherUIAdapterModel, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -51,7 +50,7 @@ class WeatherForecastAdapter :
     }
 
     override fun getItemViewType(position: Int): Int {
-        return getItem(position).type.ordinal
+        return getItem(position).type
     }
 
 
@@ -82,13 +81,13 @@ class WeatherForecastAdapter :
 
     companion object {
 
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<WeatherUIModel>() {
-            override fun areItemsTheSame(oldItem: WeatherUIModel, newItem: WeatherUIModel) =
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<WeatherUIAdapterModel>() {
+            override fun areItemsTheSame(oldItem: WeatherUIAdapterModel, newItem: WeatherUIAdapterModel) =
                 oldItem.weather.size == newItem.weather.size
 
             override fun areContentsTheSame(
-                oldItem: WeatherUIModel,
-                newItem: WeatherUIModel
+                oldItem: WeatherUIAdapterModel,
+                newItem: WeatherUIAdapterModel
             ) = oldItem == newItem
         }
     }

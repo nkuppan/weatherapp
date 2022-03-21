@@ -1,14 +1,17 @@
-package com.nkuppan.weatherapp.data.network.mapper
+package com.nkuppan.weatherapp.data.mapper
 
 import com.nkuppan.weatherapp.data.network.response.OpenWeatherMapApiResponse
-import com.nkuppan.weatherapp.domain.mapper.DomainMapper
+import com.nkuppan.weatherapp.domain.mapper.Mapper
+import com.nkuppan.weatherapp.domain.model.Alert
 import com.nkuppan.weatherapp.domain.model.Weather
+import javax.inject.Inject
 
-class CurrentWeatherDtoMapper : DomainMapper<OpenWeatherMapApiResponse, List<Weather>> {
+class CurrentWeatherDtoMapper @Inject constructor() :
+    Mapper<OpenWeatherMapApiResponse, List<Weather>> {
 
-    override fun dtoToDomainModel(dtoObject: OpenWeatherMapApiResponse): List<Weather> {
+    override fun convert(fromObject: OpenWeatherMapApiResponse): List<Weather> {
 
-        val currentWeather = dtoObject.currentWeather
+        val currentWeather = fromObject.currentWeather
 
         return listOf(
             Weather(
@@ -21,11 +24,20 @@ class CurrentWeatherDtoMapper : DomainMapper<OpenWeatherMapApiResponse, List<Wea
                 currentWeather.weatherImages[0].description,
                 currentWeather.weatherImages[0].main,
                 feelsLikeTemperature = currentWeather.feelsLikeTemperature,
-                alert = dtoObject.alerts?.get(0)?.event,
-                visibility = currentWeather.visibility,
+                alert = fromObject.alerts?.get(0)?.let {
+                    Alert(
+                        it.senderName ?: "",
+                        it.start ?: 0,
+                        it.end ?: 0,
+                        it.event ?: "",
+                        it.description,
+                        it.tags,
+                    )
+                },
+                visibility = currentWeather.visibility.toDouble(),
                 dewPoint = currentWeather.dewPoint,
                 uvIndex = currentWeather.uvIndex,
-                pressure = currentWeather.pressure,
+                pressure = currentWeather.pressure.toDouble(),
                 humidity = currentWeather.humidity,
                 windSpeed = currentWeather.windSpeed
             )

@@ -8,23 +8,8 @@ buildscript {
     dependencies {
         classpath Libs.androidGradlePlugin
         classpath Libs.Kotlin.gradlePlugin
-
-        /**
-         * Navigation component Gradle plugin to support navigation graph
-         */
         classpath Libs.AndroidX.Navigation.safeArgsGradlePlugin
-
-        /**
-         * Google Hilt library Gradle plugin to support dependency injection
-         */
         classpath Libs.Google.Hilt.androidGradlePlugin
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
     }
 }
 

@@ -50,6 +50,10 @@ dependencies {
     implementation project(":data")
     implementation project(":domain")
 
+    implementation(Libs.AndroidX.Room.runtime)
+    kapt(Libs.AndroidX.Room.compiler)
+    implementation(Libs.AndroidX.Room.ktx)
+
     implementation(Libs.Glide.core)
     annotationProcessor(Libs.Glide.compiler)
 

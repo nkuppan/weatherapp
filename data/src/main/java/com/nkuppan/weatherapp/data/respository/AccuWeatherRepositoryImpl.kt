@@ -1,21 +1,20 @@
 package com.nkuppan.weatherapp.data.respository
 
 import com.nkuppan.weatherapp.core.BuildConfig
+import com.nkuppan.weatherapp.core.utils.AppCoroutineDispatchers
 import com.nkuppan.weatherapp.data.network.AccWeatherApiService
 import com.nkuppan.weatherapp.domain.model.*
 import com.nkuppan.weatherapp.domain.respository.WeatherRepository
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.awaitResponse
 
 class AccuWeatherRepositoryImpl(
     private val service: AccWeatherApiService,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: AppCoroutineDispatchers
 ) : WeatherRepository {
 
     override suspend fun getCityInfo(cityName: String): Resource<List<City>> =
-        withContext(dispatcher) {
+        withContext(dispatcher.io) {
             return@withContext try {
                 val response = service.getCities(
                     cityName = cityName,
@@ -34,7 +33,7 @@ class AccuWeatherRepositoryImpl(
     override suspend fun getHourlyWeatherForecast(
         city: City,
         numberOfHours: Int
-    ): Resource<WeatherForecast> = withContext(dispatcher) {
+    ): Resource<WeatherForecast> = withContext(dispatcher.io) {
         return@withContext try {
             val response = service.getHourlyForecastUsingCityId(
                 cityId = city.key,
@@ -59,7 +58,7 @@ class AccuWeatherRepositoryImpl(
     override suspend fun getDailyWeatherForecast(
         city: City,
         numberOfDays: Int
-    ): Resource<WeatherForecast> = withContext(dispatcher) {
+    ): Resource<WeatherForecast> = withContext(dispatcher.io) {
         return@withContext try {
             val response = service.getDailyForecastUsingCityId(
                 cityId = city.key,

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nkuppan.weatherapp.databinding.ListItemPlaceBinding
 import com.nkuppan.weatherapp.domain.model.City
 
-class PlaceListAdapter(private val callback: (City) -> Unit) :
+class PlaceListAdapter(private val callback: (Int, City) -> Unit) :
     ListAdapter<City, PlaceViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceViewHolder =
@@ -20,7 +20,13 @@ class PlaceListAdapter(private val callback: (City) -> Unit) :
         getItem(position)?.let { city ->
             holder.item.viewModel = city
             holder.item.root.setOnClickListener {
-                callback.invoke(city)
+                callback.invoke(1, city)
+            }
+            holder.item.favorite.setOnClickListener {
+                //Changing the favorite icon
+                city.isFavorite = !city.isFavorite
+                notifyItemChanged(position)
+                callback.invoke(2, city)
             }
         }
     }

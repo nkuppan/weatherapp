@@ -1,14 +1,13 @@
 package com.nkuppan.weatherapp.data.respository
 
 import com.nkuppan.weatherapp.core.BuildConfig
+import com.nkuppan.weatherapp.core.utils.AppCoroutineDispatchers
 import com.nkuppan.weatherapp.data.network.OpenWeatherMapApiService
-import com.nkuppan.weatherapp.data.network.mapper.CurrentWeatherDtoMapper
-import com.nkuppan.weatherapp.data.network.mapper.DailyWeatherDtoMapper
-import com.nkuppan.weatherapp.data.network.mapper.HourlyWeatherDtoMapper
+import com.nkuppan.weatherapp.data.mapper.CurrentWeatherDtoMapper
+import com.nkuppan.weatherapp.data.mapper.DailyWeatherDtoMapper
+import com.nkuppan.weatherapp.data.mapper.HourlyWeatherDtoMapper
 import com.nkuppan.weatherapp.domain.model.*
 import com.nkuppan.weatherapp.domain.respository.WeatherRepository
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.awaitResponse
 
@@ -17,11 +16,11 @@ class OpenWeatherMapRepositoryImpl(
     private val currentWeatherDtoMapper: CurrentWeatherDtoMapper,
     private val hourlyWeatherDtoMapper: HourlyWeatherDtoMapper,
     private val dailyWeatherDtoMapper: DailyWeatherDtoMapper,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: AppCoroutineDispatchers
 ) : WeatherRepository {
 
     override suspend fun getCityInfo(cityName: String): Resource<List<City>> =
-        withContext(dispatcher)
+        withContext(dispatcher.io)
         {
             return@withContext try {
                 val response = service.getCities(
@@ -42,7 +41,7 @@ class OpenWeatherMapRepositoryImpl(
     override suspend fun getHourlyWeatherForecast(
         city: City,
         numberOfHours: Int
-    ): Resource<WeatherForecast> = withContext(dispatcher) {
+    ): Resource<WeatherForecast> = withContext(dispatcher.io) {
         return@withContext try {
             val response = service.getCurrentAndForecastData(
                 appId = BuildConfig.OPEN_WEATHER_API_KEY,
@@ -53,7 +52,7 @@ class OpenWeatherMapRepositoryImpl(
                 Resource.Success(
                     WeatherForecast(
                         headlines = "",
-                        forecasts = hourlyWeatherDtoMapper.dtoToDomainModel(response.body()!!)
+                        forecasts = hourlyWeatherDtoMapper.convert(response.body()!!)
                     )
                 )
             } else {
@@ -67,7 +66,7 @@ class OpenWeatherMapRepositoryImpl(
     override suspend fun getDailyWeatherForecast(
         city: City,
         numberOfDays: Int
-    ): Resource<WeatherForecast> = withContext(dispatcher) {
+    ): Resource<WeatherForecast> = withContext(dispatcher.io) {
         return@withContext try {
             val response = service.getCurrentAndForecastData(
                 appId = BuildConfig.OPEN_WEATHER_API_KEY,
@@ -78,7 +77,7 @@ class OpenWeatherMapRepositoryImpl(
                 Resource.Success(
                     WeatherForecast(
                         headlines = "",
-                        forecasts = dailyWeatherDtoMapper.dtoToDomainModel(response.body()!!)
+                        forecasts = dailyWeatherDtoMapper.convert(response.body()!!)
                     )
                 )
             } else {
@@ -93,7 +92,7 @@ class OpenWeatherMapRepositoryImpl(
         city: City,
         numberOfHours: Int,
         numberOfDays: Int
-    ): Resource<Map<WeatherType, List<Weather>>> = withContext(dispatcher) {
+    ): Resource<Map<WeatherType, List<Weather>>> = withContext(dispatcher.io) {
         return@withContext try {
             val response = service.getCurrentAndForecastData(
                 appId = BuildConfig.OPEN_WEATHER_API_KEY,
@@ -104,9 +103,9 @@ class OpenWeatherMapRepositoryImpl(
                 val body = response.body()!!
                 Resource.Success(
                     hashMapOf(
-                        WeatherType.CURRENT to currentWeatherDtoMapper.dtoToDomainModel(body),
-                        WeatherType.HOURLY to hourlyWeatherDtoMapper.dtoToDomainModel(body),
-                        WeatherType.DAILY to dailyWeatherDtoMapper.dtoToDomainModel(body)
+                        WeatherType.CURRENT to currentWeatherDtoMapper.convert(body),
+                        WeatherType.HOURLY to hourlyWeatherDtoMapper.convert(body),
+                        WeatherType.DAILY to dailyWeatherDtoMapper.convert(body)
                     )
                 )
             } else {
