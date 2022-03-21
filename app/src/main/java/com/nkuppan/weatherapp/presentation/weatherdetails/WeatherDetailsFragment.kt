@@ -4,27 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nkuppan.weatherapp.core.extention.autoCleared
 import com.nkuppan.weatherapp.core.ui.fragment.BaseFragment
 import com.nkuppan.weatherapp.databinding.FragmentForecastDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class WeatherDetailsFragment : BaseFragment() {
-
-    private var cityName: String = "London"
+class WeatherDetailFragment : BaseFragment() {
 
     private var viewBinding: FragmentForecastDetailsBinding by autoCleared()
 
-    private var dailyForecastAdapter: DailyForecastAdapter by autoCleared()
+    private var weatherForecastAdapter: WeatherForecastAdapter by autoCleared()
 
-    private var hourlyForecastAdapter: HourlyForecastAdapter by autoCleared()
-
-    private var viewModel: WeatherDetailsViewModel by autoCleared()
+    private val viewModel: WeatherDetailsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,85 +31,59 @@ class WeatherDetailsFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         viewBinding = FragmentForecastDetailsBinding.inflate(inflater, container, false)
+        viewBinding.viewModel = viewModel
+        viewBinding.lifecycleOwner = viewLifecycleOwner
         return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(WeatherDetailsViewModel::class.java)
-
-        initializeData()
-
         initializeRefreshView()
 
-        initializeAdapters()
+        initializeDailyForecastView()
 
         initializeObservers()
     }
 
     private fun initializeRefreshView() {
         viewBinding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.fetchWeatherInfo()
+            viewModel.fetchWeatherInfo(fetchAllDataInOnce = true)
         }
-    }
 
-    private fun initializeData() {
-        arguments?.getString(CITY_NAME)?.let {
-            cityName = it
+        viewBinding.place.setOnClickListener {
+            findNavController().navigate(
+                WeatherDetailFragmentDirections.actionWeatherDetailFragmentToPlaceSearchFragment()
+            )
+        }
+
+        viewBinding.settings.setOnClickListener {
+            findNavController().navigate(
+                WeatherDetailFragmentDirections.actionWeatherDetailFragmentToSettingsFragment()
+            )
         }
     }
 
     private fun initializeObservers() {
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.allWeatherInfo.collectLatest {
+                weatherForecastAdapter.submitList(it)
+            }
+        }
+
         viewModel.isLoading.observe(viewLifecycleOwner) {
             viewBinding.swipeRefreshLayout.isRefreshing = it
         }
 
-        viewModel.hourlyForecastInfo.observe(viewLifecycleOwner) {
-            hourlyForecastAdapter.submitList(it)
-        }
-
-        viewModel.dailyForecastInfo.observe(viewLifecycleOwner) {
-            dailyForecastAdapter.submitList(it)
-        }
-
-        viewModel.fetchWeatherInfo()
-    }
-
-    private fun initializeAdapters() {
-
-        initializeHourlyForecastView()
-
-        initializeDailyForecastView()
+        viewModel.fetchWeatherInfo(fetchAllDataInOnce = true)
     }
 
     private fun initializeDailyForecastView() {
-        dailyForecastAdapter = DailyForecastAdapter()
-        viewBinding.dailyForecastView.layoutManager =
+        weatherForecastAdapter = WeatherForecastAdapter()
+        viewBinding.weatherDataRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        viewBinding.dailyForecastView.setHasFixedSize(true)
-        viewBinding.dailyForecastView.adapter = dailyForecastAdapter
-    }
-
-    private fun initializeHourlyForecastView() {
-        hourlyForecastAdapter = HourlyForecastAdapter()
-        viewBinding.hourlyForecastView.setHasFixedSize(true)
-        viewBinding.hourlyForecastView.layoutManager =
-            LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
-        viewBinding.hourlyForecastView.adapter = hourlyForecastAdapter
-    }
-
-    companion object {
-
-        private const val CITY_NAME = "city_name"
-
-        fun newInstance(cityName: String): Fragment {
-            return WeatherDetailsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(CITY_NAME, cityName)
-                }
-            }
-        }
+        viewBinding.weatherDataRecyclerView.setHasFixedSize(true)
+        viewBinding.weatherDataRecyclerView.adapter = weatherForecastAdapter
     }
 }

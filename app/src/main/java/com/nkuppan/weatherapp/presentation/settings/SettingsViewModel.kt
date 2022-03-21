@@ -30,17 +30,18 @@ class SettingsViewModel @Inject constructor(
     private val _temperature: MutableStateFlow<Temperature> = MutableStateFlow(Temperature.CELSIUS)
     val temperature = _temperature.asStateFlow()
 
-    private val _windSpeed: MutableStateFlow<WindSpeed> = MutableStateFlow(WindSpeed.MILES_PER_HOUR)
+    private val _windSpeed: MutableStateFlow<WindSpeed> =
+        MutableStateFlow(WindSpeed.METERS_PER_SECOND)
     val windSpeed = _windSpeed.asStateFlow()
 
     private val _pressure: MutableStateFlow<Pressure> = MutableStateFlow(Pressure.HECTOPASCAL)
     val pressure = _pressure.asStateFlow()
 
     private val _precipitation: MutableStateFlow<Precipitation> =
-        MutableStateFlow(Precipitation.INCHES)
+        MutableStateFlow(Precipitation.MILLIMETER)
     val precipitation = _precipitation.asStateFlow()
 
-    private val _distance: MutableStateFlow<Distance> = MutableStateFlow(Distance.MILES)
+    private val _distance: MutableStateFlow<Distance> = MutableStateFlow(Distance.KILOMETERS)
     val distance = _distance.asStateFlow()
 
     private val _timeFormat: MutableStateFlow<TimeFormat> =
