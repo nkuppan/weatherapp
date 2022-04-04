@@ -5,8 +5,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.nkuppan.weatherapp.core.extention.jsonStringToObject
-import com.nkuppan.weatherapp.core.extention.objectToJsonString
+import com.nkuppan.weatherapp.data.extention.jsonStringToObject
+import com.nkuppan.weatherapp.data.extention.objectToJsonString
 import com.nkuppan.weatherapp.domain.model.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.nkuppan.weatherapp.core.utils.AppCoroutineDispatchers
 import com.nkuppan.weatherapp.data.datastore.SettingsDataStore
 import com.nkuppan.weatherapp.data.datastore.ThemeDataStore
+import com.nkuppan.weatherapp.domain.utils.AppCoroutineDispatchers
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

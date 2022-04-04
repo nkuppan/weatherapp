@@ -7,19 +7,12 @@ plugins {
     id 'kotlin-kapt'
 }
 
-def apikeyPropertiesFile = rootProject.file("keys.properties")
-def apikeyProperties = new Properties()
-apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
-
 android {
     compileSdk Versions.compileSdk
     defaultConfig {
         minSdk Versions.minSdk
         targetSdk Versions.targetSdk
         testInstrumentationRunner Libs.AndroidX.Test.instrumentationRunner
-
-        buildConfigField "String", "ACC_WEATHER_API_KEY", apikeyProperties['ACC_WEATHER_API_KEY']
-        buildConfigField "String", "OPEN_WEATHER_API_KEY", apikeyProperties['OPEN_WEATHER_API_KEY']
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -64,7 +57,7 @@ dependencies {
     api(Libs.AndroidX.DataStore.preferences)
 
     implementation(Libs.Glide.core)
-    annotationProcessor(Libs.Glide.compiler)
+    kapt(Libs.Glide.compiler)
 
     testImplementation(Libs.AndroidX.Test.runner)
     androidTestImplementation(Libs.AndroidX.Test.JUnit.ktx)

@@ -1,6 +1,6 @@
 package com.nkuppan.weatherapp.data.respository
 
-import com.nkuppan.weatherapp.core.utils.AppCoroutineDispatchers
+import com.nkuppan.weatherapp.domain.utils.AppCoroutineDispatchers
 import com.nkuppan.weatherapp.data.db.dao.FavoriteCityDao
 import com.nkuppan.weatherapp.data.mapper.FavoriteEntityToModelMapper
 import com.nkuppan.weatherapp.data.mapper.FavoriteModelToEntityMapper

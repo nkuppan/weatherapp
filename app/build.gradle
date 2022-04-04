@@ -55,7 +55,7 @@ dependencies {
     implementation(Libs.AndroidX.Room.ktx)
 
     implementation(Libs.Glide.core)
-    annotationProcessor(Libs.Glide.compiler)
+    kapt(Libs.Glide.compiler)
 
     implementation(Libs.Google.Hilt.android)
     kapt(Libs.Google.Hilt.compiler)

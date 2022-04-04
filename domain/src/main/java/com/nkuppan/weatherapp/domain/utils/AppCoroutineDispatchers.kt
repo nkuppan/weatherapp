@@ -1,4 +1,4 @@
-package com.nkuppan.weatherapp.core.utils
+package com.nkuppan.weatherapp.domain.utils
 
 import kotlinx.coroutines.CoroutineDispatcher
 

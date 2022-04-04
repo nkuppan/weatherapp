@@ -1,6 +1,5 @@
 package com.nkuppan.weatherapp.di
 
-import com.nkuppan.weatherapp.core.utils.AppCoroutineDispatchers
 import com.nkuppan.weatherapp.data.datastore.SettingsDataStore
 import com.nkuppan.weatherapp.data.datastore.ThemeDataStore
 import com.nkuppan.weatherapp.data.db.dao.FavoriteCityDao
@@ -14,6 +13,7 @@ import com.nkuppan.weatherapp.domain.respository.FavoriteCityRepository
 import com.nkuppan.weatherapp.domain.respository.SettingsRepository
 import com.nkuppan.weatherapp.domain.respository.ThemeRepository
 import com.nkuppan.weatherapp.domain.respository.WeatherRepository
+import com.nkuppan.weatherapp.domain.utils.AppCoroutineDispatchers
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -8,12 +8,19 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
+def apikeyPropertiesFile = rootProject.file("keys.properties")
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
 android {
     compileSdk Versions.compileSdk
     defaultConfig {
         minSdk Versions.minSdk
         targetSdk Versions.targetSdk
         testInstrumentationRunner Libs.AndroidX.Test.instrumentationRunner
+
+        buildConfigField "String", "ACC_WEATHER_API_KEY", apikeyProperties['ACC_WEATHER_API_KEY']
+        buildConfigField "String", "OPEN_WEATHER_API_KEY", apikeyProperties['OPEN_WEATHER_API_KEY']
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -28,19 +35,30 @@ android {
     }
 }
 dependencies {
-    implementation project(":core")
     implementation project(":domain")
+
+    implementation(Libs.AndroidX.appCompat)
+
+    implementation(Libs.Kotlin.stdlib)
+    implementation(Libs.Kotlin.Coroutines.core)
+    implementation(Libs.Kotlin.Coroutines.android)
+
+    implementation(Libs.Square.okHttp)
+    implementation(Libs.Square.Retrofit.retrofit)
+    implementation(Libs.Square.Retrofit.gsonConverter)
 
     implementation(Libs.AndroidX.Room.runtime)
     kapt(Libs.AndroidX.Room.compiler)
     implementation(Libs.AndroidX.Room.ktx)
 
     implementation(Libs.Glide.core)
-    annotationProcessor(Libs.Glide.compiler)
+    kapt(Libs.Glide.compiler)
 
     implementation(Libs.Google.Hilt.android)
     kapt(Libs.Google.Hilt.compiler)
     kapt(Libs.AndroidX.Hilt.compiler)
+
+    implementation(Libs.AndroidX.DataStore.preferences)
 
     testImplementation(Libs.Google.truth)
     testImplementation(Libs.AndroidX.Test.runner)

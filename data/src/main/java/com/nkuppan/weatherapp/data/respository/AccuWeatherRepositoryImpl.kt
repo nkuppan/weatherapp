@@ -1,10 +1,10 @@
 package com.nkuppan.weatherapp.data.respository
 
-import com.nkuppan.weatherapp.core.BuildConfig
-import com.nkuppan.weatherapp.core.utils.AppCoroutineDispatchers
+import com.nkuppan.weatherapp.data.BuildConfig
 import com.nkuppan.weatherapp.data.network.AccWeatherApiService
 import com.nkuppan.weatherapp.domain.model.*
 import com.nkuppan.weatherapp.domain.respository.WeatherRepository
+import com.nkuppan.weatherapp.domain.utils.AppCoroutineDispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.awaitResponse
 
