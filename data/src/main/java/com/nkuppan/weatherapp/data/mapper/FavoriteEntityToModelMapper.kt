@@ -12,6 +12,7 @@ class FavoriteEntityToModelMapper : Mapper<FavoriteEntity, City> {
             "",
             1,
             fromObject.country,
+            "",
             fromObject.latitude,
             fromObject.longitude,
             fromObject.isFavorite

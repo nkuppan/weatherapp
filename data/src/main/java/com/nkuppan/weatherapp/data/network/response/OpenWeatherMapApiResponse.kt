@@ -27,6 +27,8 @@ data class OpenWeatherCityDto(
     val latitude: Double,
     @SerializedName("lon")
     val longitude: Double,
+    @SerializedName("state")
+    val state: String?,
     @SerializedName("country")
     val country: String
 ) {
@@ -36,6 +38,7 @@ data class OpenWeatherCityDto(
             "",
             1,
             country,
+            state ?: "",
             latitude,
             longitude
         )

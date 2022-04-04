@@ -1,13 +1,11 @@
 package com.nkuppan.weatherapp.domain.model
 
-import com.nkuppan.weatherapp.domain.extentions.getFormattedDate
-
-
 data class City(
     val name: String,
     val key: String,
     val rank: Int,
     val country: String,
+    val state: String? = null,
     val latitude: Double? = null,
     val longitude: Double? = null,
     var isFavorite: Boolean = false
