@@ -2,6 +2,7 @@ package com.nkuppan.weatherapp.di
 
 import com.nkuppan.weatherapp.domain.respository.FavoriteCityRepository
 import com.nkuppan.weatherapp.domain.respository.SettingsRepository
+import com.nkuppan.weatherapp.domain.respository.ThemeRepository
 import com.nkuppan.weatherapp.domain.respository.WeatherRepository
 import com.nkuppan.weatherapp.domain.usecase.favorite.GetAllFavoriteCitiesUseCase
 import com.nkuppan.weatherapp.domain.usecase.favorite.SaveFavoriteCityUseCase
@@ -178,5 +179,17 @@ object UseCaseModule {
         weatherRepository: WeatherRepository
     ): GetAllWeatherForecastUseCase {
         return GetAllWeatherForecastUseCase(weatherRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetThemeUseCase(repository: ThemeRepository): GetThemeUseCase {
+        return GetThemeUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSaveThemeUseCase(repository: ThemeRepository): SaveThemeUseCase {
+        return SaveThemeUseCase(repository)
     }
 }

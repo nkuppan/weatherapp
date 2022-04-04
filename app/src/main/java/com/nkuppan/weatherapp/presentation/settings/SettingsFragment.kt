@@ -61,6 +61,7 @@ class SettingsFragment : BaseFragment(), MaterialButtonToggleGroup.OnButtonCheck
         binding.precipitationContainer.addOnButtonCheckedListener(this)
         binding.distanceContainer.addOnButtonCheckedListener(this)
         binding.timeFormatContainer.addOnButtonCheckedListener(this)
+        binding.themeContainer.addOnButtonCheckedListener(this)
     }
 
     private fun unInitializeListeners() {
@@ -70,6 +71,7 @@ class SettingsFragment : BaseFragment(), MaterialButtonToggleGroup.OnButtonCheck
         binding.precipitationContainer.removeOnButtonCheckedListener(this)
         binding.distanceContainer.removeOnButtonCheckedListener(this)
         binding.timeFormatContainer.removeOnButtonCheckedListener(this)
+        binding.themeContainer.removeOnButtonCheckedListener(this)
     }
 
     private fun setupViewModel() {
@@ -135,6 +137,15 @@ class SettingsFragment : BaseFragment(), MaterialButtonToggleGroup.OnButtonCheck
                         }
                     }
                 }
+                launch {
+                    viewModel.theme.collectLatest {
+                        if (it == Theme.LIGHT_THEME) {
+                            binding.lightTheme.isChecked = true
+                        } else if (it == Theme.DARK_THEME) {
+                            binding.darkTheme.isChecked = true
+                        }
+                    }
+                }
             }
         }
     }
@@ -144,6 +155,10 @@ class SettingsFragment : BaseFragment(), MaterialButtonToggleGroup.OnButtonCheck
         checkedId: Int,
         isChecked: Boolean
     ) {
+        if (!isChecked) {
+            return
+        }
+
         group?.let {
             when (it.id) {
                 R.id.temperature_container -> {
@@ -198,6 +213,14 @@ class SettingsFragment : BaseFragment(), MaterialButtonToggleGroup.OnButtonCheck
                         when (checkedId) {
                             R.id.twenty_four_hour_format -> TimeFormat.TWENTY_FOUR_HOUR
                             else -> TimeFormat.TWELVE_HOUR
+                        }
+                    )
+                }
+                R.id.theme_container -> {
+                    viewModel.saveTheme(
+                        when (checkedId) {
+                            R.id.light_theme -> Theme.LIGHT_THEME
+                            else -> Theme.DARK_THEME
                         }
                     )
                 }

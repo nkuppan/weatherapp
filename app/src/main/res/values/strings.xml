@@ -54,4 +54,7 @@
     <string name="visibility_value">Visibility:</string>
     <string name="dew_point_value">Dew Point:</string>
     <string name="pressure_value">Pressure:</string>
+    <string name="theme">Theme</string>
+    <string name="light_theme">Light</string>
+    <string name="dark_theme">Dark</string>
 </resources>

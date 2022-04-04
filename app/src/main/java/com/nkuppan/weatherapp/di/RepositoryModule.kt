@@ -26,8 +26,11 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideThemeRepository(dataStore: ThemeDataStore): ThemeRepository {
-        return ThemeRepositoryImpl(dataStore)
+    fun provideThemeRepository(
+        dataStore: ThemeDataStore,
+        dispatchers: AppCoroutineDispatchers
+    ): ThemeRepository {
+        return ThemeRepositoryImpl(dataStore, dispatchers)
     }
 
     @Provides

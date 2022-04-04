@@ -4,7 +4,6 @@ import android.app.Application
 import com.nkuppan.weatherapp.domain.respository.ThemeRepository
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,7 +23,7 @@ class WeatherApplication : Application() {
     @DelicateCoroutinesApi
     private fun setupTheme() {
         GlobalScope.launch {
-            themeRepository.applyTheme(this, Dispatchers.Main)
+            themeRepository.applyTheme()
         }
     }
 }

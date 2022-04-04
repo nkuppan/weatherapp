@@ -1,71 +1,48 @@
 package com.nkuppan.weatherapp.data.respository
 
-import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
-import com.nkuppan.weatherapp.data.R
 import com.nkuppan.weatherapp.data.datastore.ThemeDataStore
 import com.nkuppan.weatherapp.domain.model.Theme
 import com.nkuppan.weatherapp.domain.respository.ThemeRepository
-import kotlinx.coroutines.*
+import com.nkuppan.weatherapp.domain.utils.AppCoroutineDispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
-class ThemeRepositoryImpl(private val dataStore: ThemeDataStore) : ThemeRepository {
+class ThemeRepositoryImpl(
+    private val dataStore: ThemeDataStore,
+    private val dispatchers: AppCoroutineDispatchers
+) : ThemeRepository {
 
-    private fun getDefaultTheme(): Theme {
-        return when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> Theme(
-                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
-                R.string.system_default
-            )
-            else -> Theme(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY, R.string.set_by_battery_saver)
-        }
-    }
-
-    override fun saveTheme(theme: Theme, coroutineScope: CoroutineScope) {
-        val mode = theme.mode
-        AppCompatDelegate.setDefaultNightMode(mode)
-        coroutineScope.launch {
-            dataStore.setMode(mode)
-        }
-    }
-
-    override fun applyTheme(
-        coroutineScope: CoroutineScope,
-        mainThreadDispatcher: CoroutineDispatcher
-    ) {
-        coroutineScope.launch {
-            val theme = getSelectedTheme().first()
-            withContext(mainThreadDispatcher) {
-                val mode = theme.mode
-                AppCompatDelegate.setDefaultNightMode(mode)
+    private fun getMode(theme: Theme): Int {
+        return when (theme) {
+            Theme.LIGHT_THEME -> {
+                AppCompatDelegate.MODE_NIGHT_NO
+            }
+            Theme.DARK_THEME -> {
+                AppCompatDelegate.MODE_NIGHT_YES
             }
         }
     }
 
-    override fun getSelectedTheme(): Flow<Theme> {
-        val defaultTheme = getDefaultTheme()
-        val defaultMode = defaultTheme.mode
-        val themes = getThemes()
-        return dataStore.getMode(defaultMode).map { mode ->
-            themes.find { theme -> theme.mode == mode } ?: defaultTheme
+    override suspend fun saveTheme(theme: Theme): Boolean = withContext(dispatchers.io) {
+        val mode = getMode(theme)
+        withContext(dispatchers.main) {
+            AppCompatDelegate.setDefaultNightMode(mode)
+        }
+        dataStore.setTheme(theme)
+        return@withContext true
+    }
+
+    override suspend fun applyTheme() {
+        val theme = getSelectedTheme().first()
+        withContext(dispatchers.main) {
+            val mode = getMode(theme)
+            AppCompatDelegate.setDefaultNightMode(mode)
         }
     }
 
-    override fun getThemes(): List<Theme> {
-        return when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> listOf(
-                Theme(AppCompatDelegate.MODE_NIGHT_NO, R.string.light),
-                Theme(AppCompatDelegate.MODE_NIGHT_YES, R.string.dark),
-                Theme(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY, R.string.set_by_battery_saver),
-                Theme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, R.string.system_default)
-            )
-            else -> listOf(
-                Theme(AppCompatDelegate.MODE_NIGHT_NO, R.string.light),
-                Theme(AppCompatDelegate.MODE_NIGHT_YES, R.string.dark),
-                Theme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, R.string.system_default)
-            )
-        }
+    override fun getSelectedTheme(): Flow<Theme> {
+        return dataStore.getTheme()
     }
 }

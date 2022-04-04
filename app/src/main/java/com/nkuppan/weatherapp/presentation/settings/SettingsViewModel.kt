@@ -19,12 +19,14 @@ class SettingsViewModel @Inject constructor(
     private val saveDistanceUseCase: SaveDistanceUseCase,
     private val saveTimeFormatUseCase: SaveTimeFormatUseCase,
     private val saveWindSpeedUseCase: SaveWindSpeedUseCase,
+    private val saveThemeUseCase: SaveThemeUseCase,
     private val getTemperatureUseCase: GetTemperatureUseCase,
     private val getPressureUseCase: GetPressureUseCase,
     private val getWindSpeedUseCase: GetWindSpeedUseCase,
     private val getPrecipitationUseCase: GetPrecipitationUseCase,
     private val getDistanceUseCase: GetDistanceUseCase,
     private val getTimeFormatUseCase: GetTimeFormatUseCase,
+    private val getTheme: GetThemeUseCase,
 ) : BaseViewModel() {
 
     private val _temperature: MutableStateFlow<Temperature> = MutableStateFlow(Temperature.CELSIUS)
@@ -47,6 +49,9 @@ class SettingsViewModel @Inject constructor(
     private val _timeFormat: MutableStateFlow<TimeFormat> =
         MutableStateFlow(TimeFormat.TWENTY_FOUR_HOUR)
     val timeFormat = _timeFormat.asStateFlow()
+
+    private val _theme: MutableStateFlow<Theme> = MutableStateFlow(Theme.LIGHT_THEME)
+    val theme = _theme.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -77,6 +82,11 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             getTimeFormatUseCase.invoke().collectLatest {
                 _timeFormat.value = it
+            }
+        }
+        viewModelScope.launch {
+            getTheme.invoke().collectLatest {
+                _theme.value = it
             }
         }
     }
@@ -114,6 +124,12 @@ class SettingsViewModel @Inject constructor(
     fun saveDistance(distance: Distance) {
         viewModelScope.launch {
             saveDistanceUseCase.invoke(distance)
+        }
+    }
+
+    fun saveTheme(theme: Theme) {
+        viewModelScope.launch {
+            saveThemeUseCase.invoke(theme)
         }
     }
 }

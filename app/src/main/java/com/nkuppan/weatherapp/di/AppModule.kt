@@ -21,7 +21,7 @@ object AppModule {
 
     private const val DATA_STORE_NAME = "weather_app_data_store"
 
-    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(DATA_STORE_NAME)
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(DATA_STORE_NAME)
 
     @Provides
     @Singleton
