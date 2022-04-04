@@ -57,4 +57,7 @@
     <string name="theme">Theme</string>
     <string name="light_theme">Light</string>
     <string name="dark_theme">Dark</string>
+    <string name="government_alerts">Government alerts</string>
+    <string name="no_precipitation_within_an_hour">No precipitation within an hour</string>
+    <string name="precipitation_value">Precipitation:</string>
 </resources>

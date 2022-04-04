@@ -111,7 +111,9 @@ data class HourlyOpenWeatherDto(
     @SerializedName("clouds")
     val clouds: Int,
     @SerializedName("rain")
-    val rain: JsonObject,
+    val rain: JsonObject? = null,
+    @SerializedName("snow")
+    val snow: JsonObject? = null,
     @SerializedName("pop")
     val pop: Double
 )

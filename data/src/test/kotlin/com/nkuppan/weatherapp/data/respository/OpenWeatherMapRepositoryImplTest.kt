@@ -1,0 +1,3 @@
+package com.nkuppan.weatherapp.data.respository
+
+class OpenWeatherMapRepositoryImplTest

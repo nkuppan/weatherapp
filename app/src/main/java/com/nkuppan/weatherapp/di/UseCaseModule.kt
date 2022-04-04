@@ -9,8 +9,6 @@ import com.nkuppan.weatherapp.domain.usecase.favorite.SaveFavoriteCityUseCase
 import com.nkuppan.weatherapp.domain.usecase.settings.*
 import com.nkuppan.weatherapp.domain.usecase.weather.GetAllWeatherForecastUseCase
 import com.nkuppan.weatherapp.domain.usecase.weather.GetCityDetailsUseCase
-import com.nkuppan.weatherapp.domain.usecase.weather.GetDailyWeatherForecastUseCase
-import com.nkuppan.weatherapp.domain.usecase.weather.GetHourlyWeatherForecastUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -147,22 +145,6 @@ object UseCaseModule {
         repository: FavoriteCityRepository
     ): SaveFavoriteCityUseCase {
         return SaveFavoriteCityUseCase(repository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideGetHourlyWeatherForecastUseCase(
-        weatherRepository: WeatherRepository
-    ): GetHourlyWeatherForecastUseCase {
-        return GetHourlyWeatherForecastUseCase(weatherRepository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideGetDailyWeatherForecastUseCase(
-        weatherRepository: WeatherRepository
-    ): GetDailyWeatherForecastUseCase {
-        return GetDailyWeatherForecastUseCase(weatherRepository)
     }
 
     @Provides

@@ -86,15 +86,29 @@
             android:drawablePadding="@dimen/padding_8dp"
             android:gravity="center_vertical"
             android:padding="@dimen/padding_4dp"
-            android:text="@{viewModel.alert}"
+            android:text="@{viewModel.getAlertMessage()}"
             android:textAppearance="?attr/textAppearanceBody1"
             android:textColor="?attr/colorOnError"
-            android:visibility="@{viewModel.alert.length() > 0 ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.getAlertMessage().length() > 0 ? View.VISIBLE : View.GONE}"
             app:drawableStartCompat="@drawable/ic_info"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/feels_temperature"
+            app:layout_constraintTop_toBottomOf="@id/feels_temperature"
             tools:text="Heavy Rain" />
+
+        <TextView
+            android:id="@+id/precipitation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_4dp"
+            android:gravity="center_vertical"
+            android:padding="@dimen/padding_4dp"
+            android:text="@{viewModel.precipitation}"
+            android:textAppearance="?attr/textAppearanceBody1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/alert"
+            tools:text="@string/no_precipitation_within_an_hour" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -106,7 +120,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/alert">
+            app:layout_constraintTop_toBottomOf="@id/precipitation">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

@@ -24,7 +24,7 @@ class CurrentWeatherDtoMapper @Inject constructor() :
                 currentWeather.weatherImages[0].description,
                 currentWeather.weatherImages[0].main,
                 feelsLikeTemperature = currentWeather.feelsLikeTemperature,
-                alert = fromObject.alerts?.get(0)?.let {
+                alert = fromObject.alerts?.map {
                     Alert(
                         it.senderName ?: "",
                         it.start ?: 0,
@@ -39,7 +39,8 @@ class CurrentWeatherDtoMapper @Inject constructor() :
                 uvIndex = currentWeather.uvIndex,
                 pressure = currentWeather.pressure.toDouble(),
                 humidity = currentWeather.humidity,
-                windSpeed = currentWeather.windSpeed
+                windSpeed = currentWeather.windSpeed,
+                precipitation = currentWeather.rain?.get("1h")?.asDouble ?: 0.0
             )
         )
     }

@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @Module
 object DatabaseModule {
 
-    private const val FOREX_DB_NAME = "weatherapp.db"
+    private const val DB_NAME = "weatherapp.db"
 
     @Provides
     @Singleton
@@ -24,7 +24,7 @@ object DatabaseModule {
             .databaseBuilder(
                 context.applicationContext,
                 WeatherAppDatabase::class.java,
-                FOREX_DB_NAME
+                DB_NAME
             )
             .fallbackToDestructiveMigration()
             .build()

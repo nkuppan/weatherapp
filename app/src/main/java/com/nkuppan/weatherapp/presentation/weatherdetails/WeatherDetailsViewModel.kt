@@ -1,7 +1,6 @@
 package com.nkuppan.weatherapp.presentation.weatherdetails
 
 import android.app.Application
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.nkuppan.weatherapp.R
@@ -12,13 +11,11 @@ import com.nkuppan.weatherapp.domain.extentions.getFormattedDate
 import com.nkuppan.weatherapp.domain.model.*
 import com.nkuppan.weatherapp.domain.usecase.settings.*
 import com.nkuppan.weatherapp.domain.usecase.weather.GetAllWeatherForecastUseCase
-import com.nkuppan.weatherapp.domain.usecase.weather.GetDailyWeatherForecastUseCase
-import com.nkuppan.weatherapp.domain.usecase.weather.GetHourlyWeatherForecastUseCase
+import com.nkuppan.weatherapp.presentation.alert.AlertUIModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -29,8 +26,6 @@ import kotlin.math.roundToInt
 @HiltViewModel
 class WeatherDetailsViewModel @Inject constructor(
     application: Application,
-    private val dailyWeatherForecastUseCase: GetDailyWeatherForecastUseCase,
-    private val hourlyWeatherForecastUseCase: GetHourlyWeatherForecastUseCase,
     private val getAllWeatherForecastUseCase: GetAllWeatherForecastUseCase,
     private val getSelectedCityUseCase: GetSelectedCityUseCase,
     private val getTemperatureUseCase: GetTemperatureUseCase,
@@ -41,15 +36,11 @@ class WeatherDetailsViewModel @Inject constructor(
     private val getTimeFormatUseCase: GetTimeFormatUseCase,
 ) : BaseAndroidViewModel(application) {
 
-    private val _allWeatherInfo: MutableSharedFlow<List<WeatherUIAdapterModel>> =
-        MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
-    val allWeatherInfo: SharedFlow<List<WeatherUIAdapterModel>> = _allWeatherInfo.asSharedFlow()
-
-    private val _dailyForecastInfo: MutableLiveData<List<WeatherUIModel>> = MutableLiveData()
-    val dailyForecastInfo: LiveData<List<WeatherUIModel>> = _dailyForecastInfo
-
-    private val _hourlyForecastInfo: MutableLiveData<List<WeatherUIModel>> = MutableLiveData()
-    val hourlyForecastInfo: LiveData<List<WeatherUIModel>> = _hourlyForecastInfo
+    private val _allWeatherInfo = MutableSharedFlow<List<WeatherUIAdapterModel>>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val allWeatherInfo = _allWeatherInfo.asSharedFlow()
 
     private var currentJob: Job? = null
 
@@ -67,7 +58,7 @@ class WeatherDetailsViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             getSelectedCityUseCase.invoke().collectLatest {
-                fetchWeatherInfo(it, true)
+                fetchWeatherInfo(it)
             }
         }
         viewModelScope.launch {
@@ -102,13 +93,13 @@ class WeatherDetailsViewModel @Inject constructor(
         }
     }
 
-    fun fetchWeatherInfo(fetchAllDataInOnce: Boolean = false) {
+    fun fetchWeatherInfo() {
         selectedCity?.let {
-            fetchWeatherInfo(it, fetchAllDataInOnce)
+            fetchWeatherInfo(it)
         }
     }
 
-    private fun fetchWeatherInfo(city: City, fetchAllDataInOnce: Boolean = false) {
+    private fun fetchWeatherInfo(city: City) {
 
         if (_isLoading.value == true) {
             currentJob?.cancel()
@@ -122,11 +113,7 @@ class WeatherDetailsViewModel @Inject constructor(
 
             selectedLocation.value = city.getFormattedCityName()
 
-            if (fetchAllDataInOnce) {
-                fetchAllForecastInfo(city)
-            } else {
-                fetchIndividualForecastInfo(city)
-            }
+            fetchAllForecastInfo(city)
 
             _isLoading.value = false
         }
@@ -158,33 +145,6 @@ class WeatherDetailsViewModel @Inject constructor(
         }
     }
 
-    private suspend fun fetchIndividualForecastInfo(city: City) {
-
-        when (val response =
-            hourlyWeatherForecastUseCase.invoke(city, numberOfHours = NUMBER_OF_HOURS)) {
-            is Resource.Success -> {
-                _hourlyForecastInfo.value = response.data.forecasts.map { weather ->
-                    convertWeatherUIModel(weather)
-                }
-            }
-            is Resource.Error -> {
-                _errorMessage.value = R.string.unable_to_fetch_data
-            }
-        }
-
-        when (val response =
-            dailyWeatherForecastUseCase.invoke(city, numberOfDays = NUMBER_OF_DAYS)) {
-            is Resource.Success -> {
-                _dailyForecastInfo.value = response.data.forecasts.map { weather ->
-                    convertWeatherUIModel(weather)
-                }
-            }
-            is Resource.Error -> {
-                _errorMessage.value = (R.string.unable_to_fetch_data)
-            }
-        }
-    }
-
     private fun convertWeatherUIModel(weather: Weather) =
         WeatherUIModel(
             weather.weatherDayThemeIcon,
@@ -193,7 +153,14 @@ class WeatherDetailsViewModel @Inject constructor(
             getTemperature(weather.highTemperature),
             getFeelsLikeTemperature(weather.feelsLikeTemperature),
             getHighLowTemperature(weather.highTemperature, weather.lowTemperature),
-            weather.alert?.event ?: "",
+            weather.alert?.map {
+                AlertUIModel(
+                    it.event,
+                    "${it.start.getFormattedDate()} - ${it.end.getFormattedDate()}",
+                    it.description ?: "",
+                    it.senderName
+                )
+            },
             getWindSpeed(weather.windSpeed),
             getHumidity(weather.humidity),
             getUVIndex(weather.uvIndex),
@@ -203,7 +170,38 @@ class WeatherDetailsViewModel @Inject constructor(
             weather.date.getFormattedDate(),
             getTime(weather.date),
             weather.probability,
+            getPrecipitation(weather.precipitation)
         )
+
+    private fun getPrecipitation(precipitation: Double): String {
+        return if (precipitation > 0.0) {
+            String.format(
+                Locale.getDefault(),
+                "%s %.1f %s",
+                getApplication<Application>().resources.getString(R.string.precipitation_value),
+                getPrecipitationValue(precipitation),
+                getPrecipitationUnit()
+            )
+        } else {
+            getApplication<Application>().getString(R.string.no_precipitation_within_an_hour)
+        }
+    }
+
+    private fun getPrecipitationValue(precipitationValue: Double): Double {
+        return if (precipitation == Precipitation.MILLIMETER) {
+            precipitationValue
+        } else {
+            precipitationValue.toMillimeterToInches()
+        }
+    }
+
+    private fun getPrecipitationUnit(): String {
+        return if (precipitation == Precipitation.MILLIMETER) {
+            getApplication<Application>().resources.getString(R.string.millimeter)
+        } else {
+            getApplication<Application>().resources.getString(R.string.inches)
+        }
+    }
 
     private fun getTime(date: Long): String {
         return if (timeFormat == TimeFormat.TWENTY_FOUR_HOUR) {
@@ -378,6 +376,10 @@ class WeatherDetailsViewModel @Inject constructor(
         const val NUMBER_OF_HOURS = 12
         const val NUMBER_OF_DAYS = 7
     }
+}
+
+private fun Double.toMillimeterToInches(): Double {
+    return this / 25.4
 }
 
 private fun Double.toFahrenheit(): Double {

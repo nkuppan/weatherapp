@@ -35,7 +35,7 @@ data class Weather(
     val weatherNightThemeIcon: String,
     val weatherDescription: String,
     val weatherTitle: String? = null,
-    val alert: Alert? = null,
+    val alert: List<Alert>? = null,
     val feelsLikeTemperature: Double = 0.0,
     val windSpeed: Double = 0.0,
     val humidity: Int = 0,
@@ -43,11 +43,8 @@ data class Weather(
     val pressure: Double = 0.0,
     val visibility: Double = 0.0,
     val dewPoint: Double = 0.0,
-) {
-    fun getFormattedDate(): String {
-        return date.getFormattedDate()
-    }
-}
+    val precipitation: Double = 0.0,
+)
 
 data class WeatherTypeModel(
     val type: WeatherType,

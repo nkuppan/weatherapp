@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -48,7 +50,7 @@ class WeatherDetailFragment : BaseFragment() {
 
     private fun initializeRefreshView() {
         viewBinding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.fetchWeatherInfo(fetchAllDataInOnce = true)
+            viewModel.fetchWeatherInfo()
         }
 
         viewBinding.place.setOnClickListener {
@@ -67,8 +69,12 @@ class WeatherDetailFragment : BaseFragment() {
     private fun initializeObservers() {
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.allWeatherInfo.collectLatest {
-                weatherForecastAdapter.submitList(it)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.allWeatherInfo.collectLatest {
+                        weatherForecastAdapter.submitList(it)
+                    }
+                }
             }
         }
 
@@ -76,11 +82,19 @@ class WeatherDetailFragment : BaseFragment() {
             viewBinding.swipeRefreshLayout.isRefreshing = it
         }
 
-        viewModel.fetchWeatherInfo(fetchAllDataInOnce = true)
+        viewModel.fetchWeatherInfo()
     }
 
     private fun initializeDailyForecastView() {
-        weatherForecastAdapter = WeatherForecastAdapter()
+        weatherForecastAdapter = WeatherForecastAdapter { type, model ->
+            if (type == 0 && model?.alert?.isNotEmpty() == true) {
+                findNavController().navigate(
+                    WeatherDetailFragmentDirections.actionWeatherDetailFragmentToAlertFragment(
+                        model.alert.toTypedArray()
+                    )
+                )
+            }
+        }
         viewBinding.weatherDataRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         viewBinding.weatherDataRecyclerView.setHasFixedSize(true)

@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/main"
-        app:startDestination="@id/weatherDetailFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    app:startDestination="@id/weatherDetailFragment">
 
     <fragment
-            android:id="@+id/weatherDetailFragment"
-            android:name="com.nkuppan.weatherapp.presentation.weatherdetails.WeatherDetailFragment"
-            android:label="Weather Details"
-            tools:layout="@layout/fragment_forecast_details">
+        android:id="@+id/weatherDetailFragment"
+        android:name="com.nkuppan.weatherapp.presentation.weatherdetails.WeatherDetailFragment"
+        android:label="Weather Details"
+        tools:layout="@layout/fragment_forecast_details">
         <action
-                android:id="@+id/action_weatherDetailFragment_to_placeSearchFragment"
-                app:destination="@id/placeSearchFragment" />
+            android:id="@+id/action_weatherDetailFragment_to_placeSearchFragment"
+            app:destination="@id/placeSearchFragment" />
         <action
-                android:id="@+id/action_weatherDetailFragment_to_settingsFragment"
-                app:destination="@id/settingsFragment" />
+            android:id="@+id/action_weatherDetailFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_weatherDetailFragment_to_alertFragment"
+            app:destination="@id/alertFragment" />
     </fragment>
 
     <fragment
-            android:id="@+id/placeSearchFragment"
-            android:name="com.nkuppan.weatherapp.presentation.placesearch.PlaceSearchFragment"
-            android:label="PlaceSearchFragment"
-            tools:layout="@layout/fragment_place_search"/>
+        android:id="@+id/placeSearchFragment"
+        android:name="com.nkuppan.weatherapp.presentation.placesearch.PlaceSearchFragment"
+        android:label="Place Search"
+        tools:layout="@layout/fragment_place_search" />
 
     <fragment
-            android:id="@+id/settingsFragment"
-            android:name="com.nkuppan.weatherapp.presentation.settings.SettingsFragment"
-            android:label="SettingsFragment"
-            tools:layout="@layout/fragment_setting"/>
+        android:id="@+id/settingsFragment"
+        android:name="com.nkuppan.weatherapp.presentation.settings.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_setting" />
+
+    <fragment
+        android:id="@+id/alertFragment"
+        android:name="com.nkuppan.weatherapp.presentation.alert.AlertFragment"
+        android:label="Alerts"
+        tools:layout="@layout/fragment_alert">
+        <argument
+            android:name="alerts"
+            app:argType="com.nkuppan.weatherapp.presentation.alert.AlertUIModel[]"
+            app:nullable="false" />
+    </fragment>
 </navigation>

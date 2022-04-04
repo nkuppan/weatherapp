@@ -35,17 +35,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideThemeDataStore(
-        @ApplicationContext context: Context
-    ): ThemeDataStore {
+    fun provideThemeDataStore(@ApplicationContext context: Context): ThemeDataStore {
         return ThemeDataStore(context.dataStore)
     }
 
     @Provides
     @Singleton
-    fun provideSettingsDataStore(
-        @ApplicationContext context: Context
-    ): SettingsDataStore {
+    fun provideSettingsDataStore(@ApplicationContext context: Context): SettingsDataStore {
         return SettingsDataStore(context.dataStore)
     }
 }

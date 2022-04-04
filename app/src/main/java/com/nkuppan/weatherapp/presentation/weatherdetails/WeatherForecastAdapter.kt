@@ -11,7 +11,7 @@ import com.nkuppan.weatherapp.databinding.ListItemDailyForecastBinding
 import com.nkuppan.weatherapp.databinding.ListItemHourlyListViewBinding
 
 
-class WeatherForecastAdapter :
+class WeatherForecastAdapter(private val callback: ((Int, WeatherUIModel?) -> Unit)? = null) :
     ListAdapter<WeatherUIAdapterModel, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -58,9 +58,14 @@ class WeatherForecastAdapter :
 
         val response = getItem(position)
 
+        val weatherUIModel = response.weather[0]
+
         when (holder) {
             is CurrentWeatherForecastViewHolder -> {
-                holder.item.viewModel = response.weather[0]
+                holder.item.viewModel = weatherUIModel
+                holder.item.alert.setOnClickListener {
+                    callback?.invoke(0, weatherUIModel)
+                }
             }
             is HourlyForecastListViewHolder -> {
                 holder.item.hourlyForecastView.apply {
@@ -71,7 +76,7 @@ class WeatherForecastAdapter :
                 }
             }
             is DailyForecastViewHolder -> {
-                holder.item.viewModel = response.weather[0]
+                holder.item.viewModel = weatherUIModel
             }
             else -> {
                 throw IllegalArgumentException("Invalid type inputs")
@@ -82,7 +87,10 @@ class WeatherForecastAdapter :
     companion object {
 
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<WeatherUIAdapterModel>() {
-            override fun areItemsTheSame(oldItem: WeatherUIAdapterModel, newItem: WeatherUIAdapterModel) =
+            override fun areItemsTheSame(
+                oldItem: WeatherUIAdapterModel,
+                newItem: WeatherUIAdapterModel
+            ) =
                 oldItem.weather.size == newItem.weather.size
 
             override fun areContentsTheSame(
