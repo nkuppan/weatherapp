@@ -12,11 +12,8 @@ It displays the latest weather forecast information for selected city using open
 | Weather Home | Search City | Settings |
 | ------ | ----- | ------ |
 | ![Weather Home](art/screenshots/screenshot-1.png) | ![Search City](art/screenshots/screenshot-2.png) | ![Settings](art/screenshots/screenshot-3.png) |
-| ------ | ----- | ------ |
 | Favorites | Alert List | Dark Theme |
-| ------ | ----- | ------ |
 | ![Favorites](art/screenshots/screenshot-4.png) | ![Alert List](art/screenshots/screenshot-5.png) | ![Dark Theme](art/screenshots/screenshot-6.png) |
-| ------ | ----- | ------ |
 
 ## Android development
 
