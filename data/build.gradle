@@ -33,6 +33,24 @@ android {
         viewBinding true
         dataBinding true
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
+    sourceSets {
+        androidTest.java.srcDirs += "src/test-common/java"
+        test.java.srcDirs += "src/test-common/java"
+    }
+
+    packagingOptions {
+        exclude "**/attach_hotspot_windows.dll"
+        exclude "META-INF/licenses/**"
+        exclude "META-INF/AL2.0"
+        exclude "META-INF/LGPL2.1"
+    }
 }
 dependencies {
     implementation project(":domain")
@@ -60,8 +78,21 @@ dependencies {
 
     implementation(Libs.AndroidX.DataStore.preferences)
 
-    testImplementation(Libs.Google.truth)
-    testImplementation(Libs.AndroidX.Test.runner)
+    androidTestImplementation(Libs.AndroidX.Core.test)
     androidTestImplementation(Libs.AndroidX.Test.JUnit.ktx)
     androidTestImplementation(Libs.AndroidX.Test.Espresso.core)
+    androidTestImplementation(Libs.Google.truth)
+    androidTestImplementation(Libs.Kotlin.Coroutines.test)
+    androidTestImplementation(Libs.Mockito.core)
+    androidTestImplementation(Libs.Mockito.ktx)
+
+    //Android JUnit test cases for API
+    testImplementation(Libs.AndroidX.Test.runner)
+    testImplementation(Libs.AndroidX.Test.JUnit.core)
+    testImplementation(Libs.AndroidX.Core.test)
+    testImplementation(Libs.Kotlin.Coroutines.test)
+    testImplementation(Libs.Google.truth)
+    testImplementation(Libs.Square.mockWebServer)
+    testImplementation(Libs.Mockito.core)
+    testImplementation(Libs.Mockito.ktx)
 }

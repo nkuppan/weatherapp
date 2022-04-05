@@ -9,6 +9,9 @@ interface FavoriteCityDao {
     @Query("SELECT * FROM favorite WHERE is_favorite=1")
     fun getAllFavorites(): List<FavoriteEntity>?
 
+    @Query("SELECT * FROM favorite WHERE name=:name")
+    fun getFavorite(name: String): FavoriteEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllFavorite(favorite: List<FavoriteEntity>?)
 

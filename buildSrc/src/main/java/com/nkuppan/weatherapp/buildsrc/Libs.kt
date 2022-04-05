@@ -60,6 +60,7 @@ object Libs {
             const val runtime = "androidx.room:room-runtime:${Versions.AndroidX.room}"
             const val compiler = "androidx.room:room-compiler:${Versions.AndroidX.room}"
             const val ktx = "androidx.room:room-ktx:${Versions.AndroidX.room}"
+            const val testing = "androidx.room:room-testing:${Versions.AndroidX.room}"
         }
 
         object Paging {
@@ -135,6 +136,21 @@ object Libs {
     }
 
     object Mockito {
-        const val core = "org.mockito:mockito-core:3.3.3"
+        const val core = "org.mockito:mockito-core:${Versions.Mockito.core}"
+        const val ktx = "org.mockito.kotlin:mockito-kotlin:${Versions.Mockito.ktx}"
+        const val android = "org.mockito:mockito-android:${Versions.Mockito.android}"
+    }
+
+    object Test {
+        const val junit = "junit:junit:${Versions.Test.jUnitCore}"
+        const val cashTurbine = "app.cash.turbine:turbine:${Versions.Test.cashTurbine}"
+    }
+
+    object Robolectric {
+        const val core = "org.robolectric:robolectric:${Versions.Robolectric.core}"
+    }
+
+    object Jacoco {
+        const val gradle = "org.jacoco:org.jacoco.core:${Versions.Jacoco.gradle}"
     }
 }

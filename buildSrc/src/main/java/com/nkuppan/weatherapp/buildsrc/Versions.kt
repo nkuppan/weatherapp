@@ -54,4 +54,23 @@ object Versions {
         const val okHttp = "4.9.1"
         const val retrofit = "2.9.0"
     }
+
+    object Test {
+        const val jUnitCore = "4.13.2"
+        const val cashTurbine = "0.7.0"
+    }
+
+    object Mockito {
+        const val core = "3.3.3"
+        const val ktx = "4.0.0"
+        const val android = "4.3.1"
+    }
+
+    object Robolectric {
+        const val core = "4.6"
+    }
+
+    object Jacoco {
+        const val gradle = "0.8.7"
+    }
 }
