@@ -34,7 +34,8 @@ class SettingsDataStore(private val dataStore: DataStore<Preferences>) {
     }
 
     fun getWindSpeed() = dataStore.data.map { preferences ->
-        WindSpeed.values()[preferences[KEY_SELECTED_WIND_SPEED] ?: WindSpeed.METERS_PER_SECOND.ordinal]
+        WindSpeed.values()[preferences[KEY_SELECTED_WIND_SPEED]
+            ?: WindSpeed.METERS_PER_SECOND.ordinal]
     }
 
     suspend fun setPressure(pressure: Pressure) = dataStore.edit { preferences ->

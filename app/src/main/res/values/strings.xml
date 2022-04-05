@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">Weather App</string>
 
     <string name="next_48_hours">Next 48 hours</string>

@@ -18,7 +18,8 @@
         <item name="textAppearanceBody1">@style/TextAppearance.WeatherApp.Body1</item>
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.WeatherApp.SmallComponent
         </item>
-        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.WeatherApp.MediumComponent
+        <item name="shapeAppearanceMediumComponent">
+            @style/ShapeAppearance.WeatherApp.MediumComponent
         </item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.WeatherApp.LargeComponent
         </item>
@@ -32,7 +33,8 @@
         <item name="chipStyle">@style/Widget.WeatherApp.Chip</item>
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.WeatherApp.BottomSheetDialog</item>
         <item name="listPopupWindowStyle">@style/Widget.MaterialComponents.ListPopupWindow</item>
-        <item name="materialAlertDialogTheme">@style/ThemeOverlay.WeatherApp.MaterialAlertDialog</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.WeatherApp.MaterialAlertDialog
+        </item>
         <item name="snackbarStyle">@style/Widget.WeatherApp.Snackbar</item>
         <item name="snackbarTextViewStyle">@style/Widget.WeatherApp.Snackbar.TextView</item>
         <item name="materialCardViewStyle">@style/Widget.WeatherApp.CardView</item>
@@ -99,7 +101,8 @@
         <item name="materialAlertDialogTitleTextStyle">
             @style/MaterialAlertDialog.WeatherApp.Title.Text
         </item>
-        <item name="materialAlertDialogBodyTextStyle">@style/MaterialAlertDialog.WeatherApp.Body.Text
+        <item name="materialAlertDialogBodyTextStyle">
+            @style/MaterialAlertDialog.WeatherApp.Body.Text
         </item>
         <item name="android:windowAnimationStyle">@style/Animation.WeatherApp.MaterialAlertDialog
         </item>

@@ -10,9 +10,9 @@ import com.nkuppan.weatherapp.domain.extentions.isValidQueryString
 import com.nkuppan.weatherapp.domain.model.City
 import com.nkuppan.weatherapp.domain.model.Resource
 import com.nkuppan.weatherapp.domain.usecase.favorite.GetAllFavoriteCitiesUseCase
-import com.nkuppan.weatherapp.domain.usecase.weather.GetCityDetailsUseCase
 import com.nkuppan.weatherapp.domain.usecase.favorite.SaveFavoriteCityUseCase
 import com.nkuppan.weatherapp.domain.usecase.settings.SaveSelectedCityUseCase
+import com.nkuppan.weatherapp.domain.usecase.weather.GetCityDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

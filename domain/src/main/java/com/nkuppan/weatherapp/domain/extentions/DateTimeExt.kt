@@ -16,6 +16,7 @@ fun Long.get12HourFormattedTime(): String {
         Locale.getDefault()
     ).format(Date(this * 1000L))
 }
+
 /**
  * Since the server is sending an unix time format to convert that into an
  */

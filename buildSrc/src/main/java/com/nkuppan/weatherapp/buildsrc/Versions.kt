@@ -32,6 +32,7 @@ object Versions {
         const val navigation = "2.3.5"
         const val dataStore = "1.0.0-rc02"
         const val hilt = "1.0.0"
+
         object Test {
             const val core = "1.4.0"
             const val runner = "1.4.0"
