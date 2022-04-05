@@ -29,6 +29,9 @@ Weather Forecast attempts to make use of the latest Android libraries and best p
 * Designed and built using Material Design [components](https://material.io/components/) and [theming](https://material.io/design/material-theming/overview.html#material-theming)
 * Full [dark theme](https://material.io/design/color/dark-theme.html) support
 
+## Sequence Diagram
+![Work Flow](art/screenshots/screenshot-7.png)
+
 ## Contributions
 
 Please feel free to file an issue for errors, suggestions or feature requests. Pull requests are also encouraged.
