@@ -1,0 +1,23 @@
+@startuml
+!theme amiga from https://raw.githubusercontent.com/plantuml/plantuml/master/themes
+'https://plantuml.com/sequence-diagram
+
+header Weather App Workflow
+title Weather App Workflow
+
+autonumber
+/'
+WeatherDetailsViewModel -> GetSelectedCityUseCase: invoke
+GetSelectedCityUseCase -> SettingsRepository: getSelectedCountry
+SettingsRepository --> GetSelectedCityUseCase: response
+GetSelectedCityUseCase --> WeatherDetailsViewModel: selected city
+'/
+WeatherDetailFragment -> WeatherDetailsViewModel: fetchWeatherInfo
+WeatherDetailsViewModel -> GetAllWeatherForecastUseCase: invoke
+GetAllWeatherForecastUseCase -> OpenWeatherMapRepositoryImpl: getAllWeatherForecast
+OpenWeatherMapRepositoryImpl -> OpenWeatherMapApiService: getCurrentAndForecastData
+OpenWeatherMapApiService --> OpenWeatherMapRepositoryImpl: getAllWeatherForecast response
+OpenWeatherMapRepositoryImpl --> GetAllWeatherForecastUseCase: getAllWeatherForecast response
+GetAllWeatherForecastUseCase --> WeatherDetailsViewModel: invoke  response
+WeatherDetailsViewModel --> WeatherDetailFragment: allWeatherInfo  response
+@enduml
