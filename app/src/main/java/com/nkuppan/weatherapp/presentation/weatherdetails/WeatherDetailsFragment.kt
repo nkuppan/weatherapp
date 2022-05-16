@@ -11,32 +11,19 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.nkuppan.weatherapp.core.extention.autoCleared
-import com.nkuppan.weatherapp.core.ui.fragment.BaseFragment
+import com.nkuppan.weatherapp.core.extention.showSnackBarMessage
+import com.nkuppan.weatherapp.core.ui.fragment.BaseBindingFragment
 import com.nkuppan.weatherapp.databinding.FragmentForecastDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class WeatherDetailFragment : BaseFragment() {
+class WeatherDetailFragment : BaseBindingFragment<FragmentForecastDetailsBinding>() {
 
-    private var viewBinding: FragmentForecastDetailsBinding by autoCleared()
-
-    private var weatherForecastAdapter: WeatherForecastAdapter by autoCleared()
+    private lateinit var weatherForecastAdapter: WeatherForecastAdapter
 
     private val viewModel: WeatherDetailsViewModel by viewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        viewBinding = FragmentForecastDetailsBinding.inflate(inflater, container, false)
-        viewBinding.viewModel = viewModel
-        viewBinding.lifecycleOwner = viewLifecycleOwner
-        return viewBinding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,17 +36,17 @@ class WeatherDetailFragment : BaseFragment() {
     }
 
     private fun initializeRefreshView() {
-        viewBinding.swipeRefreshLayout.setOnRefreshListener {
+        binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.fetchWeatherInfo()
         }
 
-        viewBinding.place.setOnClickListener {
+        binding.place.setOnClickListener {
             findNavController().navigate(
                 WeatherDetailFragmentDirections.actionWeatherDetailFragmentToPlaceSearchFragment()
             )
         }
 
-        viewBinding.settings.setOnClickListener {
+        binding.settings.setOnClickListener {
             findNavController().navigate(
                 WeatherDetailFragmentDirections.actionWeatherDetailFragmentToSettingsFragment()
             )
@@ -75,11 +62,12 @@ class WeatherDetailFragment : BaseFragment() {
                         weatherForecastAdapter.submitList(it)
                     }
                 }
+                launch {
+                    viewModel.errorMessage.collectLatest {
+                        binding.root.showSnackBarMessage(it.asString(requireContext()))
+                    }
+                }
             }
-        }
-
-        viewModel.isLoading.observe(viewLifecycleOwner) {
-            viewBinding.swipeRefreshLayout.isRefreshing = it
         }
 
         viewModel.fetchWeatherInfo()
@@ -87,17 +75,33 @@ class WeatherDetailFragment : BaseFragment() {
 
     private fun initializeDailyForecastView() {
         weatherForecastAdapter = WeatherForecastAdapter { type, model ->
-            if (type == 0 && model?.alert?.isNotEmpty() == true) {
-                findNavController().navigate(
-                    WeatherDetailFragmentDirections.actionWeatherDetailFragmentToAlertFragment(
-                        model.alert.toTypedArray()
+            viewLifecycleOwner.lifecycleScope.launch {
+                if (type == 0 && model?.alert?.isNotEmpty() == true) {
+                    findNavController().navigate(
+                        WeatherDetailFragmentDirections.actionWeatherDetailFragmentToAlertFragment(
+                            model.alert.toTypedArray()
+                        )
                     )
-                )
+                }
             }
         }
-        viewBinding.weatherDataRecyclerView.layoutManager =
+        binding.weatherDataRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        viewBinding.weatherDataRecyclerView.setHasFixedSize(true)
-        viewBinding.weatherDataRecyclerView.adapter = weatherForecastAdapter
+        binding.weatherDataRecyclerView.setHasFixedSize(true)
+        binding.weatherDataRecyclerView.adapter = weatherForecastAdapter
+    }
+
+    override fun inflateLayout(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): FragmentForecastDetailsBinding {
+        return FragmentForecastDetailsBinding.inflate(inflater, container, false)
+    }
+
+    override fun bindData(binding: FragmentForecastDetailsBinding) {
+        super.bindData(binding)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 }

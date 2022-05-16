@@ -1,10 +1,8 @@
 package com.nkuppan.weatherapp.presentation.weatherdetails
 
-import android.app.Application
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nkuppan.weatherapp.R
-import com.nkuppan.weatherapp.core.ui.viewmodel.BaseAndroidViewModel
 import com.nkuppan.weatherapp.domain.extentions.get12HourFormattedTime
 import com.nkuppan.weatherapp.domain.extentions.get24HourFormattedTime
 import com.nkuppan.weatherapp.domain.extentions.getFormattedDate
@@ -12,20 +10,20 @@ import com.nkuppan.weatherapp.domain.model.*
 import com.nkuppan.weatherapp.domain.usecase.settings.*
 import com.nkuppan.weatherapp.domain.usecase.weather.GetAllWeatherForecastUseCase
 import com.nkuppan.weatherapp.presentation.alert.AlertUIModel
+import com.nkuppan.weatherapp.utils.UiText
+import com.nkuppan.weatherapp.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
 @HiltViewModel
 class WeatherDetailsViewModel @Inject constructor(
-    application: Application,
     private val getAllWeatherForecastUseCase: GetAllWeatherForecastUseCase,
     private val getSelectedCityUseCase: GetSelectedCityUseCase,
     private val getTemperatureUseCase: GetTemperatureUseCase,
@@ -34,19 +32,19 @@ class WeatherDetailsViewModel @Inject constructor(
     private val getPrecipitationUseCase: GetPrecipitationUseCase,
     private val getDistanceUseCase: GetDistanceUseCase,
     private val getTimeFormatUseCase: GetTimeFormatUseCase,
-) : BaseAndroidViewModel(application) {
+) : ViewModel() {
 
-    private val _allWeatherInfo = MutableSharedFlow<List<WeatherUIAdapterModel>>(
-        replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-    val allWeatherInfo = _allWeatherInfo.asSharedFlow()
+    private val _errorMessage = Channel<UiText>()
+    val errorMessage = _errorMessage.receiveAsFlow()
+
+    private val _allWeatherInfo = Channel<List<WeatherUIAdapterModel>>()
+    val allWeatherInfo = _allWeatherInfo.receiveAsFlow()
 
     private var currentJob: Job? = null
 
     private var selectedCity: City? = null
 
-    val selectedLocation = MutableLiveData<String>()
+    val selectedLocation = MutableStateFlow("")
 
     private var temperature = Temperature.CELSIUS
     private var windSpeed = WindSpeed.METERS_PER_SECOND
@@ -101,11 +99,7 @@ class WeatherDetailsViewModel @Inject constructor(
 
     private fun fetchWeatherInfo(city: City) {
 
-        if (_isLoading.value == true) {
-            currentJob?.cancel()
-        }
-
-        _isLoading.value = true
+        currentJob?.cancel()
 
         currentJob = viewModelScope.launch {
 
@@ -114,8 +108,6 @@ class WeatherDetailsViewModel @Inject constructor(
             selectedLocation.value = city.getFormattedCityName()
 
             fetchAllForecastInfo(city)
-
-            _isLoading.value = false
         }
     }
 
@@ -128,7 +120,7 @@ class WeatherDetailsViewModel @Inject constructor(
             )
         ) {
             is Resource.Success -> {
-                _allWeatherInfo.tryEmit(
+                _allWeatherInfo.send(
                     response.data.map { data ->
                         WeatherUIAdapterModel(
                             data.type.ordinal,
@@ -140,7 +132,7 @@ class WeatherDetailsViewModel @Inject constructor(
                 )
             }
             is Resource.Error -> {
-                _errorMessage.value = (R.string.unable_to_fetch_data)
+                _errorMessage.send(UiText.StringResource(R.string.unable_to_fetch_data))
             }
         }
     }
@@ -173,17 +165,15 @@ class WeatherDetailsViewModel @Inject constructor(
             getPrecipitation(weather.precipitation)
         )
 
-    private fun getPrecipitation(precipitation: Double): String {
+    private fun getPrecipitation(precipitation: Double): UiText {
         return if (precipitation > 0.0) {
-            String.format(
-                Locale.getDefault(),
-                "%s %.1f %s",
-                getApplication<Application>().resources.getString(R.string.precipitation_value),
+            UiText.StringResource(
+                R.string.precipitation_value,
                 getPrecipitationValue(precipitation),
                 getPrecipitationUnit()
             )
         } else {
-            getApplication<Application>().getString(R.string.no_precipitation_within_an_hour)
+            UiText.StringResource(R.string.no_precipitation_within_an_hour)
         }
     }
 
@@ -195,11 +185,11 @@ class WeatherDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun getPrecipitationUnit(): String {
+    private fun getPrecipitationUnit(): UiText {
         return if (precipitation == Precipitation.MILLIMETER) {
-            getApplication<Application>().resources.getString(R.string.millimeter)
+            UiText.StringResource(R.string.millimeter)
         } else {
-            getApplication<Application>().resources.getString(R.string.inches)
+            UiText.StringResource(R.string.inches)
         }
     }
 
@@ -211,11 +201,9 @@ class WeatherDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun getVisibility(visibility: Double): String {
-        return String.format(
-            Locale.getDefault(),
-            "%s %.1f %s",
-            getApplication<Application>().resources.getString(R.string.visibility_value),
+    private fun getVisibility(visibility: Double): UiText {
+        return UiText.StringResource(
+            R.string.visibility_value,
             getDistanceValue(visibility),
             getDistanceUnit()
         )
@@ -229,74 +217,55 @@ class WeatherDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun getDistanceUnit(): String {
+    private fun getDistanceUnit(): UiText {
         return if (distance == Distance.KILOMETERS) {
-            getApplication<Application>().resources.getString(R.string.kilometers)
+            UiText.StringResource(R.string.kilometers)
         } else {
-            getApplication<Application>().resources.getString(R.string.miles)
+            UiText.StringResource(R.string.miles)
         }
     }
 
-    private fun getUVIndex(uvIndex: Double): String {
-        return String.format(
-            Locale.getDefault(),
-            "%s %.1f",
-            getApplication<Application>().resources.getString(R.string.uv_index_value),
+    private fun getUVIndex(uvIndex: Double): UiText {
+        return UiText.StringResource(
+            R.string.uv_index_value,
             uvIndex
         )
     }
 
-    private fun getHumidity(humidity: Int): String {
-        return String.format(
-            Locale.getDefault(),
-            "%s %d %%",
-            getApplication<Application>().resources.getString(R.string.humidity_value),
-            humidity
-        )
+    private fun getHumidity(humidity: Int): UiText {
+        return UiText.StringResource(R.string.humidity_value, humidity)
     }
 
-    private fun getFeelsLikeTemperature(temperatureValue: Double): String {
-        return String.format(
-            Locale.getDefault(),
-            "%s %s",
-            getApplication<Application>().resources.getString(R.string.feels_like_value),
-            getTemperature(temperatureValue)
-        )
+    private fun getFeelsLikeTemperature(temperatureValue: Double): UiText {
+        return UiText.StringResource(R.string.feels_like_value, getTemperature(temperatureValue))
     }
 
-    private fun getDewPoint(temperatureValue: Double): String {
-        return String.format(
-            Locale.getDefault(),
-            "%s %s",
-            getApplication<Application>().resources.getString(R.string.dew_point_value),
-            getTemperature(temperatureValue)
-        )
+    private fun getDewPoint(temperatureValue: Double): UiText {
+        return UiText.StringResource(R.string.dew_point_value, getTemperature(temperatureValue))
     }
 
-    private fun getTemperature(temperatureValue: Double): String {
-        return String.format(
-            Locale.getDefault(),
-            "%d %s",
+    private fun getTemperature(temperatureValue: Double): UiText {
+        return UiText.StringResource(
+            R.string.temperature_value,
             getTemperatureValue(temperatureValue),
             getTemperatureUnit()
         )
     }
 
-    private fun getHighLowTemperature(highTemperature: Double, lowTemperature: Double): String {
-        return String.format(
-            Locale.getDefault(),
-            "%d/%d %s",
+    private fun getHighLowTemperature(highTemperature: Double, lowTemperature: Double): UiText {
+        return UiText.StringResource(
+            R.string.high_low_temperature_value,
             getTemperatureValue(highTemperature),
             getTemperatureValue(lowTemperature),
             getTemperatureUnit()
         )
     }
 
-    private fun getTemperatureUnit(): String {
+    private fun getTemperatureUnit(): UiText {
         return if (temperature == Temperature.CELSIUS) {
-            getApplication<Application>().resources.getString(R.string.celsius)
+            UiText.StringResource(R.string.celsius)
         } else {
-            getApplication<Application>().resources.getString(R.string.fahrenheit)
+            UiText.StringResource(R.string.fahrenheit)
         }
     }
 
@@ -308,26 +277,24 @@ class WeatherDetailsViewModel @Inject constructor(
         }.roundToInt()
     }
 
-    private fun getWindSpeed(windSpeed: Double): String {
-        return String.format(
-            Locale.getDefault(),
-            "%s %.1f %s",
-            getApplication<Application>().resources.getString(R.string.wind_value),
+    private fun getWindSpeed(windSpeed: Double): UiText {
+        return UiText.StringResource(
+            R.string.wind_value,
             getWindSpeedValue(windSpeed),
             getWindSpeedUnit()
         )
     }
 
-    private fun getWindSpeedUnit(): String {
+    private fun getWindSpeedUnit(): UiText {
         return when (windSpeed) {
             WindSpeed.MILES_PER_HOUR -> {
-                getApplication<Application>().resources.getString(R.string.miles_per_hour)
+                UiText.StringResource(R.string.miles_per_hour)
             }
             WindSpeed.KILOMETERS_PER_HOUR -> {
-                getApplication<Application>().resources.getString(R.string.kilometers_per_hour)
+                UiText.StringResource(R.string.kilometers_per_hour)
             }
             else -> {
-                getApplication<Application>().resources.getString(R.string.meters_per_second)
+                UiText.StringResource(R.string.meters_per_second)
             }
         }
     }
@@ -346,21 +313,19 @@ class WeatherDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun getPressure(pressure: Double): String {
-        return String.format(
-            Locale.getDefault(),
-            "%s %.1f %s",
-            getApplication<Application>().resources.getString(R.string.wind_value),
+    private fun getPressure(pressure: Double): UiText {
+        return UiText.StringResource(
+            R.string.pressure_value,
             getPressureValue(pressure),
             getPressureUnit()
         )
     }
 
-    private fun getPressureUnit(): String {
+    private fun getPressureUnit(): UiText {
         return if (pressure == Pressure.HECTOPASCAL) {
-            getApplication<Application>().resources.getString(R.string.hpa)
+            UiText.StringResource(R.string.hpa)
         } else {
-            getApplication<Application>().resources.getString(R.string.inHg)
+            UiText.StringResource(R.string.inHg)
         }
     }
 
@@ -376,32 +341,4 @@ class WeatherDetailsViewModel @Inject constructor(
         const val NUMBER_OF_HOURS = 12
         const val NUMBER_OF_DAYS = 7
     }
-}
-
-private fun Double.toMillimeterToInches(): Double {
-    return this / 25.4
-}
-
-private fun Double.toFahrenheit(): Double {
-    return this * 1.8 + 32
-}
-
-private fun Double.toKilometerPerHour(): Double {
-    return this * 1.609
-}
-
-private fun Double.toMeterPerSecond(): Double {
-    return this * 2.237
-}
-
-private fun Double.toInchesOfMercury(): Double {
-    return this / 33.863886666667
-}
-
-private fun Double.toKilometer(): Double {
-    return this / 1000
-}
-
-private fun Double.toMiles(): Double {
-    return this / 1609.34
 }

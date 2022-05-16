@@ -1,7 +1,7 @@
 package com.nkuppan.weatherapp.presentation.settings
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nkuppan.weatherapp.core.ui.viewmodel.BaseViewModel
 import com.nkuppan.weatherapp.domain.model.*
 import com.nkuppan.weatherapp.domain.usecase.settings.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,30 +27,27 @@ class SettingsViewModel @Inject constructor(
     private val getDistanceUseCase: GetDistanceUseCase,
     private val getTimeFormatUseCase: GetTimeFormatUseCase,
     private val getTheme: GetThemeUseCase,
-) : BaseViewModel() {
+) : ViewModel() {
 
-    private val _temperature: MutableStateFlow<Temperature> = MutableStateFlow(Temperature.CELSIUS)
+    private val _temperature = MutableStateFlow(Temperature.CELSIUS)
     val temperature = _temperature.asStateFlow()
 
-    private val _windSpeed: MutableStateFlow<WindSpeed> =
-        MutableStateFlow(WindSpeed.METERS_PER_SECOND)
+    private val _windSpeed = MutableStateFlow(WindSpeed.METERS_PER_SECOND)
     val windSpeed = _windSpeed.asStateFlow()
 
-    private val _pressure: MutableStateFlow<Pressure> = MutableStateFlow(Pressure.HECTOPASCAL)
+    private val _pressure = MutableStateFlow(Pressure.HECTOPASCAL)
     val pressure = _pressure.asStateFlow()
 
-    private val _precipitation: MutableStateFlow<Precipitation> =
-        MutableStateFlow(Precipitation.MILLIMETER)
+    private val _precipitation = MutableStateFlow(Precipitation.MILLIMETER)
     val precipitation = _precipitation.asStateFlow()
 
-    private val _distance: MutableStateFlow<Distance> = MutableStateFlow(Distance.KILOMETERS)
+    private val _distance = MutableStateFlow(Distance.KILOMETERS)
     val distance = _distance.asStateFlow()
 
-    private val _timeFormat: MutableStateFlow<TimeFormat> =
-        MutableStateFlow(TimeFormat.TWENTY_FOUR_HOUR)
+    private val _timeFormat = MutableStateFlow(TimeFormat.TWENTY_FOUR_HOUR)
     val timeFormat = _timeFormat.asStateFlow()
 
-    private val _theme: MutableStateFlow<Theme> = MutableStateFlow(Theme.LIGHT_THEME)
+    private val _theme = MutableStateFlow(Theme.LIGHT_THEME)
     val theme = _theme.asStateFlow()
 
     init {

@@ -1,7 +1,7 @@
 package com.nkuppan.weatherapp
 
 import android.app.Application
-import com.nkuppan.weatherapp.domain.respository.ThemeRepository
+import com.nkuppan.weatherapp.domain.usecase.settings.ApplyThemeUseCase
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -12,9 +12,9 @@ import javax.inject.Inject
 class WeatherApplication : Application() {
 
     @Inject
-    lateinit var themeRepository: ThemeRepository
+    lateinit var applyThemeUseCase: ApplyThemeUseCase
 
-    @OptIn(DelicateCoroutinesApi::class)
+    @DelicateCoroutinesApi
     override fun onCreate() {
         super.onCreate()
         setupTheme()
@@ -23,7 +23,7 @@ class WeatherApplication : Application() {
     @DelicateCoroutinesApi
     private fun setupTheme() {
         GlobalScope.launch {
-            themeRepository.applyTheme()
+            applyThemeUseCase.invoke()
         }
     }
 }

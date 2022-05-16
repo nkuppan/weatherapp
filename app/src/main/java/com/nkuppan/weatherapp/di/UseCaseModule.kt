@@ -174,4 +174,10 @@ object UseCaseModule {
     fun provideSaveThemeUseCase(repository: ThemeRepository): SaveThemeUseCase {
         return SaveThemeUseCase(repository)
     }
+
+    @Provides
+    @Singleton
+    fun provideApplyThemeUseCase(repository: ThemeRepository): ApplyThemeUseCase {
+        return ApplyThemeUseCase(repository)
+    }
 }

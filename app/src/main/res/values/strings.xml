@@ -47,17 +47,20 @@
     <string name="inches">in</string>
 
     <!-- String to configure -->
-    <string name="feels_like_value">Feels like</string>
-    <string name="wind_value">Wind:</string>
-    <string name="humidity_value">Humidity:</string>
-    <string name="uv_index_value">UV Index:</string>
-    <string name="visibility_value">Visibility:</string>
-    <string name="dew_point_value">Dew Point:</string>
-    <string name="pressure_value">Pressure:</string>
+    <string name="feels_like_value">Feels like %s</string>
+    <string name="wind_value">Wind: %.1f %s</string>
+    <string name="humidity_value">Humidity: %d %%</string>
+    <string name="uv_index_value">UV Index: %.1f</string>
+    <string name="visibility_value">Visibility: %.1f %s</string>
+    <string name="dew_point_value">Dew Point: %s</string>
+    <string name="pressure_value">Pressure: %.1f %s</string>
+    <string name="precipitation_value">Precipitation: %.1f %s</string>
+    <string name="temperature_value">%d %s</string>
+    <string name="high_low_temperature_value">%d/%d %s</string>
+
     <string name="theme">Theme</string>
     <string name="light_theme">Light</string>
     <string name="dark_theme">Dark</string>
     <string name="government_alerts">Government alerts</string>
     <string name="no_precipitation_within_an_hour">No precipitation within an hour</string>
-    <string name="precipitation_value">Precipitation:</string>
 </resources>

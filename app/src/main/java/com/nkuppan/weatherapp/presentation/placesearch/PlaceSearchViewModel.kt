@@ -2,19 +2,23 @@ package com.nkuppan.weatherapp.presentation.placesearch
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nkuppan.weatherapp.R
 import com.nkuppan.weatherapp.core.extention.Event
-import com.nkuppan.weatherapp.core.ui.viewmodel.BaseViewModel
 import com.nkuppan.weatherapp.domain.extentions.isValidQueryString
 import com.nkuppan.weatherapp.domain.model.City
 import com.nkuppan.weatherapp.domain.model.Resource
+import com.nkuppan.weatherapp.utils.UiText
 import com.nkuppan.weatherapp.domain.usecase.favorite.GetAllFavoriteCitiesUseCase
 import com.nkuppan.weatherapp.domain.usecase.favorite.SaveFavoriteCityUseCase
 import com.nkuppan.weatherapp.domain.usecase.settings.SaveSelectedCityUseCase
 import com.nkuppan.weatherapp.domain.usecase.weather.GetCityDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,12 +28,15 @@ class PlaceSearchViewModel @Inject constructor(
     private val getAllFavoriteCitiesUseCase: GetAllFavoriteCitiesUseCase,
     private val saveSelectedCityUseCase: SaveSelectedCityUseCase,
     private val saveFavoriteCityUseCase: SaveFavoriteCityUseCase,
-) : BaseViewModel() {
+) : ViewModel() {
 
-    val queryString: MutableLiveData<String> = MutableLiveData()
+    val queryString = MutableStateFlow("")
 
-    private val _places = MutableLiveData<List<City>>()
-    val places: LiveData<List<City>> = _places
+    private val _errorMessage = Channel<UiText>()
+    val errorMessage = _errorMessage.receiveAsFlow()
+
+    private val _places = Channel<List<City>>()
+    val places = _places.receiveAsFlow()
 
     private val _placeSelected = MutableLiveData<Event<City>>()
     val placeSelected: LiveData<Event<City>> = _placeSelected
@@ -42,36 +49,40 @@ class PlaceSearchViewModel @Inject constructor(
 
         val query = queryString.value
 
-        return if (query.isValidQueryString()) {
-            searchPlaces(query)
-            true
-        } else {
-            _errorMessage.value = R.string.enter_valid_query_string
-            false
+        viewModelScope.launch {
+            if (query.isValidQueryString()) {
+                searchPlaces(query)
+            } else {
+                _errorMessage.send(
+                    UiText.StringResource(R.string.enter_valid_query_string)
+                )
+            }
         }
+
+        return true
     }
 
     fun searchFavorites() {
 
         searchJob?.cancel()
 
-        _isLoading.value = true
-
         searchJob = viewModelScope.launch {
 
             when (val response = getAllFavoriteCitiesUseCase.invoke()) {
                 is Resource.Success -> {
                     val data = response.data
-                    _places.value = data.ifEmpty {
-                        emptyList()
-                    }
+                    _places.send(
+                        data.ifEmpty {
+                            emptyList()
+                        }
+                    )
                 }
                 is Resource.Error -> {
-                    _errorMessage.value = R.string.unable_to_fetch_data
+                    _errorMessage.send(
+                        UiText.StringResource(R.string.unable_to_fetch_data)
+                    )
                 }
             }
-
-            _isLoading.value = false
         }
     }
 
@@ -81,24 +92,24 @@ class PlaceSearchViewModel @Inject constructor(
 
         searchJob?.cancel()
 
-        _isLoading.value = true
-
         searchJob = viewModelScope.launch {
 
             when (val response = getCityDetailsUseCase.invoke(placeName)) {
                 is Resource.Success -> {
                     val data = response.data
-                    _places.value = data.ifEmpty {
-                        emptyList()
-                    }
+                    _places.send(
+                        data.ifEmpty {
+                            emptyList()
+                        }
+                    )
                     isPlaceAvailable = true
                 }
                 is Resource.Error -> {
-                    _errorMessage.value = R.string.unable_to_fetch_data
+                    _errorMessage.send(
+                        UiText.StringResource(R.string.unable_to_fetch_data)
+                    )
                 }
             }
-
-            _isLoading.value = false
         }
     }
 
@@ -107,7 +118,9 @@ class PlaceSearchViewModel @Inject constructor(
         viewModelScope.launch {
             when (saveSelectedCityUseCase.invoke(city)) {
                 is Resource.Error -> {
-                    _errorMessage.value = R.string.city_selection_failed
+                    _errorMessage.send(
+                        UiText.StringResource(R.string.city_selection_failed)
+                    )
                 }
                 is Resource.Success -> {
                     _placeSelected.value = Event(city)

@@ -7,44 +7,33 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nkuppan.weatherapp.R
-import com.nkuppan.weatherapp.core.extention.autoCleared
 import com.nkuppan.weatherapp.core.extention.clearFocusAndHideKeyboard
 import com.nkuppan.weatherapp.core.extention.showSnackBarMessage
-import com.nkuppan.weatherapp.core.ui.fragment.BaseFragment
+import com.nkuppan.weatherapp.core.ui.fragment.BaseBindingFragment
 import com.nkuppan.weatherapp.databinding.FragmentPlaceSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PlaceSearchFragment : BaseFragment() {
+class PlaceSearchFragment : BaseBindingFragment<FragmentPlaceSearchBinding>() {
 
-    private var binding: FragmentPlaceSearchBinding by autoCleared()
-
-    private val placeSearchViewModel: PlaceSearchViewModel by viewModels()
+    private val viewModel: PlaceSearchViewModel by viewModels()
 
     private val placeListAdapter = PlaceListAdapter { type, city ->
         viewLifecycleOwner.lifecycleScope.launch {
             if (type == 1) {
-                placeSearchViewModel.saveSelectedCity(city)
+                viewModel.saveSelectedCity(city)
             } else if (type == 2) {
-                placeSearchViewModel.saveFavoriteCity(city)
+                viewModel.saveFavoriteCity(city)
             }
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentPlaceSearchBinding.inflate(inflater, container, false)
-        binding.viewModel = placeSearchViewModel
-        binding.lifecycleOwner = viewLifecycleOwner
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,15 +48,26 @@ class PlaceSearchFragment : BaseFragment() {
 
     private fun initializeObserver() {
 
-        placeSearchViewModel.places.observe(viewLifecycleOwner) {
-            placeListAdapter.submitList(it)
-        }
-
-        placeSearchViewModel.placeSelected.observe(viewLifecycleOwner) {
+        viewModel.placeSelected.observe(viewLifecycleOwner) {
             findNavController().popBackStack()
         }
 
-        placeSearchViewModel.searchFavorites()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.errorMessage.collect {
+                        binding.root.showSnackBarMessage(it.asString(requireContext()))
+                    }
+                }
+                launch {
+                    viewModel.places.collect {
+                        placeListAdapter.submitList(it)
+                    }
+                }
+            }
+        }
+
+        viewModel.searchFavorites()
     }
 
     private fun initializeSearchContainer() {
@@ -101,10 +101,24 @@ class PlaceSearchFragment : BaseFragment() {
     }
 
     private fun handleSearchAction() {
-        if (placeSearchViewModel.processQuery()) {
+        if (viewModel.processQuery()) {
             binding.query.clearFocusAndHideKeyboard()
         } else {
             binding.root.showSnackBarMessage(R.string.enter_valid_query_string)
         }
+    }
+
+    override fun inflateLayout(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): FragmentPlaceSearchBinding {
+        return FragmentPlaceSearchBinding.inflate(inflater, container, false)
+    }
+
+    override fun bindData(binding: FragmentPlaceSearchBinding) {
+        super.bindData(binding)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 }

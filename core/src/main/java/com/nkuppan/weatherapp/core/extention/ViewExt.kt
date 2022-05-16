@@ -7,14 +7,6 @@ import android.widget.EditText
 import androidx.annotation.StringRes
 import com.google.android.material.snackbar.Snackbar
 
-fun View.showSnackbar(message: String, length: Int = Snackbar.LENGTH_SHORT) {
-    Snackbar.make(this, message, length).show()
-}
-
-fun View.showSnackbar(@StringRes message: Int, length: Int = Snackbar.LENGTH_SHORT) {
-    Snackbar.make(this, this.resources.getString(message), length).show()
-}
-
 /**
  *  This extension will allow the user to clear focus and hide the keyboard
  */
@@ -29,4 +21,8 @@ fun EditText.clearFocusAndHideKeyboard() {
  */
 fun View.showSnackBarMessage(@StringRes stringRes: Int, length: Int = Snackbar.LENGTH_LONG) {
     Snackbar.make(this, stringRes, length).show()
+}
+
+fun View.showSnackBarMessage(message: String, length: Int = Snackbar.LENGTH_SHORT) {
+    Snackbar.make(this, message, length).show()
 }

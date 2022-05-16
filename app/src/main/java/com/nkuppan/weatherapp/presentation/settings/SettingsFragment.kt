@@ -11,8 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.nkuppan.weatherapp.R
-import com.nkuppan.weatherapp.core.extention.autoCleared
-import com.nkuppan.weatherapp.core.ui.fragment.BaseFragment
+import com.nkuppan.weatherapp.core.ui.fragment.BaseBindingFragment
 import com.nkuppan.weatherapp.databinding.FragmentSettingBinding
 import com.nkuppan.weatherapp.domain.model.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,22 +19,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SettingsFragment : BaseFragment(), MaterialButtonToggleGroup.OnButtonCheckedListener {
-
-    private var binding: FragmentSettingBinding by autoCleared()
+class SettingsFragment : BaseBindingFragment<FragmentSettingBinding>(),
+    MaterialButtonToggleGroup.OnButtonCheckedListener {
 
     private val viewModel: SettingsViewModel by viewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentSettingBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -226,5 +213,19 @@ class SettingsFragment : BaseFragment(), MaterialButtonToggleGroup.OnButtonCheck
                 }
             }
         }
+    }
+
+    override fun inflateLayout(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): FragmentSettingBinding {
+        return FragmentSettingBinding.inflate(inflater, container, false)
+    }
+
+    override fun bindData(binding: FragmentSettingBinding) {
+        super.bindData(binding)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 }

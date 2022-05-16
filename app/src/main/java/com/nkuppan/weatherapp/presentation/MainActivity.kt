@@ -1,15 +1,15 @@
 package com.nkuppan.weatherapp.presentation
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.nkuppan.weatherapp.R
-import com.nkuppan.weatherapp.core.ui.activity.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity() {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
 
