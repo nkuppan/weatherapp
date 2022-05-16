@@ -40,7 +40,6 @@ object Versions {
             const val jUnit = "1.1.3"
             const val jUnitCore = "4.13.2"
             const val espresso = "3.4.0"
-            const val espresso_contrib = "3.0.2"
         }
     }
 

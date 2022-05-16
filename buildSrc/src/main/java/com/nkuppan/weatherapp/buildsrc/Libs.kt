@@ -107,7 +107,7 @@ object Libs {
                 const val core =
                     "androidx.test.espresso:espresso-core:${Versions.AndroidX.Test.espresso}"
                 const val contrib =
-                    "com.android.support.test.espresso:espresso-contrib:${Versions.AndroidX.Test.espresso_contrib}"
+                    "androidx.test.espresso:espresso-contrib:${Versions.AndroidX.Test.espresso}"
             }
         }
     }
