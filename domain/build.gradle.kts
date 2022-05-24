@@ -1,8 +1,8 @@
 import com.nkuppan.weatherapp.buildsrc.Libs
 
 plugins {
-    id 'java-library'
-    id 'kotlin'
+    id("java-library")
+    id("kotlin")
 }
 
 java {

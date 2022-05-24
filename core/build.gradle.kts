@@ -2,28 +2,30 @@ import com.nkuppan.weatherapp.buildsrc.Libs
 import com.nkuppan.weatherapp.buildsrc.Versions
 
 plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
+    id("com.android.library")
+    id("kotlin-android")
+    id("kotlin-kapt")
 }
 
 android {
-    compileSdk Versions.compileSdk
+    compileSdk = Versions.compileSdk
+
     defaultConfig {
-        minSdk Versions.minSdk
-        targetSdk Versions.targetSdk
-        testInstrumentationRunner Libs.AndroidX.Test.instrumentationRunner
+        minSdk = Versions.minSdk
+        targetSdk = Versions.targetSdk
+        testInstrumentationRunner = Libs.AndroidX.Test.instrumentationRunner
     }
+
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = "1.8"
     }
     buildFeatures {
-        viewBinding true
-        dataBinding true
+        viewBinding = true
+        dataBinding = true
     }
 }
 
@@ -50,16 +52,8 @@ dependencies {
 
     api(Libs.Google.material)
 
-    api(Libs.Square.okHttp)
-    api(Libs.Square.Retrofit.retrofit)
-    api(Libs.Square.Retrofit.gsonConverter)
-
     api(Libs.AndroidX.DataStore.preferences)
 
     implementation(Libs.Glide.core)
     kapt(Libs.Glide.compiler)
-
-    testImplementation(Libs.AndroidX.Test.runner)
-    androidTestImplementation(Libs.AndroidX.Test.JUnit.ktx)
-    androidTestImplementation(Libs.AndroidX.Test.Espresso.core)
 }

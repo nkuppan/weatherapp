@@ -79,11 +79,6 @@ object Libs {
                 "androidx.navigation:navigation-testing:${Versions.AndroidX.navigation}"
         }
 
-        object Hilt {
-            const val compiler = "androidx.hilt:hilt-compiler:${Versions.AndroidX.hilt}"
-            const val work = "androidx.hilt:hilt-work:${Versions.AndroidX.hilt}"
-        }
-
         object DataStore {
             const val preferences =
                 "androidx.datastore:datastore-preferences:${Versions.AndroidX.dataStore}"
@@ -117,10 +112,12 @@ object Libs {
         const val truth = "com.google.truth:truth:${Versions.Google.truth}"
 
         object Hilt {
-            const val compiler = "com.google.dagger:hilt-android-compiler:${Versions.Google.hilt}"
+            const val hiltCompiler = "com.google.dagger:hilt-compiler:${Versions.Google.hilt}"
             const val android = "com.google.dagger:hilt-android:${Versions.Google.hilt}"
+            const val androidCompiler = "com.google.dagger:hilt-android-compiler:${Versions.Google.hilt}"
             const val androidGradlePlugin =
                 "com.google.dagger:hilt-android-gradle-plugin:${Versions.Google.hilt}"
+            const val test = "com.google.dagger:hilt-android-testing:${Versions.Google.hilt}"
         }
     }
 
@@ -132,6 +129,10 @@ object Libs {
             const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.Square.retrofit}"
             const val gsonConverter =
                 "com.squareup.retrofit2:converter-gson:${Versions.Square.retrofit}"
+            const val moshiConverter =
+                "com.squareup.retrofit2:converter-moshi:${Versions.Square.retrofit}"
+            const val logging =
+                "com.squareup.okhttp3:logging-interceptor:${Versions.Square.okHttp}"
         }
     }
 

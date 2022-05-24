@@ -1,19 +1,16 @@
 package com.nkuppan.weatherapp.presentation.placesearch
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nkuppan.weatherapp.R
-import com.nkuppan.weatherapp.core.extention.Event
 import com.nkuppan.weatherapp.domain.extentions.isValidQueryString
 import com.nkuppan.weatherapp.domain.model.City
 import com.nkuppan.weatherapp.domain.model.Resource
-import com.nkuppan.weatherapp.utils.UiText
 import com.nkuppan.weatherapp.domain.usecase.favorite.GetAllFavoriteCitiesUseCase
 import com.nkuppan.weatherapp.domain.usecase.favorite.SaveFavoriteCityUseCase
 import com.nkuppan.weatherapp.domain.usecase.settings.SaveSelectedCityUseCase
 import com.nkuppan.weatherapp.domain.usecase.weather.GetCityDetailsUseCase
+import com.nkuppan.weatherapp.utils.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -38,8 +35,8 @@ class PlaceSearchViewModel @Inject constructor(
     private val _places = Channel<List<City>>()
     val places = _places.receiveAsFlow()
 
-    private val _placeSelected = MutableLiveData<Event<City>>()
-    val placeSelected: LiveData<Event<City>> = _placeSelected
+    private val _placeSelected = Channel<City>()
+    val placeSelected = _placeSelected.receiveAsFlow()
 
     private var searchJob: Job? = null
 
@@ -96,13 +93,11 @@ class PlaceSearchViewModel @Inject constructor(
 
             when (val response = getCityDetailsUseCase.invoke(placeName)) {
                 is Resource.Success -> {
-                    val data = response.data
-                    _places.send(
-                        data.ifEmpty {
-                            emptyList()
-                        }
-                    )
-                    isPlaceAvailable = true
+                    val data = response.data.ifEmpty {
+                        emptyList()
+                    }
+                    _places.send(data)
+                    isPlaceAvailable = data.isNotEmpty()
                 }
                 is Resource.Error -> {
                     _errorMessage.send(
@@ -123,7 +118,7 @@ class PlaceSearchViewModel @Inject constructor(
                     )
                 }
                 is Resource.Success -> {
-                    _placeSelected.value = Event(city)
+                    _placeSelected.send(city)
                 }
             }
         }

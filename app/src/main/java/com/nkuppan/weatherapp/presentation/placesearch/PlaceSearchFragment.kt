@@ -19,6 +19,7 @@ import com.nkuppan.weatherapp.core.ui.fragment.BaseBindingFragment
 import com.nkuppan.weatherapp.databinding.FragmentPlaceSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -48,10 +49,6 @@ class PlaceSearchFragment : BaseBindingFragment<FragmentPlaceSearchBinding>() {
 
     private fun initializeObserver() {
 
-        viewModel.placeSelected.observe(viewLifecycleOwner) {
-            findNavController().popBackStack()
-        }
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
@@ -62,6 +59,11 @@ class PlaceSearchFragment : BaseBindingFragment<FragmentPlaceSearchBinding>() {
                 launch {
                     viewModel.places.collect {
                         placeListAdapter.submitList(it)
+                    }
+                }
+                launch {
+                    viewModel.placeSelected.collectLatest {
+                        findNavController().popBackStack()
                     }
                 }
             }

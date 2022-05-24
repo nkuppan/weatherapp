@@ -1,4 +1,4 @@
-package com.nkuppan.weatherapp.utils
+package com.nkuppan.weatherapp.core.testing
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

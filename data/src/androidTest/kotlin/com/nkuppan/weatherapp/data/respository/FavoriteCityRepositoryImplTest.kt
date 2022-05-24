@@ -5,10 +5,10 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth
+import com.nkuppan.weatherapp.core.testing.BaseCoroutineTest
 import com.nkuppan.weatherapp.data.db.WeatherAppDatabase
 import com.nkuppan.weatherapp.data.db.dao.FavoriteCityDao
 import com.nkuppan.weatherapp.data.db.entity.FavoriteEntity
-import com.nkuppan.weatherapp.utils.BaseCoroutineTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Rule
 import org.junit.Test
@@ -62,7 +62,8 @@ class FavoriteCityRepositoryImplTest : BaseCoroutineTest() {
         Truth.assertThat(favoriteCityData.country).isEqualTo(updatedFakeFavoriteEntity.country)
         Truth.assertThat(favoriteCityData.latitude).isEqualTo(updatedFakeFavoriteEntity.latitude)
         Truth.assertThat(favoriteCityData.longitude).isEqualTo(updatedFakeFavoriteEntity.longitude)
-        Truth.assertThat(favoriteCityData.isFavorite).isEqualTo(updatedFakeFavoriteEntity.isFavorite)
+        Truth.assertThat(favoriteCityData.isFavorite)
+            .isEqualTo(updatedFakeFavoriteEntity.isFavorite)
     }
 
     @Test

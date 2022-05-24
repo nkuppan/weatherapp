@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.nkuppan.weatherapp.core.extention.autoCleared
 import com.nkuppan.weatherapp.core.ui.fragment.BaseBindingFragment
 import com.nkuppan.weatherapp.databinding.FragmentAlertBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,7 +16,7 @@ class AlertFragment : BaseBindingFragment<FragmentAlertBinding>() {
 
     private val navArgs: AlertFragmentArgs by navArgs()
 
-    private var alertListAdapter: AlertListAdapter by autoCleared()
+    private lateinit var alertListAdapter: AlertListAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

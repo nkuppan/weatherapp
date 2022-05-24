@@ -7,7 +7,8 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "weatherapp"
-include ':app'
-include ':core'
-include ':data'
-include ':domain'
+include(":app")
+include(":core")
+include(":domain")
+include(":data")
+include(":core-testing")

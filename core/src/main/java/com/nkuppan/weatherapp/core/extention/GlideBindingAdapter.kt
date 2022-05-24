@@ -24,6 +24,7 @@ fun loadWeatherImageURL(imageView: ImageView, networkURL: String?) {
         loadErrorImage(imageView)
         return
     }
+
     Glide
         .with(imageView.context)
         .setDefaultRequestOptions(

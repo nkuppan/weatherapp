@@ -1,15 +1,17 @@
 package com.nkuppan.weatherapp.data.respository
 
 import com.google.common.truth.Truth.assertThat
+import com.nkuppan.weatherapp.core.testing.BaseCoroutineTest
+import com.nkuppan.weatherapp.core.testing.FakeResponseFileReader
 import com.nkuppan.weatherapp.data.mapper.CurrentWeatherDtoMapper
 import com.nkuppan.weatherapp.data.mapper.DailyWeatherDtoMapper
 import com.nkuppan.weatherapp.data.mapper.HourlyWeatherDtoMapper
 import com.nkuppan.weatherapp.data.network.OpenWeatherMapApiService
+import com.nkuppan.weatherapp.domain.model.City
 import com.nkuppan.weatherapp.domain.model.Resource
 import com.nkuppan.weatherapp.domain.model.WeatherType
 import com.nkuppan.weatherapp.domain.respository.WeatherRepository
 import com.nkuppan.weatherapp.domain.utils.AppCoroutineDispatchers
-import com.nkuppan.weatherapp.utils.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
@@ -79,7 +81,8 @@ class OpenWeatherMapRepositoryImplTest : BaseCoroutineTest() {
 
     @Test
     fun `read weather success json response file`() {
-        val reader = FakeResponseFileReader(SUCCESS_RESPONSE_FILE_NAME)
+        val reader =
+            FakeResponseFileReader(SUCCESS_RESPONSE_FILE_NAME)
         assertThat(reader.content).isNotNull()
     }
 
@@ -90,11 +93,17 @@ class OpenWeatherMapRepositoryImplTest : BaseCoroutineTest() {
             setupMockResponse(
                 MockResponse()
                     .setResponseCode(200)
-                    .setBody(FakeResponseFileReader(SUCCESS_EMPTY_RESPONSE_FILE_NAME).content)
+                    .setBody(
+                        FakeResponseFileReader(
+                            SUCCESS_EMPTY_RESPONSE_FILE_NAME
+                        ).content
+                    )
             )
 
             val availableWeatherInfo = weatherRepository.getAllWeatherForecast(
-                FAKE_CITY, NUMBER_OF_HOURS, NUMBER_OF_DAYS
+                FAKE_CITY,
+                NUMBER_OF_HOURS,
+                NUMBER_OF_DAYS
             )
 
             assertThat(availableWeatherInfo).isInstanceOf(Resource.Error::class.java)
@@ -111,11 +120,17 @@ class OpenWeatherMapRepositoryImplTest : BaseCoroutineTest() {
             setupMockResponse(
                 MockResponse()
                     .setResponseCode(200)
-                    .setBody(FakeResponseFileReader(SUCCESS_RESPONSE_FILE_NAME).content)
+                    .setBody(
+                        FakeResponseFileReader(
+                            SUCCESS_RESPONSE_FILE_NAME
+                        ).content
+                    )
             )
 
             val availableWeatherInfo = weatherRepository.getAllWeatherForecast(
-                FAKE_CITY, NUMBER_OF_HOURS, NUMBER_OF_DAYS
+                FAKE_CITY,
+                NUMBER_OF_HOURS,
+                NUMBER_OF_DAYS
             )
             assertThat(availableWeatherInfo).isInstanceOf(Resource.Success::class.java)
 
@@ -139,11 +154,17 @@ class OpenWeatherMapRepositoryImplTest : BaseCoroutineTest() {
             setupMockResponse(
                 MockResponse()
                     .setResponseCode(400)
-                    .setBody(FakeResponseFileReader(ERROR_RESPONSE_FILE_NAME).content)
+                    .setBody(
+                        FakeResponseFileReader(
+                            ERROR_RESPONSE_FILE_NAME
+                        ).content
+                    )
             )
 
             val availableWeatherInfo = weatherRepository.getAllWeatherForecast(
-                FAKE_CITY, NUMBER_OF_HOURS, NUMBER_OF_DAYS
+                FAKE_CITY,
+                NUMBER_OF_HOURS,
+                NUMBER_OF_DAYS
             )
             assertThat(availableWeatherInfo).isInstanceOf(Resource.Error::class.java)
             val error = availableWeatherInfo as Resource.Error
@@ -155,5 +176,17 @@ class OpenWeatherMapRepositoryImplTest : BaseCoroutineTest() {
         private const val SUCCESS_RESPONSE_FILE_NAME: String = "valid_response.json"
         private const val SUCCESS_EMPTY_RESPONSE_FILE_NAME: String = "valid_empty_response.json"
         private const val ERROR_RESPONSE_FILE_NAME: String = "valid_error_response.json"
+
+        private val FAKE_CITY = City(
+            "London",
+            "1",
+            1,
+            "England",
+            longitude = 0.0,
+            latitude = 0.0
+        )
+
+        private const val NUMBER_OF_HOURS = 48
+        private const val NUMBER_OF_DAYS = 7
     }
 }

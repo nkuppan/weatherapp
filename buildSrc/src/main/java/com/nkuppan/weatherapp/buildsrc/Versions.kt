@@ -1,9 +1,9 @@
 package com.nkuppan.weatherapp.buildsrc
 
 object Versions {
-    const val compileSdk = 30
+    const val compileSdk = 31
     const val minSdk = 21
-    const val targetSdk = 30
+    const val targetSdk = 31
 
     const val versionCode = 1
     const val versionName = "1.0.0"
@@ -13,7 +13,7 @@ object Versions {
     const val glide = "4.12.0"
 
     object Kotlin {
-        const val kotlin = "1.5.21"
+        const val kotlin = "1.6.21"
         const val coroutines = "1.5.1"
     }
 
@@ -27,11 +27,10 @@ object Versions {
         const val recyclerView = "1.2.1"
         const val swipeRefreshLayout = "1.2.0-alpha01"
         const val lifecycle = "2.4.0-alpha02"
-        const val room = "2.4.0-alpha04"
-        const val paging = "3.1.0-alpha03"
-        const val navigation = "2.3.5"
-        const val dataStore = "1.0.0-rc02"
-        const val hilt = "1.0.0"
+        const val room = "2.4.2"
+        const val paging = "3.1.1"
+        const val navigation = "2.4.2"
+        const val dataStore = "1.0.0"
 
         object Test {
             const val core = "1.4.0"
@@ -45,7 +44,7 @@ object Versions {
 
     object Google {
         const val truth = "1.1.3"
-        const val material = "1.5.0-alpha01"
+        const val material = "1.6.0"
         const val hilt = "2.38.1"
     }
 
