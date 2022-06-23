@@ -13,8 +13,8 @@ object Versions {
     const val glide = "4.12.0"
 
     object Kotlin {
-        const val kotlin = "1.6.21"
-        const val coroutines = "1.5.1"
+        const val kotlin = "1.7.0"
+        const val coroutines = "1.6.3"
     }
 
     object AndroidX {
@@ -45,7 +45,7 @@ object Versions {
     object Google {
         const val truth = "1.1.3"
         const val material = "1.6.0"
-        const val hilt = "2.38.1"
+        const val hilt = "2.42"
     }
 
     object Square {

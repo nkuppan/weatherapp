@@ -7,17 +7,17 @@ import com.nkuppan.weatherapp.data.db.entity.FavoriteEntity
 interface FavoriteCityDao {
 
     @Query("SELECT * FROM favorite WHERE is_favorite=1")
-    fun getAllFavorites(): List<FavoriteEntity>?
+    suspend fun getAllFavorites(): List<FavoriteEntity>?
 
     @Query("SELECT * FROM favorite WHERE name=:name")
-    fun getFavorite(name: String): FavoriteEntity?
+    suspend fun getFavorite(name: String): FavoriteEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllFavorite(favorite: List<FavoriteEntity>?)
+    suspend fun insertAllFavorite(favorite: List<FavoriteEntity>?)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertFavorite(favorite: FavoriteEntity?): Long
+    suspend fun insertFavorite(favorite: FavoriteEntity?): Long
 
     @Delete
-    fun deleteFavorite(favorite: FavoriteEntity?)
+    suspend fun deleteFavorite(favorite: FavoriteEntity?)
 }

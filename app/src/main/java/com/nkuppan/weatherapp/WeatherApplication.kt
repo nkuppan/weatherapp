@@ -8,19 +8,18 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(DelicateCoroutinesApi::class)
 @HiltAndroidApp
 class WeatherApplication : Application() {
 
     @Inject
     lateinit var applyThemeUseCase: ApplyThemeUseCase
 
-    @DelicateCoroutinesApi
     override fun onCreate() {
         super.onCreate()
         setupTheme()
     }
 
-    @DelicateCoroutinesApi
     private fun setupTheme() {
         GlobalScope.launch {
             applyThemeUseCase.invoke()

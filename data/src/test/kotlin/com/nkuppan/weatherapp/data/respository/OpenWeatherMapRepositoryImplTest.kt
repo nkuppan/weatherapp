@@ -3,6 +3,7 @@ package com.nkuppan.weatherapp.data.respository
 import com.google.common.truth.Truth.assertThat
 import com.nkuppan.weatherapp.core.testing.BaseCoroutineTest
 import com.nkuppan.weatherapp.core.testing.FakeResponseFileReader
+import com.nkuppan.weatherapp.core.testing.utils.TestDispatcherRule
 import com.nkuppan.weatherapp.data.mapper.CurrentWeatherDtoMapper
 import com.nkuppan.weatherapp.data.mapper.DailyWeatherDtoMapper
 import com.nkuppan.weatherapp.data.mapper.HourlyWeatherDtoMapper
@@ -19,6 +20,7 @@ import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -34,6 +36,9 @@ class OpenWeatherMapRepositoryImplTest : BaseCoroutineTest() {
     private lateinit var mockWebServer: MockWebServer
 
     private lateinit var weatherRepository: WeatherRepository
+
+    @get:Rule
+    val dispatcherRule = TestDispatcherRule()
 
     override fun onCreate() {
         super.onCreate()
@@ -59,9 +64,9 @@ class OpenWeatherMapRepositoryImplTest : BaseCoroutineTest() {
             HourlyWeatherDtoMapper(),
             DailyWeatherDtoMapper(),
             AppCoroutineDispatchers(
-                testCoroutineDispatcher,
-                testCoroutineDispatcher,
-                testCoroutineDispatcher
+                dispatcherRule.dispatcher,
+                dispatcherRule.dispatcher,
+                dispatcherRule.dispatcher
             )
         )
     }

@@ -5,10 +5,13 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth
 import com.nkuppan.weatherapp.core.testing.BaseCoroutineTest
+import com.nkuppan.weatherapp.core.testing.utils.TestDispatcherRule
 import com.nkuppan.weatherapp.data.db.WeatherAppDatabase
 import com.nkuppan.weatherapp.data.db.dao.FavoriteCityDao
 import com.nkuppan.weatherapp.data.db.entity.FavoriteEntity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -17,7 +20,11 @@ import org.junit.runner.RunWith
 class FavoriteCityRepositoryImplTest : BaseCoroutineTest() {
 
     private lateinit var favoriteCityDao: FavoriteCityDao
+
     private lateinit var weatherAppDatabase: WeatherAppDatabase
+
+    @get:Rule
+    val dispatcherRule = TestDispatcherRule()
 
     override fun onCreate() {
         super.onCreate()
@@ -36,7 +43,7 @@ class FavoriteCityRepositoryImplTest : BaseCoroutineTest() {
     }
 
     @Test
-    fun validateFavoriteCityTest() {
+    fun validateFavoriteCityTest() = runTest {
         val id = favoriteCityDao.insertFavorite(fakeFavoriteEntity)
         Truth.assertThat(id).isNotEqualTo(-1)
         val favoriteCityData = favoriteCityDao.getFavorite(fakeFavoriteEntity.name)
@@ -44,7 +51,7 @@ class FavoriteCityRepositoryImplTest : BaseCoroutineTest() {
     }
 
     @Test
-    fun validateFavoriteCityInsertReplaceStrategy() {
+    fun validateFavoriteCityInsertReplaceStrategy() = runTest {
         val id = favoriteCityDao.insertFavorite(fakeFavoriteEntity)
         Truth.assertThat(id).isNotEqualTo(-1)
 
@@ -62,7 +69,7 @@ class FavoriteCityRepositoryImplTest : BaseCoroutineTest() {
     }
 
     @Test
-    fun validateFavoriteCityInsertAndRetrieve() {
+    fun validateFavoriteCityInsertAndRetrieve() = runTest {
         val id = favoriteCityDao.insertFavorite(fakeFavoriteEntity)
         Truth.assertThat(id).isNotEqualTo(-1)
 
@@ -76,7 +83,7 @@ class FavoriteCityRepositoryImplTest : BaseCoroutineTest() {
     }
 
     @Test
-    fun validateFavoriteCityInsertDeleteRetrieve() {
+    fun validateFavoriteCityInsertDeleteRetrieve() = runTest {
         val id = favoriteCityDao.insertFavorite(fakeFavoriteEntity)
         Truth.assertThat(id).isNotEqualTo(-1)
 
