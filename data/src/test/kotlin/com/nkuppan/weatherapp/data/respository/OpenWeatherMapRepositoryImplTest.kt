@@ -14,7 +14,7 @@ import com.nkuppan.weatherapp.domain.model.WeatherType
 import com.nkuppan.weatherapp.domain.respository.WeatherRepository
 import com.nkuppan.weatherapp.domain.utils.AppCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -92,90 +92,87 @@ class OpenWeatherMapRepositoryImplTest : BaseCoroutineTest() {
     }
 
     @Test
-    fun `Search weather information with empty result`() =
-        runBlocking {
+    fun `Search weather information with empty result`() = runTest {
 
-            setupMockResponse(
-                MockResponse()
-                    .setResponseCode(200)
-                    .setBody(
-                        FakeResponseFileReader(
-                            SUCCESS_EMPTY_RESPONSE_FILE_NAME
-                        ).content
-                    )
-            )
+        setupMockResponse(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody(
+                    FakeResponseFileReader(
+                        SUCCESS_EMPTY_RESPONSE_FILE_NAME
+                    ).content
+                )
+        )
 
-            val availableWeatherInfo = weatherRepository.getAllWeatherForecast(
-                FAKE_CITY,
-                NUMBER_OF_HOURS,
-                NUMBER_OF_DAYS
-            )
+        val availableWeatherInfo = weatherRepository.getAllWeatherForecast(
+            FAKE_CITY,
+            NUMBER_OF_HOURS,
+            NUMBER_OF_DAYS
+        )
 
-            assertThat(availableWeatherInfo).isInstanceOf(Resource.Error::class.java)
+        assertThat(availableWeatherInfo).isInstanceOf(Resource.Error::class.java)
 
-            val errorResponse = availableWeatherInfo as Resource.Error
-            assertThat(errorResponse).isNotNull()
-            assertThat(errorResponse.exception).isNotNull()
-        }
-
-    @Test
-    fun `Search weather information with valid result`(): Unit =
-        runBlocking {
-
-            setupMockResponse(
-                MockResponse()
-                    .setResponseCode(200)
-                    .setBody(
-                        FakeResponseFileReader(
-                            SUCCESS_RESPONSE_FILE_NAME
-                        ).content
-                    )
-            )
-
-            val availableWeatherInfo = weatherRepository.getAllWeatherForecast(
-                FAKE_CITY,
-                NUMBER_OF_HOURS,
-                NUMBER_OF_DAYS
-            )
-            assertThat(availableWeatherInfo).isInstanceOf(Resource.Success::class.java)
-
-            val successResponse = availableWeatherInfo as Resource.Success
-            assertThat(successResponse).isNotNull()
-            assertThat(successResponse.data).isNotEmpty()
-
-            val weatherInfo = successResponse.data[WeatherType.CURRENT]
-            assertThat(weatherInfo).isNotNull()
-            assertThat(weatherInfo).isNotEmpty()
-            val currentWeather = weatherInfo!![0]
-            assertThat(currentWeather).isNotNull()
-            assertThat(currentWeather.weatherTitle).isNotNull()
-            assertThat(currentWeather.date).isNotEqualTo(0)
-        }
+        val errorResponse = availableWeatherInfo as Resource.Error
+        assertThat(errorResponse).isNotNull()
+        assertThat(errorResponse.exception).isNotNull()
+    }
 
     @Test
-    fun `Search weather information with error result`() =
-        runBlocking {
+    fun `Search weather information with valid result`(): Unit = runTest {
 
-            setupMockResponse(
-                MockResponse()
-                    .setResponseCode(400)
-                    .setBody(
-                        FakeResponseFileReader(
-                            ERROR_RESPONSE_FILE_NAME
-                        ).content
-                    )
-            )
+        setupMockResponse(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody(
+                    FakeResponseFileReader(
+                        SUCCESS_RESPONSE_FILE_NAME
+                    ).content
+                )
+        )
 
-            val availableWeatherInfo = weatherRepository.getAllWeatherForecast(
-                FAKE_CITY,
-                NUMBER_OF_HOURS,
-                NUMBER_OF_DAYS
-            )
-            assertThat(availableWeatherInfo).isInstanceOf(Resource.Error::class.java)
-            val error = availableWeatherInfo as Resource.Error
-            assertThat(error).isNotNull()
-            assertThat(error.exception).isNotNull()
-        }
+        val availableWeatherInfo = weatherRepository.getAllWeatherForecast(
+            FAKE_CITY,
+            NUMBER_OF_HOURS,
+            NUMBER_OF_DAYS
+        )
+        assertThat(availableWeatherInfo).isInstanceOf(Resource.Success::class.java)
+
+        val successResponse = availableWeatherInfo as Resource.Success
+        assertThat(successResponse).isNotNull()
+        assertThat(successResponse.data).isNotEmpty()
+
+        val weatherInfo = successResponse.data[WeatherType.CURRENT]
+        assertThat(weatherInfo).isNotNull()
+        assertThat(weatherInfo).isNotEmpty()
+        val currentWeather = weatherInfo!![0]
+        assertThat(currentWeather).isNotNull()
+        assertThat(currentWeather.weatherTitle).isNotNull()
+        assertThat(currentWeather.date).isNotEqualTo(0)
+    }
+
+    @Test
+    fun `Search weather information with error result`() = runTest {
+
+        setupMockResponse(
+            MockResponse()
+                .setResponseCode(400)
+                .setBody(
+                    FakeResponseFileReader(
+                        ERROR_RESPONSE_FILE_NAME
+                    ).content
+                )
+        )
+
+        val availableWeatherInfo = weatherRepository.getAllWeatherForecast(
+            FAKE_CITY,
+            NUMBER_OF_HOURS,
+            NUMBER_OF_DAYS
+        )
+        assertThat(availableWeatherInfo).isInstanceOf(Resource.Error::class.java)
+        val error = availableWeatherInfo as Resource.Error
+        assertThat(error).isNotNull()
+        assertThat(error.exception).isNotNull()
+    }
 
     companion object {
         private const val SUCCESS_RESPONSE_FILE_NAME: String = "valid_response.json"
