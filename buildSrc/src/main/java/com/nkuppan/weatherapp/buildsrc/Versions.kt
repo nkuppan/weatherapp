@@ -18,11 +18,11 @@ object Versions {
     }
 
     object AndroidX {
-        const val core = "1.7.0-alpha01"
+        const val core = "1.8.0"
         const val coreTest = "2.1.0"
-        const val activity = "1.3.0-rc02"
-        const val fragment = "1.4.0-alpha05"
-        const val appCompat = "1.4.0-alpha03"
+        const val activity = "1.4.0"
+        const val fragment = "1.4.1"
+        const val appCompat = "1.4.2"
         const val constraintLayout = "2.1.0-beta02"
         const val recyclerView = "1.2.1"
         const val swipeRefreshLayout = "1.2.0-alpha01"

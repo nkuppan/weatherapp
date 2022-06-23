@@ -10,14 +10,12 @@ import com.nkuppan.weatherapp.domain.model.*
 import com.nkuppan.weatherapp.domain.usecase.settings.*
 import com.nkuppan.weatherapp.domain.usecase.weather.GetAllWeatherForecastUseCase
 import com.nkuppan.weatherapp.presentation.alert.AlertUIModel
-import com.nkuppan.weatherapp.utils.UiText
 import com.nkuppan.weatherapp.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -34,11 +32,10 @@ class WeatherDetailsViewModel @Inject constructor(
     private val getTimeFormatUseCase: GetTimeFormatUseCase,
 ) : ViewModel() {
 
-    private val _errorMessage = Channel<UiText>()
-    val errorMessage = _errorMessage.receiveAsFlow()
-
-    private val _allWeatherInfo = Channel<List<WeatherUIAdapterModel>>()
-    val allWeatherInfo = _allWeatherInfo.receiveAsFlow()
+    private val _weatherUIState = MutableStateFlow<WeatherUIState>(
+        WeatherUIState.Loading(true)
+    )
+    val weatherUIState = _weatherUIState.asStateFlow()
 
     private var currentJob: Job? = null
 
@@ -103,11 +100,15 @@ class WeatherDetailsViewModel @Inject constructor(
 
         currentJob = viewModelScope.launch {
 
+            _weatherUIState.value = WeatherUIState.Loading(status = true)
+
             selectedCity = city
 
             selectedLocation.value = city.getFormattedCityName()
 
             fetchAllForecastInfo(city)
+
+            _weatherUIState.value = WeatherUIState.Loading(status = false)
         }
     }
 
@@ -120,7 +121,7 @@ class WeatherDetailsViewModel @Inject constructor(
             )
         ) {
             is Resource.Success -> {
-                _allWeatherInfo.send(
+                _weatherUIState.value = WeatherUIState.Success(
                     response.data.map { data ->
                         WeatherUIAdapterModel(
                             data.type.ordinal,
@@ -132,7 +133,9 @@ class WeatherDetailsViewModel @Inject constructor(
                 )
             }
             is Resource.Error -> {
-                _errorMessage.send(UiText.StringResource(R.string.unable_to_fetch_data))
+                _weatherUIState.value = WeatherUIState.Error(
+                    UiText.StringResource(R.string.unable_to_fetch_data)
+                )
             }
         }
     }
@@ -341,4 +344,10 @@ class WeatherDetailsViewModel @Inject constructor(
         const val NUMBER_OF_HOURS = 12
         const val NUMBER_OF_DAYS = 7
     }
+}
+
+sealed class WeatherUIState {
+    data class Loading(val status: Boolean) : WeatherUIState()
+    data class Success(val info: List<WeatherUIAdapterModel>) : WeatherUIState()
+    data class Error(val info: UiText) : WeatherUIState()
 }

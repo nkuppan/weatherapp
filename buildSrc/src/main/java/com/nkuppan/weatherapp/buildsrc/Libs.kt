@@ -112,9 +112,9 @@ object Libs {
         const val truth = "com.google.truth:truth:${Versions.Google.truth}"
 
         object Hilt {
-            const val hiltCompiler = "com.google.dagger:hilt-compiler:${Versions.Google.hilt}"
+            const val hiltCompiler =
+                "com.google.dagger:hilt-android-compiler:${Versions.Google.hilt}"
             const val android = "com.google.dagger:hilt-android:${Versions.Google.hilt}"
-            const val androidCompiler = "com.google.dagger:hilt-android-compiler:${Versions.Google.hilt}"
             const val androidGradlePlugin =
                 "com.google.dagger:hilt-android-gradle-plugin:${Versions.Google.hilt}"
             const val test = "com.google.dagger:hilt-android-testing:${Versions.Google.hilt}"

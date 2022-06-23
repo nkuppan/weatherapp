@@ -1,7 +1,6 @@
 package com.nkuppan.weatherapp.presentation.settings
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.common.truth.Truth
@@ -13,9 +12,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 @MediumTest
 @ExperimentalCoroutinesApi
 @HiltAndroidTest

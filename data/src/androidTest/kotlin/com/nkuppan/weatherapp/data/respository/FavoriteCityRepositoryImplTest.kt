@@ -1,6 +1,5 @@
 package com.nkuppan.weatherapp.data.respository
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -10,7 +9,6 @@ import com.nkuppan.weatherapp.data.db.WeatherAppDatabase
 import com.nkuppan.weatherapp.data.db.dao.FavoriteCityDao
 import com.nkuppan.weatherapp.data.db.entity.FavoriteEntity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -20,9 +18,6 @@ class FavoriteCityRepositoryImplTest : BaseCoroutineTest() {
 
     private lateinit var favoriteCityDao: FavoriteCityDao
     private lateinit var weatherAppDatabase: WeatherAppDatabase
-
-    @get:Rule
-    var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     override fun onCreate() {
         super.onCreate()

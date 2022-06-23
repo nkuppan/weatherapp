@@ -58,13 +58,20 @@ class WeatherDetailFragment : BaseBindingFragment<FragmentForecastDetailsBinding
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.allWeatherInfo.collectLatest {
-                        weatherForecastAdapter.submitList(it)
-                    }
-                }
-                launch {
-                    viewModel.errorMessage.collectLatest {
-                        binding.root.showSnackBarMessage(it.asString(requireContext()))
+                    viewModel.weatherUIState.collectLatest { state ->
+                        when (state) {
+                            is WeatherUIState.Error -> {
+                                binding.root.showSnackBarMessage(
+                                    state.info.asString(requireContext())
+                                )
+                            }
+                            is WeatherUIState.Loading -> {
+                                binding.swipeRefreshLayout.isRefreshing = state.status
+                            }
+                            is WeatherUIState.Success -> {
+                                weatherForecastAdapter.submitList(state.info)
+                            }
+                        }
                     }
                 }
             }

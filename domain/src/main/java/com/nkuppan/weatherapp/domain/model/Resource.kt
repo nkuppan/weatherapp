@@ -17,9 +17,3 @@ sealed class Resource<out R> {
         }
     }
 }
-
-/**
- * `true` if [Resource] is of type [Resource.Success] & holds non-null [Resource.Success.data].
- */
-val Resource<*>.succeeded
-    get() = this is Resource.Success && data != null
